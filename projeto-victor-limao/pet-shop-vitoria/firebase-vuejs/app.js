@@ -529,6 +529,7 @@ var App = new Vue({
 
                 },
                 list: [],
+                addlist: [],
             },
 
             edit: {
@@ -637,6 +638,11 @@ var App = new Vue({
                 messages: [],
 
                 fields: {
+                    teste:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
                     codigodebarras: {
                         value: '',
                         error: false,
@@ -727,6 +733,7 @@ var App = new Vue({
 
                     },
                     list: [],
+                    testelist: [],
                 },
             },
 
@@ -895,6 +902,14 @@ var App = new Vue({
             $('#modalProductAdd').modal();
             App.sales.add.messages = [];
         },
+
+
+        openSearchProduct: function () {
+
+            $('#openSearchProduct').modal();
+            App.sales.add.messages = [];
+        },
+
 
         addProduct: function () {
 
@@ -1229,8 +1244,51 @@ var App = new Vue({
 
         },
 
+
+        getEstoque: function (inputprocuraestoque) {
+            //console.log(inputprocuraestoque);
+            App.sales.add.addlist = [];
+            firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
+              
+               var nomeproduto = inputprocuraestoque;
+               //var concat = "/"+nomeproduto+"*/";
+               //console.log(concat)
+                var concatenando = new RegExp(nomeproduto, "i");
+                var testando = [];
+                
+                data.forEach(function (item) {
+                    var listsales = item.val();
+                    listsales.key = item.key;
+                    var arrayteste = {
+                        "key" : listsales.key,
+                        product : [
+                            listsales
+                        ]
+                    };
+                    
+                    
+                    if(arrayteste.product[0].produto.match(concatenando)){
+                        listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".",",");
+                        App.sales.add.addlist.push(listsales);
+                        
+              
+                        //console.log(App.sales.add.addlist);
+                        //listsales.produto = arrayteste.product[0];
+                        //listsales.produtovalorfinal = parseFloat(App.sales.add.addlist.valorfinal).toFixed(2).replace(".",",");
+                        //listsale.valorfinal = arrayteste.product[0].valorfinal;
+                        
+                        //console.log(arrayteste.product[0]);
+
+                    }
+                })
+                console.log(App.sales.add.addlist);
+                
+
+            })
+        },
         getSales: function () {
             firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
+               
                 var totaldinheiro = 0;
                 var totalcartao = 0;
                 var totalgeral = 0;
@@ -1247,17 +1305,17 @@ var App = new Vue({
 
                     totaldinheiro += parseFloat(listsales.cash);
                     totalcartao += parseFloat(listsales.card);
-                    console.log(totalcartao);
+                    //console.log(totalcartao);
                     totalgeral += listsales.totalcompra;
                     //console.log("total cash é igual a: "+ totalcartao);
                     //console.log(listsales);
                     listsales.cash = parseFloat(listsales.cash).toFixed(2).replace(".", ",");
                     listsales.card = parseFloat(listsales.card).toFixed(2).replace(".", ",");
                     listsales.subtotalcompra = parseFloat(listsales.subtotalcompra).toFixed(2).replace(".", ",");
-                    listsales.totalcompra = listsales.totalcompra.toFixed(2).replace(".", ",");
+                    listsales.totalcompra = parseFloat(listsales.totalcompra).toFixed(2).replace(".", ",");
                     App.sales.add.fields.dinheiro.value = totaldinheiro.toFixed(2).replace(".", ",");
-                    App.sales.add.fields.totalcartao.value = totalcartao.toFixed(2).replace(".", ",");
-                    App.sales.add.fields.relatoriototal.value = totalgeral.toFixed(2).replace(".", ",");
+                    App.sales.add.fields.totalcartao.value = parseFloat(totalcartao).toFixed(2).replace(".", ",");
+                    App.sales.add.fields.relatoriototal.value = parseFloat(totalgeral).toFixed(2).replace(".", ",");
 
                     // console.log(subtotal)
                     // if (typeof subtotal != 'number' || isNaN(subtotal)) subtotal = 0;
@@ -1328,7 +1386,6 @@ var App = new Vue({
 
         // Adicionando Venda  
         addSale: function () {
-
 
             if (App.sales.add.fields.card.value == "") {
                 App.sales.add.fields.card.value = 0
@@ -2132,6 +2189,7 @@ App.getProducts();
 App.getUsers();
 App.getProviders();
 App.getSales();
+App.getEstoque();
 
 
 document.cookie;
@@ -2808,6 +2866,11 @@ function number_format(number, decimals, decPoint, thousandsSep) {// eslint-disa
     }
 
     return s.join(dec);
+}
+
+function procuraestoque(){
+    var inputprocuraestoque = document.getElementById("inputprocuraestoque").value;
+    App.getEstoque(inputprocuraestoque);
 }
 
 

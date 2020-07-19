@@ -877,6 +877,57 @@
                 </div>
             </div>
 
+            <!-- Show sale -->
+            <div class="modal fade" id="openSearchProduct" tabindex="-1" role="dialog" aria-labelledby="modalSaleEditLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="modalProviderAddLabel">Pesquisar Mercadorias</h4>
+                        </div>
+
+                        <div class="modal-body">
+
+                           
+
+                                <div class="alert"
+                                    :class="{ 'alert-danger': providers.add.error, 'alert-success': !providers.add.error }"
+                                    v-if="providers.add.messages.length > 0">
+                                    <p v-for="message in providers.add.messages">{{ message }}</p>
+                                </div>
+                                <!--------------FORM MINIMIZADO------------>
+                                <div id="minimizarform">
+                                    <h3><b>Dados das Mercadorias</b></h3>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr style="text-align: center;">
+                                                <th>Produto</th>
+                                                <th class="text-right">Preço Unitário (R$)</th>
+                                                <th class="text-right">Qtd. Estoque</th>                                          
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in sales.add.addlist">
+                                                <td>{{item.produto}}</td>
+                                                <td>{{item.valorfinal}}</td>
+                                                <td>{{item.quantidade}}</td>
+                    
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <small
+                                        class="help-block">{{providers.add.fields.nome.messages.join(", ")}}</small>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Caixa - Sale -->
             <div v-if="page.current == 'caixa'">
                 <div id="mom">
@@ -914,6 +965,10 @@
                                         <label for="">Data Atual</label><br>
                                         <input type="text" class="form-control text-right" maxlength="30"
                                             v-model="sales.add.fields.dataatual.value" disabled>
+                                    </div>
+                                    <div class="form-group" style="display: flex;"> 
+                                    <input type="text" id="inputprocuraestoque" style="width: 124px; margin-right: 5px; border-radius: 3px;" placeholder="Pesquisar Produto...">
+                                    <button class="btn btn-primary btn-block" @click.prevent="openSearchProduct();" onclick="procuraestoque()"><i class="glyphicon glyphicon-search"></i></button>
                                     </div>
                                     <!-- 
                                     <div class="form-group" :class="{ 'has-error': products.add.fields.marca.error }">
