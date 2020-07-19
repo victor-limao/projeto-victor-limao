@@ -282,9 +282,9 @@ var App = new Vue({
                 cliente: '',
 
             },
-            list: [],    
+            list: [],
         },
-         login: {
+        login: {
             select: {
                 error: false,
                 messages: [],
@@ -359,6 +359,7 @@ var App = new Vue({
             },
             list: [],
         },
+
 
 
         // newSale: {
@@ -515,7 +516,7 @@ var App = new Vue({
                         messages: [],
 
                     },
-                    cartao: {
+                    totalcartao: {
 
                         value: '',
                         error: false,
@@ -563,6 +564,57 @@ var App = new Vue({
 
                     },
                 },
+            },
+
+            view: {
+                error: false,
+                messages: [],
+                fields: {
+                    valortotalrecebido: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    desconto: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+
+                    valortotal: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    total: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    datavenda: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    subtotalcompra: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    troco: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                },
+                list: [],
             },
 
             remove: {
@@ -812,11 +864,11 @@ var App = new Vue({
 
                     var product = item.val();
                     product.key = item.key;
-                    product.lucroporcentagem = product.lucroporcentagem.toFixed(2).replace(".",",");
-                    product.gastototal = product.gastototal.toFixed(2).replace(".",",");
-                    product.lucrodinheiro = product.lucrodinheiro.toFixed(2).replace(".",",");
-                    product.valorinicial = parseFloat(product.valorinicial).toFixed(2).replace(".",",");
-                    product.valorfinal = parseFloat(product.valorfinal).toFixed(2).replace(".",",").replace(" ","");
+                    product.lucroporcentagem = product.lucroporcentagem.toFixed(2).replace(".", ",");
+                    product.gastototal = product.gastototal.toFixed(2).replace(".", ",");
+                    product.lucrodinheiro = product.lucrodinheiro.toFixed(2).replace(".", ",");
+                    product.valorinicial = parseFloat(product.valorinicial).toFixed(2).replace(".", ",");
+                    product.valorfinal = parseFloat(product.valorfinal).toFixed(2).replace(".", ",").replace(" ", "");
                     //console.log(product)
                     // console.log(product);
                     // console.log(item.key);
@@ -1030,7 +1082,7 @@ var App = new Vue({
         },
 
         editProduct: function () {
-            
+
             // limpando erros do form
             App.products.edit.error = false;
             App.products.edit.messages = [];
@@ -1139,6 +1191,8 @@ var App = new Vue({
         },
 
         addNewSale: function () {
+
+
             var product = App.sales.add.fields.nome.value;
             var price = parseFloat(App.sales.add.fields.precoproduto.value);
             var amount = parseFloat(App.sales.add.fields.quantidade.value);
@@ -1177,32 +1231,33 @@ var App = new Vue({
 
         getSales: function () {
             firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
-                var totaldinheiro = 0;    
+                var totaldinheiro = 0;
                 var totalcartao = 0;
                 var totalgeral = 0;
 
-               
+
                 data.forEach(function (item) {
                     var listsales = item.val();
                     listsales.key = item.key;
-                    
+
 
                     // console.log((listsales.totalcompra)+" R$ - "+(listsales.datavenda));
                     App.sales.add.list.push(listsales);
-                    
-                  
+
+
                     totaldinheiro += parseFloat(listsales.cash);
                     totalcartao += parseFloat(listsales.card);
+                    console.log(totalcartao);
                     totalgeral += listsales.totalcompra;
                     //console.log("total cash é igual a: "+ totalcartao);
                     //console.log(listsales);
-                    listsales.cash =  parseFloat(listsales.cash).toFixed(2).replace(".",",");
-                    listsales.card =  parseFloat(listsales.card).toFixed(2).replace(".",",");
-                    listsales.subtotalcompra =  parseFloat(listsales.subtotalcompra).toFixed(2).replace(".",",");
-                    listsales.totalcompra = listsales.totalcompra.toFixed(2).replace(".",",");
-                    App.sales.add.fields.dinheiro.value = totaldinheiro.toFixed(2).replace(".",",");
-                    App.sales.add.fields.cartao.value = totalcartao.toFixed(2).replace(".",",");
-                    App.sales.add.fields.relatoriototal.value = totalgeral.toFixed(2).replace(".",",");
+                    listsales.cash = parseFloat(listsales.cash).toFixed(2).replace(".", ",");
+                    listsales.card = parseFloat(listsales.card).toFixed(2).replace(".", ",");
+                    listsales.subtotalcompra = parseFloat(listsales.subtotalcompra).toFixed(2).replace(".", ",");
+                    listsales.totalcompra = listsales.totalcompra.toFixed(2).replace(".", ",");
+                    App.sales.add.fields.dinheiro.value = totaldinheiro.toFixed(2).replace(".", ",");
+                    App.sales.add.fields.totalcartao.value = totalcartao.toFixed(2).replace(".", ",");
+                    App.sales.add.fields.relatoriototal.value = totalgeral.toFixed(2).replace(".", ",");
 
                     // console.log(subtotal)
                     // if (typeof subtotal != 'number' || isNaN(subtotal)) subtotal = 0;
@@ -1235,8 +1290,8 @@ var App = new Vue({
                 subtotal += App.sales.list[i].total;
             }
             //console.log(subtotal);
-            
-            
+
+
 
             var somaValorRecebido = cash + card;
 
@@ -1274,84 +1329,101 @@ var App = new Vue({
         // Adicionando Venda  
         addSale: function () {
 
-            // limpando erros do form
-            App.sales.add.error = false;
-            App.sales.add.messages = [];
 
-            // limpando erros dos campos
-            App.sales.add.fields.valortotalrecebido.value = App.sales.add.fields.valortotalrecebido.value;
-            App.sales.add.fields.valortotalrecebido.error = false;
-            App.sales.add.fields.valortotalrecebido.messages = [];
-
-            var error = false;
-
-            // validando campos
-
-            if (App.sales.add.fields.valortotalrecebido.value == '') {
-                App.sales.add.fields.valortotalrecebido.error = true;
-                App.sales.add.fields.valortotalrecebido.messages.push('Campo obrigatório.');
-                error = true;
+            if (App.sales.add.fields.card.value == "") {
+                App.sales.add.fields.card.value = 0
             }
-
-
-
-            // e todos os demais campos aqui...
-
-            // se deu algum erro...
-            if (error) {
-                App.sales.add.error = true;
-                App.sales.add.messages.push('Verifique todos os campos.');
-                return;
+            if (App.sales.add.fields.cash.value == "") {
+                App.sales.add.fields.cash.value = 0
             }
+            var cashfloat = parseFloat(App.sales.add.fields.cash.value);
+            var cardfloat = parseFloat(App.sales.add.fields.card.value);
+            var somarecebido = cardfloat + cashfloat;
+            if (somarecebido < App.sales.add.fields.totalcompra.value) {
 
-            firebase.database().ref(App.firebase.path + '/sales').push({
-                cash: App.sales.add.fields.cash.value,
-                card: App.sales.add.fields.card.value,
-                desconto: App.sales.add.fields.desconto.value + " " + App.sales.add.fields.discountType,
-                totalcompra: App.sales.add.fields.totalcompra.value,
-                subtotalcompra: App.sales.add.fields.subtotalcompra.value,
-                valortotalrecebido: App.sales.add.fields.valortotalrecebido.value,
-                troco: App.sales.add.fields.troco.value,
-                produtos: App.sales.list,
-                datavenda: App.sales.add.fields.dataatual.value,
+                alert("Valor recebido abaixo do esperado.");
+            }
+            else if (somarecebido >= App.sales.add.fields.totalcompra.value){
+
+                // limpando erros do form
+                App.sales.add.error = false;
+                App.sales.add.messages = [];
+
+                // limpando erros dos campos
+                App.sales.add.fields.valortotalrecebido.value = App.sales.add.fields.valortotalrecebido.value;
+                App.sales.add.fields.valortotalrecebido.error = false;
+                App.sales.add.fields.valortotalrecebido.messages = [];
+
+                var error = false;
+
+                // validando campos
+
+                if (App.sales.add.fields.valortotalrecebido.value == '') {
+                    App.sales.add.fields.valortotalrecebido.error = true;
+                    App.sales.add.fields.valortotalrecebido.messages.push('Campo obrigatório.');
+                    error = true;
+                }
 
 
 
-            })
-                .then(function () {
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.nome.value = '';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.precoproduto.value = '';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.cash.value = '0,00';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.card.value = '0,00';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.quantidade.value = '';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.desconto.value = '0,00';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.totalcompra.value = '0,00';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.subtotalcompra.value = '0,00';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.valortotalrecebido.value = '0,00';
-                    App.sales.add.messages = [];
-                    App.sales.add.fields.troco.value = '0,00';
-                    App.sales.add.messages = [];
+                // e todos os demais campos aqui...
 
-                    App.sales.list = '';
+                // se deu algum erro...
+                if (error) {
+                    App.sales.add.error = true;
+                    App.sales.add.messages.push('Verifique todos os campos.');
+                    return;
+                }
 
-                    alert('Venda inserida com sucesso!');
+                firebase.database().ref(App.firebase.path + '/sales').push({
+                    cash: App.sales.add.fields.cash.value,
+                    card: App.sales.add.fields.card.value,
+                    desconto: App.sales.add.fields.desconto.value + " " + App.sales.add.fields.discountType,
+                    totalcompra: App.sales.add.fields.totalcompra.value,
+                    subtotalcompra: App.sales.add.fields.subtotalcompra.value,
+                    valortotalrecebido: App.sales.add.fields.valortotalrecebido.value,
+                    troco: App.sales.add.fields.troco.value,
+                    produtos: App.sales.list,
+                    datavenda: App.sales.add.fields.dataatual.value,
+
+
 
                 })
-                .catch(function (err) {
-                    App.sales.add.error = true;
-                    App.sales.add.messages = [];
-                    App.sales.add.messages.push('Aconteceu um erro interno. Tente novamente.');
-                });
+                    .then(function () {
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.nome.value = '';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.precoproduto.value = '';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.cash.value = '0,00';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.card.value = '0,00';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.quantidade.value = '';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.desconto.value = '0,00';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.totalcompra.value = '0,00';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.subtotalcompra.value = '0,00';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.valortotalrecebido.value = '0,00';
+                        App.sales.add.messages = [];
+                        App.sales.add.fields.troco.value = '0,00';
+                        App.sales.add.messages = [];
 
+                        App.sales.list = '';
+
+                        alert('Venda inserida com sucesso!');
+
+                    })
+                    .catch(function (err) {
+                        App.sales.add.error = true;
+                        App.sales.add.messages = [];
+                        App.sales.add.messages.push('Aconteceu um erro interno. Tente novamente.');
+                    });
+                    document.location.reload(true);
+            }
         },
 
         removeSaleProduct: function (sale, i) {
@@ -1500,6 +1572,58 @@ var App = new Vue({
 
 
             $('#modalProviderEdit').modal();
+
+
+        },
+        openSale: function (key) {
+            firebase.database().ref(App.firebase.path + '/sales/' + key).once('value').then(function (data) {
+                App.sales.view.list = [];
+                sale = data.val();
+                sale.key = data.key;
+                var subtotal = 0;
+
+                console.log(sale.desconto);
+                var split1 = sale.desconto.split(" ");
+                var cvtsplit1 = split1[1];
+
+
+                if (cvtsplit1 == "percent") {
+                    App.sales.view.fields.desconto.value = split1[0] + "%";
+                }
+                else if (cvtsplit1 == "value") {
+                    App.sales.view.fields.desconto.value = "R$" + parseFloat(split1[0]).toFixed(2).replace(".", ",");
+                }
+
+
+
+
+                App.sales.view.fields.datavenda.value = sale.datavenda;
+                App.sales.view.fields.total.value = "R$" + parseFloat(sale.totalcompra).toFixed(2).replace(".", ",");
+                App.sales.view.fields.subtotalcompra.value = "R$" + parseFloat(sale.subtotalcompra).toFixed(2).replace(".", ",");
+                App.sales.view.fields.valortotalrecebido.value = "R$" + parseFloat(sale.valortotalrecebido).toFixed(2).replace(".", ",");
+                App.sales.view.fields.troco.value = "R$" + parseFloat(sale.troco).toFixed(2).replace(".", ",");
+
+
+                sale.produtos.forEach(function (sale) {
+
+                    subtotal += sale.total;
+
+                    App.sales.view.list.push(sale);
+
+
+                });
+
+            });
+
+            if (typeof sale == 'undefined') {
+                sale = {
+                    key: App.sales.view.fields.key,
+                    nome: App.sales.view.fields.nome,
+                };
+            }
+
+
+            $('#modalSaleEdit').modal();
 
 
         },
@@ -1998,7 +2122,7 @@ var App = new Vue({
         },
 
     },
-    
+
 
 
 });
@@ -2011,19 +2135,19 @@ App.getSales();
 
 
 document.cookie;
-function deslogar(){
+function deslogar() {
 
     document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     window.location.href = "/";
-    
+
 }
 var route = new FMRoute();
 // HOME
 
 route.get('/', function (vars, next) {
-  
-    logado = true;   
-    if(document.cookie){
+
+    logado = true;
+    if (document.cookie) {
         App.page.current = 'home';
     }
     else {
@@ -2044,7 +2168,7 @@ route.get('/deslogado', function (vars, next) {
 
 route.get('/home', function (vars, next) {
     window.location.href = "home"
-   
+
     next();
 });
 // Fornecedores - Providers
@@ -2062,17 +2186,17 @@ route.get('/vendas', function (vars, next) {
 
 
 route.get('/graficos', function (vars, next) {
-   
+
     window.location.href = "/graficoscanvas.html"
-    
+
 
     next();
 });
 
 route.get('/caixa', function (vars, next) {
-     
-    logado = true;   
-    if(document.cookie){
+
+    logado = true;
+    if (document.cookie) {
         App.page.current = 'caixa';
     }
     else {
@@ -2522,7 +2646,7 @@ function moveRelogio() {
 
     var date = new Date();
     var year = date.getFullYear();
-    
+
     momentoAtual = new Date()
     var correct = 1;
 
@@ -2559,7 +2683,7 @@ function moveRelogio() {
 
 
 
-    horaImprimivel = dia + "/" + mes + "/" + ano + " - " + hora + ":" + minuto + ":"+segundo;
+    horaImprimivel = dia + "/" + mes + "/" + ano + " - " + hora + ":" + minuto + ":" + segundo;
     horaImprimivel2 = dia + "/" + mes + "/" + ano;
 
     document.getElementById("yearfooter").innerHTML = year;
@@ -2772,9 +2896,9 @@ function CalctotalCaixa() {
     console.log(subtotal);
 
     if (App.sales.add.fields.discountType == 'value') {
-        App.sales.add.fields.totalcompra.value = subtotal - discount;
+        App.sales.add.fields.totalcompra.value = parseFloat(subtotal - discount).toFixed(2);
     } else if (App.sales.add.fields.discountType == 'percent') {
-        App.sales.add.fields.totalcompra.value = subtotal * (100 - discount) / 100;
+        App.sales.add.fields.totalcompra.value = parseFloat(subtotal * (100 - discount) / 100).toFixed(2);
     }
 
     if (App.sales.add.fields.valortotalrecebido.value < App.sales.add.fields.totalcompra.value) {
