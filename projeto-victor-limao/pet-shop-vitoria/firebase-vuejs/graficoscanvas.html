@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="pp2.png" color="#111">
+    <title>Pet Vitória</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+
+        .pet {
+            height: auto;
+            color: #ffb366;
+            display: table-cell;
+            vertical-align: middle;
+            font-family: "montserrat";
+            font-size: 25px;
+            font-weight: 500px;
+            vertical-align: top;
+
+        }
+
+
+        #vitoria {
+            font-weight: 600;
+            color: white;
+            font-size: 25px;
+            vertical-align: top;
+
+        }
+
+        .footercomplemento {
+            background-color: rgba(74, 170, 77, 0.00);
+            border: none;
+            color: black;
+
+        }
+        .footergreen {
+            position:absolute;
+            bottom:0;
+            width:100%;
+            height: 20px;
+            align-items: center;
+        }
+
+        .footer-align {
+            display: flex;
+            height: 0px;
+            justify-content: space-between;
+        }
+
+        #mom {
+            height: 100%;
+        }
+
+        .box-left {
+            background-color: rgba(245, 245, 245, 1);
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            width: 200px;
+            border-right: 1px solid #ccc;
+            overflow: auto;
+
+        }
+
+        .box-center {
+            background-color: #fff;
+            position: fixed;
+            top: 6%;
+            left: 200px;
+            right: 0;
+            bottom: 100px;
+            overflow: auto;
+        }
+
+        .box-bottom {
+            background-color: rgba(250, 250, 250, 1);
+
+            position: fixed;
+            left: 200px;
+            right: 0;
+            bottom: 0;
+            height: 100px;
+            border-top: 1px solid #ccc;
+            overflow: auto;
+        }
+        .mr-footer{
+            margin-right: 5px;
+        }
+        #AppVue{
+            height: 92vh;
+            overflow-y: scroll;
+        }
+        #AppVue::-webkit-scrollbar {
+        display: none;
+        }
+        body::-webkit-scrollbar{
+            display: none;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ul class="nav navbar-nav">
+                    <li><a href="/">
+                            <h4 class="pet">PET<span id="vitoria"> Vitória</span></h4>
+                        </a></li>
+                </ul>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- 
+                    <li>
+                        <form name="form_relogio">
+                            <input type="text" id="relogio" size="8" disabled>
+                        </form>
+                    </li> -->
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#/caixa">Caixa</a></li>
+
+
+                    <li><a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            Cadastros <span class="caret">
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/#/users">Usuário </a></li>
+                            <li><a href="/#/providers">Fornecedor</a></li>
+                            <li><a href="/#/products">Mercadoria</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li><a href="" class="dropdown-toggle" data-toggle="dropdown">Operações
+                            <span class="caret">
+
+                            </span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="">Abertura de Caixa</a></li>
+                            <li><a href="">Fechamento de Caixa</a></li>
+                            <li><a href="/#/vendas">Relatórios</a></li>
+                            <li><a href="">Sangria</a></li>
+                            <li><a href="/graficos">Gráficos</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="/#/asdasdasdasd">Não Existe</a></li>
+                    <li><a href="/" class="glyphicon glyphicon-log-out" onclick="deslogar()"></a>
+                    </li>
+
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+        <!-- Gráficos -->
+
+        <div v-if="page.current == 'graficos'" class="container" id="graficohidden">
+            <h2 class="page-header">Gráficos </h2>
+    
+            <ol class="breadcrumb">
+                <li><a href="/#/">Home</a></li>
+                <li class="active">Gráfico</li>
+    
+            </ol>
+    
+            <div id="canvas-holder">
+                <canvas class="line-chart">
+    
+                </canvas>
+    
+                <p>
+    
+                </p>
+            </div>
+    
+        </div>
+
+
+    <!-- Bootstrap e jQuery -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+
+
+
+
+
+    <!-- VueJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js"></script>
+
+
+    <!--API CEP-->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+            authDomain: "fir-app-1868c.firebaseapp.com",
+            databaseURL: "https://fir-app-1868c.firebaseio.com",
+            projectId: "fir-app-1868c",
+            storageBucket: "fir-app-1868c.appspot.com",
+            messagingSenderId: "517211514277"
+        };
+        firebase.initializeApp(config);
+    </script>
+      <script src="appcanvas.js"></script>
+
+    <footer id="footer-active" class="footergreen" style="margin-top: 15px;">
+        <div class="footer-align">
+
+            <div style="display: flex;">
+                <a href="" class="mr-footer"> Copyright</a> <p class="mr-footer">&copy;</p> <p class="mr-footer" id="yearfooter"></p> - PET
+                Vitoria.
+                All rights reserved.
+            </div>
+            <div>
+                <form name="form_relogio">
+                    <input type="text" id="relogio" class="footercomplemento" size="18" disabled>
+                </form>
+            </div>
+
+        </div>
+    </footer>
+</body>
+</html>

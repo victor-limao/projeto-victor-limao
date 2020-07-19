@@ -1,0 +1,74 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+	
+	<link rel="stylesheet" href="login CSS.css">
+	
+	<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	
+	<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	<!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	<link rel="stylesheet" href="login CSS.css"> 
+	
+<script src="andamentoJS.js"></script>
+	
+<title>Venda de Imóveis</title>
+</head>
+
+<body ng-app="foreignerApp">
+
+			
+	<div class="container">
+<form ng-controller="foreignerController">
+		<h2>Cadastro de Pedidos</h2>
+		
+		<ul><li><a href="CadastroImovel.html">Cadastro Produto</a></li></ul>
+		<ul><li><a href="Contato.html">Contato</a></li></ul>
+		<ul><li><a href="busca3.0.html">Pedidos</a></li></ul>
+		<ul><li><a href="ANGULAR TESTE/atuaizaredeletar.html">Estoque</a></li></ul>
+		<ul><li><a href="Login.html">Sair</a></li></ul>
+	
+		Código:<input type="text" id="txtCodigo"  placeholder="Código" ></br></br>
+		Área estimada da obra:<input type="text" id="txtArea"  placeholder="Área" ></br></br>	
+		Data de solicitação:<input type="date" id="txtData"  placeholder="Data" ></br></br>
+		Descrição da obra:<input type="text" id="txtDescricao"  placeholder="Descrição" ></br></br>		
+		Endereço:<input type="text" id="txtEndereco"  placeholder="Endereço" ></br></br>
+		Valor do serviço:<input type="text" id="txtValor" placeholder="Valor" ></br></br>
+
+			<select id="TxtAndamento" name="Andamento" form="carform">
+			  <option value="Solicitado">Solicitado</option>
+			  <option value="Em Andamento">Em Andamento</option>
+			  <option value="Concluído">Concluído</option>
+			</select>
+
+<!--
+		<form id="TxtAndamento" action="/action_page.php">
+		  <input type="radio" name="gender" value="male"> Solicitado<br>
+		  <input type="radio" name="gender" value="female"> Em Andamento<br>
+		  <input type="radio" name="gender" value="other"> Concluído<br>  
+		</form>
+-->
+
+<br/><br/><p id="theID3"></p>
+	</br></br>
+		<button type="submit" id="Enviar" placeholder="Enviar" ng-click="insert()">Cadastrar</button>
+
+<!--		<input type="submit" id="Enviar" placeholder="Enviar" ng-click="insert()">-->
+	</form>
+	</div>
+	
+	
+	
+</body>
+</html>

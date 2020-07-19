@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+
+  <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	  
+	  <link rel="stylesheet" href="pedidoscss.css">
+	  
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	  
+	  	  <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	
+	  <!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	  
+	  <!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	  
+	  <script src="BuscaAndamento.js"></script>
+	  
+	  
+	  
+<!--
+	  <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+    authDomain: "fir-app-1868c.firebaseapp.com",
+    databaseURL: "https://fir-app-1868c.firebaseio.com",
+    projectId: "fir-app-1868c",
+    storageBucket: "",
+    messagingSenderId: "517211514277"
+  };
+  firebase.initializeApp(config);
+</script>
+-->
+	  
+  </head>
+<meta charset="utf-8">
+<title>Pedidos</title>
+	
+	
+	
+	
+	
+<body ng-app="angularativApp" ng-controller="angularativController" >
+	
+	
+	<div class="container">
+  <h2>Busca Andamento Obras</h2>
+		<br/>
+		<ul><li><a href="CadastroImovel.html">Cadastro Produto</a></li></ul>
+		<ul><li><a href="Contato.html">Contato</a></li></ul>
+		<ul><li><a href="Compra2.0.html">Compra Produto</a></li></ul>
+		<ul><li><a href="ANGULAR TESTE/atuaizaredeletar.html">Estoque</a></li></ul>
+		<ul><li><a href="Login.html">Sair</a></li></ul>
+		
+		
+			
+</div>
+	<div class="container">
+
+		<table class="table table-striped">
+			
+			<br/><br/><p id="theID2" style="display:none"></p><br/>
+			
+			
+			<label>digite o Código</label>
+			<input type="text" id="getIDByName" />
+			<button id="btnGetID">Buscar</button><br/>
+			<br/><br/><p id="theID"></p><br/>
+			<br/>
+			
+			
+			<tr>
+					<td>Código: <input type="text" id="codigo" size="5px" /></td>
+					<td>Área: <input type="text" id="area" size="10px"/></td>
+					<td>Data do Cadastro: <input type="date" id="data" /></td>
+					<td>Descrição: <input type="text" id="descricao" /></td>
+					<td>Endereço: <input type="text" id="endereco" /></td>
+					<td>Valor: <input type="text" id="valor" /></td>
+<!--					<td>Progresso: <input type="text" id="andamento" /></td>-->
+					<td>Andamento:<select id="andamento" name="Andamento" form="carform">
+			  		<option value="Solicitado">Solicitado</option>
+			  		<option value="Em Andamento">Em Andamento</option>
+			  		<option value="Concluído">Concluído</option>
+					</select></td>
+			</tr>
+			
+		<!--	
+
+			<label>Código: </label><input type="text" id="codigo" /><br/><br/>
+			<label>Data: </label><input type="text" id="data" /><br/><br/>
+			<label>Descrição: </label><input type="text" id="descricao" /><br/><br/>
+			<label>Produto: </label><input type="text" id="produto" /><br/><br/>
+			<label>Quantidade: </label><input type="text" id="quantidade" /><br/><br/>
+			<label>Valor: </label><input type="text" id="valor" /><br/><br/>
+			<button id="btnupdate">Atualizar</button>
+			
+			<hr><br/>-->
+
+			<button id="remove">Excluir</button>
+			<button id="btnupdate">Atualizar</button><br></br>
+		
+		
+	
+		
+
+	</table>
+	<br/><br/><p id="theID3"></p>
+	
+		<table class="table table-striped">
+			<br></br>
+		
+		<button type="submit" ng-click="record()">Buscar Todos os Pedidos</button>
+ <br></br>
+    <thead>
+      <tr>
+        <th>Código:</th>
+        <th>Área da Obra:</th>
+		 <th>Data do cadastro:</th>
+		  <th>Descrição:</th>
+		  <th>Endereço:</th>
+		  <th>Valor:</th>
+		  <th>Progresso:</th>
+      </tr>
+    </thead>
+    
+		<tr ng-repeat="x in records">
+					<td>{{x.codigo}}</td>
+					<td>{{x.area}}</td>
+					<td>{{x.data}}</td>
+					<td>{{x.descricao}}</td>
+					<td>{{x.endereco}}</td>
+					<td>{{x.valor}}</td>
+					<td>{{x.andamento}}</td>
+				</tr>
+
+
+	
+	
+  </table>
+	
+</div>
+	
+	<script src="ArquivoJs.js" type="text/javascript"></script>
+</body>
+</html>

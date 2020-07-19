@@ -1,0 +1,76 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+	<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	
+	<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	<!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+    authDomain: "fir-app-1868c.firebaseapp.com",
+    databaseURL: "https://fir-app-1868c.firebaseio.com",
+    projectId: "fir-app-1868c",
+    storageBucket: "",
+    messagingSenderId: "517211514277"
+  };
+  firebase.initializeApp(config);
+</script>
+	
+	<script>
+		
+		var myApp = angular.module('foreignerApp',['firebase']);
+		 
+		 myApp.controller("foreignerController", function($scope,$http){
+		
+		var db = firebase.database().ref();
+		
+		
+		 $scope.insert = function(){
+		var data = {
+			nome: $("#txtNome").val(),
+			data: $("#txtData").val(),
+			endereço: $("#txtEndereço").val(),
+			idade: $("#txtIdade").val(),			
+		};
+		
+		db.child("Foreigner").push(data);
+		 };
+		 });	
+		
+		 
+	</script>
+	
+<title>Firebase</title>
+</head>
+
+<body ng-app="foreignerApp">
+
+			
+	<div class="container">
+<form ng-controller="foreignerController">
+		<h2>Cadastro</h2>
+		<input type="text" id="txtNome" onkeyup="myFunction()" placeholder="Nome" >
+		<input type="text" id="txtData" onkeyup="myFunction()" placeholder="Data" > 
+		<input type="text" id="txtEndereço" onkeyup="myFunction()" placeholder="Endereço" >
+		<input type="text" id="txtIdade" onkeyup="myFunction()" placeholder="Idade" >
+		<input type="submit" id="Enviar" placeholder="Enviar" ng-click="insert()">
+	</form>
+	</div>
+	
+	
+	
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+  <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	  
+	  	  <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	
+	  <!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	  
+	  <!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	  
+	  <script src="script2.0.js"></script>	
+	  
+<link rel="stylesheet" href="compracss.css"> 
+	  
+<!--
+	  <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+    authDomain: "fir-app-1868c.firebaseapp.com",
+    databaseURL: "https://fir-app-1868c.firebaseio.com",
+    projectId: "fir-app-1868c",
+    storageBucket: "",
+    messagingSenderId: "517211514277"
+  };
+  firebase.initializeApp(config);
+</script>
+-->
+	  
+  </head>
+<meta charset="utf-8">
+<title>Compra de Produtos</title>
+	
+<body ng-app="angularativApp" ng-controller="angularativController">
+	
+	<div class="container">
+  <h2>Lista dos Produtos</h2>
+		<br/>
+		<ul><li><a href="CadastroImovel.html">Cadastro Produto</a></li></ul>
+		<ul><li><a href="Contato.html">Contato</a></li></ul>
+		<ul><li><a href="busca3.0.html">Pedidos</a></li></ul>
+		<ul><li><a href="ANGULAR TESTE/atuaizaredeletar.html">Estoque</a></li></ul>
+		<ul><li><a href="Login.html">Sair</a></li></ul>
+	
+		<table class="table table-striped">
+			
+			<br/><br/><p id="theID2" style="display:none"></p><br/>
+			
+			<label>Digite o Código do Produto:</label>
+			<input type="text" id="getIDByName" />
+			<button id="btnGetID">Buscar Produto</button><br/>
+			<br/><br/><p id="theID"></p><br/>
+			<br/>
+			
+			
+			<tr>
+					<td>Código: <input type="text" id="codigo" size="5px" /></td>
+					<td>Produto: <input type="text" id="produto" /></td>
+					<td>Data do Cadastro: <input type="date" id="data" /></td>
+					<td>Valor: <input type="text" id="valor" /></td>
+					<td>Descrição: <input type="text" id="descricao" /></td>
+					<td>Quantidade: <input type="text" id="quantidade" /></td>
+					
+					
+				
+			</tr>
+		
+		
+			<button id="remove">Excluir</button>
+			<button id="btnupdate">Atualizar</button><br></br>
+		
+		</table>
+	<br/><br/><p id="theID3"></p>
+			<table class="table table-striped" id="tt" style="display:inline">
+			<br></br>
+<!--
+		<input type="text" id="txtNomeProduto" />
+			
+		<button id="btnDelete" type="button">Deletar</button>
+-->
+<!--			<input type="submit" value="Buscar todos os Produtos" ng-click="record()" >-->
+	
+			<button id="btnupdate1 " type="submit" value="Buscar todos os Produtos" ng-click="record()" >Buscar Todos</button>
+ <br></br>
+    <thead>
+      <tr>
+        <th>Código:</th>
+        <th>Produto:</th>
+		 <th>Data:</th>
+		  <th>Valor:</th>
+		  <th>Descrição:</th>
+		  <th>Quantidade:</th>
+
+      </tr>
+    </thead>
+    
+		<tr ng-repeat="x in records">
+					<td>{{x.codigo}}</td>
+					<td>{{x.produto}}</td>
+					<td>{{x.data}}</td>
+					<td>{{x.valor}}</td>					
+					<td>{{x.descricao}}</td>
+					<td>{{x.quantidade}}</td>
+			
+				</tr>
+
+		  
+  </table>
+
+</div>
+	
+	<script src="compraJs.js" type="text/javascript"></script>
+	
+</body>
+</html>

@@ -1,0 +1,154 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	background-color:#EAFEFF;
+	
+	background-repeat:repeat;
+	font-family:"Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+}
+p{
+	text-align:justify;
+	text-indent:50px;
+	font-style:normal;
+	color:#0000A0
+	
+}
+a{
+	color:#0C0497;
+	text-decoration:none;
+}
+
+h1{color:#800040;
+	
+}
+h2{color:#00F;
+	
+}
+h3{color:#400080;
+	
+}
+h4{color:#008000;
+	
+}
+
+
+div#interface{
+	background-color:rgba(255,255,255,.8);
+	width:1000px;
+	margin:0px auto 0px auto;
+	padding:10px;
+	box-shadow:0px 0px 10px rgba(0,0,0,.5);
+	border-radius:20px;
+	height:1350px;
+	
+}
+div#interface1{
+	background-color:rgba(255,255,255,.8);
+	width:900px;
+	margin:0px auto 0px auto;
+	padding:10px;
+	box-shadow:0px 0px 10px rgba(0,0,0,.5);
+	border-radius:20px;
+	height:850px;
+	
+}
+#logo img{
+	width:300px;
+	height:150px;
+	border-radius:10px;
+}
+/* aqui começa o cabeçalho */
+header#cabecalho{
+	width:910px;
+	height:50px;
+}
+nav#menu{
+	display:block;	
+}
+nav#menu ul{
+	list-style: none; 
+	left: 509px;
+	top: 74px;
+}
+nav#menu li{
+	display:inline-block;
+	background-color:#ABADFC;
+	padding:20px;
+	margin:2px;
+	border-radius:10px;
+	font-size:18px;
+}
+nav#menu li:hover{
+	background-color:#3C49F9;
+	font-size:24px;
+}
+nav#menu a{
+	color:#000024;
+	text-decoration:none;
+}
+nav#menu a:hover{
+	color:#F00;
+	text-decoration:underline;
+}
+#aluminio img{
+	width:920px;
+	height:500px;	
+	float:left;
+	border-radius:20px;
+	margin-bottom:15px;
+	box-shadow:0px 0px 30px rgba(0,0,0,0.8);
+}
+/* aqui acaba o cabeçalho */
+/* aqui começa o corpo */
+section#corpo{
+	width:600px;
+	float:left;
+	border-right:1px dotted #F7F2F8;
+	padding-right:15px;
+}
+
+
+/* aqui acaba o corpo */
+/* aqui começa a lateral */
+aside#lateral{
+	display:block;
+	width:325px;
+	height:380px;
+	float:left;
+	background-color:#E0F0EF;
+	padding:10px;
+	box-shadow:2px 2px 2px rgba(0,0,0,.5);
+	border-radius:20px;
+}
+/* aqui acaba a lateral */
+
+
+/* aqui começa o rodape*/
+
+footer#rodape{
+				border-top:1px dotted #606060;
+				clear:both;
+				
+	
+}
+footer#rodape p{
+				text-align:right;
+				
+				
+					
+}
+
+
+footer#rodape img{
+	width:60px;
+	height:50px;
+	padding:5px;
+	
+	
+}
+
+img {
+	 border-radius:10px;     
+	
+}
+/* aqui acaba  o rodape*/

@@ -1,0 +1,2528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="pp2.png" color="#111">
+    <title>Pet Vitória</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+
+        .pet {
+            height: auto;
+            color: #ffb366;
+            display: table-cell;
+            vertical-align: middle;
+            font-family: "montserrat";
+            font-size: 25px;
+            font-weight: 500px;
+            vertical-align: top;
+
+        }
+
+
+        #vitoria {
+            font-weight: 600;
+            color: white;
+            font-size: 25px;
+            vertical-align: top;
+
+        }
+
+        .footercomplemento {
+            background-color: rgba(74, 170, 77, 0.00);
+            border: none;
+            color: black;
+
+        }
+        .footergreen {
+            position:absolute;
+            bottom:0;
+            width:100%;
+            height: 20px;
+            align-items: center;
+        }
+
+        .footer-align {
+            display: flex;
+            height: 0px;
+            justify-content: space-between;
+        }
+
+        #mom {
+            height: 100%;
+        }
+
+        .box-left {
+            background-color: rgba(245, 245, 245, 1);
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            width: 200px;
+            border-right: 1px solid #ccc;
+            overflow: auto;
+
+        }
+
+        .box-center {
+            background-color: #fff;
+            position: fixed;
+            top: 6%;
+            left: 200px;
+            right: 0;
+            bottom: 100px;
+            overflow: auto;
+        }
+
+        .box-bottom {
+            background-color: rgba(250, 250, 250, 1);
+
+            position: fixed;
+            left: 200px;
+            right: 0;
+            bottom: 0;
+            height: 100px;
+            border-top: 1px solid #ccc;
+            overflow: auto;
+        }
+        .mr-footer{
+            margin-right: 5px;
+        }
+        #AppVue{
+            height: 92vh;
+            overflow-y: scroll;
+        }
+     
+        body::-webkit-scrollbar{
+            display: none;
+        }
+
+
+    </style>
+</head>
+
+<body onload="moveRelogio()">
+
+    <div id="AppVue">
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav navbar-nav">
+                        <li><a href="#/">
+                                <h4 class="pet">PET<span id="vitoria"> Vitória</span></h4>
+                            </a></li>
+                    </ul>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- 
+                        <li>
+                            <form name="form_relogio">
+                                <input type="text" id="relogio" size="8" disabled>
+                            </form>
+                        </li> -->
+                        <li><a href="#/">Home</a></li>
+                        <li><a href="#/caixa">Caixa</a></li>
+
+
+                        <li><a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                Cadastros <span class="caret">
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/users">Usuário </a></li>
+                                <li><a href="#/providers">Fornecedor</a></li>
+                                <li><a href="#/products">Mercadoria</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li><a href="" class="dropdown-toggle" data-toggle="dropdown">Operações
+                                <span class="caret">
+
+                                </span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">Abertura de Caixa</a></li>
+                                <li><a href="">Fechamento de Caixa</a></li>
+                                <li><a href="#/vendas">Relatórios</a></li>
+                                <li><a href="">Sangria</a></li>
+                                <li><a href="#/graficos">Gráficos</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#/asdasdasdasd">Não Existe</a></li>
+                        <li><a href="#/logout" class="glyphicon glyphicon-log-out" onclick="deslogar()"></button></a>
+                        </li>
+
+
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <div class="container">
+
+            <!-- Páginas -->
+
+            <!-- Home -->
+            <div v-if="page.current == 'home'">
+                <h2 class="page-header">Home</h2>
+
+                <ol class="breadcrumb">
+                    <li class="active">Home</li>
+                </ol>
+
+                <div class="container">
+                    <h2 class="pet">Bem-vindo</h2>
+                    <p>Você está na página home.</p>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- Add Product -->
+
+            <div v-if="page.current == 'products'">
+                <h2 class="page-header">Mercadorias</h2>
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li class="active">Mercadorias</li>
+                </ol>
+                <p>
+                    <button class="btn btn-default" @click.prevent="openAddProduct()">Nova <b> Mercadoria </b><i
+                            class="glyphicon glyphicon-plus-sign"></i>
+                    </button>
+                </p>
+                <div class="alert"
+                    :class="{ 'alert-danger': products.remove.error, 'alert-success': !products.remove.error }"
+                    v-if="products.remove.messages.length > 0">
+                    <p v-for="message in products.remove.messages">{{ message }}</p>
+                </div>
+
+                <div class="alert alert-warning" v-if="App.products.list.length == 0">Nenhum registro encontrado</div>
+
+                <table class="table table-bordered" v-else>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Marca</th>
+                            <th>Medida</th>
+                            <th>Categoria</th>
+                            <th>Quantidade</th>
+                            <th>P. Custo</th>
+                            <th>Margem %</th>
+                            <th>P. Venda</th>
+
+
+                            <th width="200">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="product in products.list">
+                            <td><a href="#" @click.prevent="openEditProduct(product.key)">{{ product.produto }}</a></td>
+                            <td><a href="#" @click.prevent="openEditProduct(product.key)">{{ product.marca }}</a></td>
+                            <td><a href="#" @click.prevent="openEditProduct(product.key)">{{ product.peso }}KG</a></td>
+                            <td><a href="#" @click.prevent="openEditProduct(product.key)">{{ product.categoria }}</a>
+                            </td>
+                            <td><a href="#"
+                                    @click.prevent="openEditProduct(product.key)">{{ product.quantidade }}UN.</a></td>
+                            <td><a href="#"
+                                    @click.prevent="openEditProduct(product.key)">R${{ product.valorinicial }}</a></td>
+                            <td><a href="#" id="getlucroporcentagem"
+                                    @click.prevent="openEditProduct(product.key)">{{ product.lucroporcentagem }}%</a>
+                            </td>
+                            <td><a href="#" @click.prevent="openEditProduct(product.key)">R${{ product.valorfinal }}</a>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary"
+                                    @click.prevent="openEditProduct(product.key)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+
+                                <button type="button" class="btn btn-danger"
+                                    @click.prevent="goRemoveProduct(product.key)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+                <!-- Modal Add Product -->
+                <div class="modal fade" id="modalProductAdd" tabindex="-1" role="dialog"
+                    aria-labelledby="modalSaleAddLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalProductAddLabel"> Nova Mercadoria</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <form @submit.prevent="addProduct()">
+
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': products.add.error, 'alert-success': !products.add.error }"
+                                        v-if="products.add.messages.length > 0">
+                                        <p v-for="message in products.add.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+
+                                        <h3><b> Mercadoria</b></h3>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.produto.error }">
+                                                    <label for="">Codigo de Barras</label>
+                                                    <input type="text" class="form-control" placeholder="Cod. Barras"
+                                                        maxlength="30"
+                                                        v-model="products.add.fields.codigodebarras.value">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8"
+                                                :class="{ 'has-error': products.add.fields.produto.error }">
+                                                <label for="">Produto</label>
+                                                <input type="text" class="form-control" placeholder="Produto"
+                                                    maxlength="30" v-model="products.add.fields.produto.value">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.marca.error }">
+                                                    <label for="">Marca</label>
+                                                    <select type="text" class="form-control" placeholder="Produto"
+                                                        maxlength="30" v-model="products.add.fields.marca.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Amicil">Amicil</option>
+                                                        <option value="Joanópolis">Joanópolis</option>
+                                                        <option value="Adimax">Adimax</option>
+                                                        <option value="Outro">Outro</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.peso.error }">
+                                                    <label for="">Peso</label>
+                                                    <input type="number" class="form-control" placeholder="KG"
+                                                        step="any" maxlength="30"
+                                                        v-model="products.add.fields.peso.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.categoria.error }">
+                                                    <label for="">Categoria</label>
+                                                    <select type="text" class="form-control" placeholder="Produto"
+                                                        maxlength="30" v-model="products.add.fields.categoria.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Ração">Ração</option>
+                                                        <option value="Fracionado">Miudeza</option>
+                                                        <option value="Acessório">Acessório</option>
+                                                        <option value="Medicamento">Medicamento</option>
+                                                        <option value="Animal">Animal</option>
+                                                        <option value="Outro">Outro</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <div class="form-group"
+                                                        :class="{ 'has-error': products.add.fields.quantidade.error }">
+                                                        <label for="">Quantidade</label>
+                                                        <input type="number" class="form-control" placeholder="Qtd."
+                                                            maxlength="30"
+                                                            v-model="products.add.fields.quantidade.value"
+                                                            onblur="calcValorFinal()">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.lucrodinheiro.error }">
+                                                    <label for="">Preço Custo</label>
+                                                    <input type="number" class="form-control" placeholder="0,00"
+                                                        step="any" maxlength="30"
+                                                        v-model="products.add.fields.valorinicial.value"
+                                                        onblur="calcValorFinal()">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.lucroporcentagem.error }">
+                                                    <label for="">Lucro Un. %</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.add.fields.lucroporcentagem.value"
+                                                        onblur="calcValorFinal()">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.lucrodinheiro.error }">
+                                                    <label for="">Lucro Un. R$</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.add.fields.lucrodinheiro.value" disabled>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.valorfinal.error }">
+                                                    <label for="">Preço Venda</label>
+                                                    <input type="number" class="form-control" placeholder="0,00"
+                                                        step="any" maxlength="30"
+                                                        v-model="products.add.fields.valorfinal.value"
+                                                        onblur="calcPorcentagem()">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.gastototal.error }">
+                                                    <label for="">Gasto Total R$</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.add.fields.gastototal.value" disabled>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.gastototal.error }">
+                                                    <label for="">Lucro Total R$</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.add.fields.lucrototal.value" disabled>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.add.fields.undmedida.error }">
+                                                    <label for="">Unidade Medida</label>
+                                                    <select type="text" class="form-control"
+                                                        placeholder="Unidade de Medida" maxlength="30"
+                                                        v-model="products.add.fields.undmedida.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Unidade" id="unidade">Unidade</option>
+                                                        <option value="Fracionado">Fracionado</option>
+                                                        <option value="Serviço">Serviço</option>
+                                                        <option value="Outros">Outros</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <small
+                                            class="help-block">{{products.add.fields.produto.messages.join(", ")}}</small>
+                                    </div>
+                                    <br>
+                                    <p>
+                                        <button type="submit" class="btn btn-primary">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    </p>
+
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end Product Add -->
+
+
+
+
+
+                <!-- Modal Edit Product -->
+                <div class="modal fade" id="modalProductEdit" tabindex="-1" role="dialog"
+                    aria-labelledby="modalSaleEditLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalProductEditLabel"> Editar Mercadoria</h4>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form @submit.prevent="editProduct()">
+
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': products.edit.error, 'alert-success': !products.edit.error }"
+                                        v-if="products.edit.messages.length > 0">
+                                        <p v-for="message in products.edit.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b> Mercadoria</b></h3>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.produto.error }">
+                                                    <label for="">Codigo de Barras</label>
+                                                    <input type="text" class="form-control" placeholder="Cod. Barras"
+                                                        maxlength="30"
+                                                        v-model="products.edit.fields.codigodebarras.value">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8"
+                                                :class="{ 'has-error': products.edit.fields.produto.error }">
+                                                <label for="">Produto</label>
+                                                <input type="text" class="form-control" placeholder="Produto"
+                                                    maxlength="30" v-model="products.edit.fields.produto.value">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.marca.error }">
+                                                    <label for="">Marca</label>
+                                                    <select type="text" class="form-control" placeholder="Produto"
+                                                        maxlength="30" v-model="products.edit.fields.marca.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Adimax">Adimax</option>
+                                                        <option value="Amicil">Amicil</option>
+                                                        <option value="Demarc">Demarc</option>
+                                                        <option value="Joanópolis">Joanópolis</option>
+                                                        <option value="Outro">Outro</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.peso.error }">
+                                                    <label for="">Peso</label>
+                                                    <input type="number" class="form-control" placeholder="KG"
+                                                        step="any" maxlength="30"
+                                                        v-model="products.edit.fields.peso.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.categoria.error }">
+                                                    <label for="">Categoria</label>
+                                                    <select type="text" class="form-control" placeholder="Produto"
+                                                        step="any" maxlength="30"
+                                                        v-model="products.edit.fields.categoria.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Ração">Ração</option>
+                                                        <option value="Fracionado">Miudeza</option>
+                                                        <option value="Acessório">Acessório</option>
+                                                        <option value="Medicamento">Medicamento</option>
+                                                        <option value="Animal">Animal</option>
+                                                        <option value="Outro">Outro</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <div class="form-group"
+                                                        :class="{ 'has-error': products.edit.fields.quantidade.error }">
+                                                        <label for="">Quantidade</label>
+                                                        <input type="number" class="form-control" placeholder="Qtd."
+                                                            step="any" maxlength="30"
+                                                            v-model="products.edit.fields.quantidade.value"
+                                                            onblur="editValorFinal()">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.lucrodinheiro.error }">
+                                                    <label for="">Preço Custo</label>
+                                                    <input type="number" class="form-control" placeholder="0,00"
+                                                        step="any" maxlength="30"
+                                                        v-model="products.edit.fields.valorinicial.value"
+                                                        onblur="editValorFinal()">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.lucroporcentagem.error }">
+                                                    <label for="">Lucro Un. %</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.edit.fields.lucroporcentagem.value"
+                                                        onblur="editValorFinal()">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.lucrodinheiro.error }">
+                                                    <label for="">Lucro Un. R$</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.edit.fields.lucrodinheiro.value" disabled>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.valorfinal.error }">
+                                                    <label for="">Preço Venda</label>
+                                                    <input type="number" class="form-control" placeholder="0,00"
+                                                        step="any" maxlength="30"
+                                                        v-model="products.edit.fields.valorfinal.value"
+                                                        onblur="editPorcentagem()">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.gastototal.error }">
+                                                    <label for="">Gasto Total R$</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.edit.fields.gastototal.value" disabled>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.gastototal.error }">
+                                                    <label for="">Lucro Total R$</label>
+                                                    <input type="number" class="form-control" placeholder="0" size="7"
+                                                        step="any" min="0.00" maxlength="6"
+                                                        v-model="products.edit.fields.lucrototal.value" disabled>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': products.edit.fields.undmedida.error }">
+                                                    <label for="">Unidade Medida</label>
+                                                    <select type="text" class="form-control"
+                                                        placeholder="Unidade de Medida" maxlength="30"
+                                                        v-model="products.edit.fields.undmedida.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Unidade">Unidade</option>
+                                                        <option value="Fracionado">Fracionado</option>
+                                                        <option value="Serviço">Serviço</option>
+                                                        <option value="Outros">Outros</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <small
+                                            class="help-block">{{products.add.fields.produto.messages.join(", ")}}</small>
+                                    </div>
+                                    <br>
+                                    <p>
+                                        <button type="submit" class="btn btn-success">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+
+
+                                        <button type="button" class="btn btn-danger"
+                                            @click.prevent="goRemoveProduct(products.edit.fields.key)">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </p>
+
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- End Edit Product-->
+
+
+            <!-- Relatorio de Vendas -->
+            <div v-if="page.current == 'vendas'">
+                <h2 class="page-header">Vendas Concluídas</h2>
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li class="active">Vendas</li>
+                </ol>
+
+
+                <div></div>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="200">Data Venda</th>
+                            <th width="200">Recebido em <span class="glyphicon glyphicon-usd"></span></th>
+                            <th width="200">Recebido em <span class="glyphicon glyphicon-credit-card"></span></th>
+                            <th width="200">Subtotal (R$)</th>
+                            <th width="200">Valor Compra (R$)</th>
+                            <th width="30">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="listsales in sales.add.list">
+                            <td>{{listsales.datavenda}}</td>
+                            <td>{{listsales.cash}}</td>
+                            <td>{{listsales.card}}</td>
+                            <td>{{listsales.subtotalcompra}}</td>
+                            <td>{{listsales.totalcompra}}</td>
+
+                            <td><button class="btn btn-primary glyphicon glyphicon-search"></button></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="200">Rerente à</th>
+                            <th width="150"><span class="glyphicon glyphicon-usd"></span> Total</th>
+                            <th width="150"><span class="glyphicon glyphicon-credit-card"></span> Total</th>
+                            <th width="150"> Total Geral</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <div class="form-group">
+                                <td width="333"><input class="form-control" placeholder="21/08/2019" readonly></td>
+                                <td width="333"><input type="text" class="form-control" placeholder="0,00"
+                                        v-model="sales.add.fields.dinheiro.value" readonly>
+                                </td>
+                                <td width="333"><input class="form-control" placeholder="0,00"
+                                        v-model="sales.add.fields.cartao.value" readonly></td>
+                                <td width="333"><input class="form-control" placeholder="0,00"
+                                        v-model="sales.add.fields.relatoriototal.value" readonly></td>
+                            </div>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- Caixa - Sale -->
+            <div v-if="page.current == 'caixa'">
+                <div id="mom">
+                    <form @submit.prevent="addSale()">
+                        <div class="box-left" id="produto">
+                            <div class="container-fluid">
+
+                                <form @submit.prevent="addNewSale()">
+
+                                    <!-- <button class="btn btn-success"><i
+                                        class="glyphicon glyphicon-plus"></i></button><br><br> -->
+
+
+                                    <div class="form-group">
+                                        <label for="">Produto</label><br>
+                                        <input type="text" class="form-control" placeholder="Produto" maxlength="30   "
+                                            v-model="sales.add.fields.nome.value">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Preço Unitário (R$)</label><br>
+                                        <input type="text" class="form-control text-right" placeholder="Preço Unitário"
+                                            maxlength="30" v-model="sales.add.fields.precoproduto.value" step="any"
+                                            id="iptPrice">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Quantidade</label><br>
+                                        <input type="text" class="form-control text-right" placeholder="Qtd."
+                                            maxlength="30" v-model="sales.add.fields.quantidade.value" step="any">
+                                    </div>
+                                    <p>
+                                        <button class="btn btn-primary btn-block"
+                                            @click.prevent="addNewSale()">Adicionar</button>
+                                    </p><br>
+                                    <div class="form-group">
+                                        <label for="">Data Atual</label><br>
+                                        <input type="text" class="form-control text-right" maxlength="30"
+                                            v-model="sales.add.fields.dataatual.value" disabled>
+                                    </div>
+                                    <!-- 
+                                    <div class="form-group" :class="{ 'has-error': products.add.fields.marca.error }">
+                                            <label for="" >Tipo</label><br>
+                                            <select v-model="sales.add.fields.tipodevenda.value" class="form-control">
+                                                <option value="" disabled selected hidden>Selecione...</option>
+                                                <option value="Pet Shop">Pet Shop</option>
+                                                <option value="Banho e Tosa">Banho e Tosa</option>
+                                                <option value="Outro">Outro</option>
+                                            </select>
+                                    </div> -->
+
+                                    <!-- <p>
+                                        <button class="btn btn-default btn-block" @click.prevent="openAddSale()"><b>Nova
+                                                Venda </b><i class="glyphicon glyphicon-usd"></i></button>
+                                    </p> -->
+                                    <br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+
+                                    <label for="">Forma de Pagamento</label><br>
+                                    <p>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" class="input-group-addon"><b><i
+                                                        class="glyphicon glyphicon-usd"></i></b>
+                                                <input type="checkbox">
+                                            </span>
+                                            <input type="number" class="form-control text-right" placeholder="0,00"
+                                                maxlength="30" v-model="sales.add.fields.cash.value"
+                                                onblur="CalctotalCaixa()">
+                                        </div>
+                                    </p>
+
+                                    <p>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><b> <i
+                                                        class="glyphicon glyphicon-credit-card"></i></b>
+                                                <input type="checkbox">
+                                            </span>
+                                            <input type="number" class="form-control text-right" placeholder="0,00"
+                                                maxlength="30" v-model="sales.add.fields.card.value"
+                                                onblur="CalctotalCaixa()">
+                                        </div>
+                                    </p>
+
+                                    <p>
+                                        <button class="btn btn-success" @click.prevent="addSale()"
+                                            onclick="document.location.reload(true)">Finalizar Compra <i
+                                                class="glyphicon glyphicon-ok"></i></button>
+                                    </p>
+
+                                </form>
+
+
+                            </div>
+                        </div>
+                        <div class="box-center">
+                            <div class="container-fluid">
+                                <br>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th class="text-right">Preço Unitário (R$)</th>
+                                            <th class="text-right">Quantidade</th>
+                                            <th class="text-right">Total (R$)</th>
+                                            <th width="30"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(sale, i) in sales.list">
+                                            <td>{{sale.product}}</a></td>
+                                            <td class="text-right">{{sale.priceFormat}}</td>
+                                            <td class="text-right">{{sale.amountFormat}}</td>
+                                            <td class="text-right">{{sale.totalFormat}}</td>
+                                            <td>
+                                                <button class="btn btn-danger btn-xs"
+                                                    @click.prevent="removeSaleProduct(sale, i)">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="box-bottom">
+                            <div class="container-fluid">
+                                <br>
+
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="">Subtotal (R$)</label>
+                                        <input type="text" class="form-control text-right" maxlength="30"
+                                            v-model="sales.add.fields.subtotalcompra.value" readonly>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label for="">Desconto</label>
+                                        <div class=input-group>
+                                            <input type="text" class="form-control text-right" maxlength="30"
+                                                v-model="sales.add.fields.desconto.value" onblur="CalctotalCaixa()">
+                                            <span class="input-group-addon" id="basic-addon1"></span>
+                                            <select class="form-control" v-model="sales.add.fields.discountType"
+                                                onblur="CalctotalCaixa()">
+                                                <option value="value">R$</option>
+                                                <option value="percent">%</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label for="">Recebido (R$)</label>
+                                        <input type="text" class="form-control text-right" maxlength="30"
+                                            v-model="sales.add.fields.valortotalrecebido.value" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-2">
+                                    <div class="form-group" :class="{ 'has-error': sales.add.fields.troco.error }">
+                                        <label for="">Troco</label>
+                                        <input type="text" class="form-control text-right" maxlength="20"
+                                            v-model="sales.add.fields.troco.value" readonly>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="">Total (R$)</label>
+                                        <input type="text" class="form-control text-right" maxlength="30"
+                                            v-model="sales.add.fields.totalcompra.value" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <!-- Modal Sale Add -->
+                <div class="modal fade" id="modalSaleAdd" tabindex="-1" role="dialog"
+                    aria-labelledby="modalSaleAddLabel">
+                    <div class="modal-dialog modal-large" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalSaleAddLabel"> Nova Venda</h4>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form @submit.prevent="addSale()">
+
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': sales.add.error, 'alert-success': !sales.add.error }"
+                                        v-if="sales.add.messages.length > 0">
+                                        <p v-for="message in sales.add.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b> Venda</b></h3>
+                                        <div class="form-group" :class="{ 'has-error': sales.add.fields.nome.error }">
+                                            <label for="">Produto</label>
+
+                                            <input type="text" class="form-control" placeholder="Produto"
+                                                maxlength="30   " v-model="sales.add.fields.nome.value">
+                                        </div>
+
+
+                                        <label for="">Preço Produto</label>
+                                        <div class="input-group"
+                                            :class="{ 'has-error': sales.add.fields.precoproduto.error }">
+                                            <span class="input-group-addon" class="input-group-addon"><b>R$</b>
+                                            </span>
+                                            <input type="text" class="form-control" placeholder="0,00" maxlength="30"
+                                                v-model="sales.add.fields.precoproduto.value">
+                                        </div><br>
+
+                                        <div class="form-group"
+                                            :class="{ 'has-error': sales.add.fields.quantidade.error }">
+                                            <label for="">Quantidade</label>
+                                            <input type="number" class="form-control" placeholder="Qtd." maxlength="30"
+                                                v-model="sales.add.fields.quantidade.value" onblur="calcTotalCompra()">
+                                        </div>
+
+                                        <div><label for="">Forma de Pagamento</label></div>
+                                        <div class="input-group" :class="{ 'has-error': sales.add.fields.cash.error }">
+                                            <span class="input-group-addon" class="input-group-addon"><b><i
+                                                        class="glyphicon glyphicon-usd"></i></b>
+                                                <input type="checkbox">
+                                            </span>
+                                            <input type="number" class="form-control" placeholder="Valor" maxlength="30"
+                                                v-model="sales.add.fields.cash.value" onblur="calcRecebido()">
+                                        </div><br>
+                                        <div class="input-group" :class="{ 'has-error': sales.add.fields.card.error }">
+                                            <span class="input-group-addon"><b> <i
+                                                        class="glyphicon glyphicon-credit-card"></i></b>
+                                                <input type="checkbox">
+                                            </span>
+                                            <input type="number" class="form-control" placeholder="Valor" maxlength="30"
+                                                v-model="sales.add.fields.card.value" onblur="calcRecebido()">
+                                        </div><br>
+
+                                        <label for="">Desconto</label>
+                                        <div class="input-group"
+                                            :class="{ 'has-error': sales.add.fields.desconto.error }">
+                                            <span class="input-group-addon" class="input-group-addon"><b>R$</b>
+                                            </span>
+                                            <input type="number" class="form-control" placeholder="0,00" maxlength="30"
+                                                v-model="sales.add.fields.desconto.value" onblur="calcRecebido()">
+                                        </div><br>
+
+
+
+                                        <label for="">Recebido</label>
+                                        <div class="input-group"
+                                            :class="{ 'has-error': sales.add.fields.valortotalrecebido.error }">
+                                            <span class="input-group-addon" class="input-group-addon"><b>R$</b>
+                                            </span>
+                                            <input type="text" class="form-control" placeholder="0,00" maxlength="30"
+                                                v-model="sales.add.fields.valortotalrecebido.value" disabled>
+                                        </div><br>
+
+                                        <label for=""> Total Compra</label>
+                                        <div class="input-group"
+                                            :class="{ 'has-error': sales.add.fields.valortotalcompra.error }">
+                                            <span class="input-group-addon" class="input-group-addon"><b>R$</b>
+                                            </span>
+                                            <input type="number" class="form-control" placeholder="0,00" maxlength="30"
+                                                v-model="sales.add.fields.valortotalcompra.value" disabled>
+                                        </div><br>
+
+
+
+                                        <label for="">Troco</label>
+                                        <div class="input-group" :class="{ 'has-error': sales.add.fields.troco.error }">
+                                            <span class="input-group-addon" class="input-group-addon"><b>R$</b>
+                                            </span>
+                                            <input type="number" class="form-control" placeholder="0,00" maxlength="20"
+                                                v-model="sales.add.fields.troco.value" disabled>
+                                        </div><br>
+
+                                        <small class="help-block">{{sales.add.fields.nome.messages.join(", ")}}</small>
+                                    </div>
+
+                                    <p>
+                                        <button type="submit" class="btn btn-primary">Finalizar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    </p>
+
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fornecedores - Listar -->
+            <div v-if="page.current == 'providers'">
+                <h2 class="page-header"> Fornecedores</h2>
+                <ol class="breadcrumb">
+
+                    <li><a href="#/"> Home</a></li>
+                    <li class="active">Fornecedores</li>
+                </ol>
+                <p>
+                    <button type="button" class="btn btn-default" @click.prevent="openProviderUser()">
+                        <span class="glyphicon glyphicon-plus-sign"></span> Adicionar <b>Fornecedor</b>
+                    </button>
+                </p>
+
+                <div class="alert"
+                    :class="{ 'alert-danger': providers.remove.error, 'alert-success': !providers.remove.error }"
+                    v-if="providers.remove.messages.length > 0">
+                    <p v-for="message in providers.remove.messages">{{ message }}</p>
+                </div>
+
+
+                <!-- Listagem de Fornecedores -->
+                <div class="alert alert-warning" v-if="App.providers.list.length == 0">Nenhum registro encontrado</div>
+                <table class="table table-bordered" v-else>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Marca</th>
+
+                            <th width="200">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="provider in providers.list">
+                            <td><a href="#" @click.prevent="openEditProvider(provider.key)">{{ provider.nome }}</a></td>
+                            <td><a href="#" @click.prevent="openEditProvider(provider.key)">{{ provider.marca }}</a>
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-primary"
+                                    @click.prevent="openEditProvider(provider.key)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+
+                                <button type="button" class="btn btn-danger"
+                                    @click.prevent="goRemoveProvider(provider.key)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Modal Provider Add -->
+                <div class="modal fade" id="modalProviderAdd" tabindex="-1" role="dialog"
+                    aria-labelledby="modalProviderAddLabel">
+                    <div class="modal-dialog modal-large" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalProviderAddLabel">Adicionar Fornecedor</h4>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form @submit.prevent="addProvider()">
+
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': providers.add.error, 'alert-success': !providers.add.error }"
+                                        v-if="providers.add.messages.length > 0">
+                                        <p v-for="message in providers.add.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b>Dados do Fornecedor</b></h3>
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.add.fields.nome.error }">
+                                            <label for="">Nome</label>
+
+                                            <input type="text" class="form-control" placeholder="Representante"
+                                                maxlength="30   " v-model="providers.add.fields.nome.value">
+                                        </div>
+
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.add.fields.marca.error }">
+                                            <label for="">Marca</label>
+
+                                            <input type="text" class="form-control" placeholder="Marca"
+                                                maxlength="30   " v-model="providers.add.fields.marca.value">
+                                        </div>
+
+                                        <small
+                                            class="help-block">{{providers.add.fields.nome.messages.join(", ")}}</small>
+                                    </div>
+
+                                    <p>
+                                        <button type="submit" class="btn btn-primary">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    </p>
+
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Edit Provider -->
+                <div class="modal fade" id="modalProviderEdit" tabindex="-1" role="dialog"
+                    aria-labelledby="modalProviderEditLabel">
+                    <div class="modal-dialog modal-large" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalProviderEditLabel">Editar Fornecedor</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <form @submit.prevent="editProvider()">
+
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': providers.edit.error, 'alert-success': !providers.edit.error }"
+                                        v-if="providers.edit.messages.length > 0">
+                                        <p v-for="message in providers.edit.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b>Dados do Fornecedor</b></h3>
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.edit.fields.nome.error }">
+                                            <label for="">Nome</label>
+
+                                            <input type="text" class="form-control" placeholder="Representante"
+                                                maxlength="30   " v-model="providers.edit.fields.nome.value">
+                                        </div>
+
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.edit.fields.marca.error }">
+                                            <label for="">Marca</label>
+
+                                            <input type="text" class="form-control" placeholder="Marca"
+                                                maxlength="30   " v-model="providers.edit.fields.marca.value">
+                                        </div>
+                                        <!-- <br>
+                                        <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" class="form-control">
+                                            
+                                              </div> -->
+
+                                        <small
+                                            class="help-block">{{providers.edit.fields.nome.messages.join(", ")}}</small>
+                                    </div>
+
+                                    <p>
+                                        <button type="submit" class="btn btn-success">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    </p>
+
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Fornecedor - Editar -->
+                <div v-if="page.current == 'providers-edit'">
+                    <h2 class="page-header">Fornecedor - Editar</h2>
+
+                    <ol class="breadcrumb">
+                        <li><a href="#/">Home</a></li>
+                        <li><a href="#/providers">Fornecedores</a></li>
+                        <li class="active">Editar</li>
+                    </ol>
+                    <!--  <pre>{{users.edit}}</pre>-->
+                    <form @submit.prevent="editProvider()">
+                        <!--------------FORM MINIMIZADO------------>
+                        <div id="minimizar form">
+                            <div class="alert"
+                                :class="{ 'alert-danger': users.edit.error, 'alert-success': !users.edit.error }"
+                                v-if="users.edit.messages.length > 0">
+                                <p v-for="message in users.edit.messages">{{ message }}</p>
+                            </div>
+                            <h3><b>Dados do Fornecedor</b></h3>
+                            <div class="form-group" :class="{ 'has-error': providers.edit.fields.nome.error }">
+                                <label for="">Nome</label>
+
+                                <input type="text" class="form-control" placeholder="Representante" maxlength="30   "
+                                    v-model="providers.edit.fields.nome.value">
+                            </div>
+
+                            <div class="form-group" :class="{ 'has-error': providers.edit.fields.marca.error }">
+                                <label for="">Marca</label>
+
+                                <input type="text" class="form-control" placeholder="Marca" maxlength="30   "
+                                    v-model="providers.edit.fields.marca.value">
+                            </div>
+
+                        </div>
+                        <p>
+                            <button type="submit" class="btn btn-primary">Salvar <i
+                                    class="glyphicon glyphicon-floppy-disk"></i></button>
+
+                            <button type="button" class="btn btn-danger"
+                                @click.prevent="goRemoveProvider(providers.edit.fields.key)">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+
+                            <button type="button" class="btn btn-default"
+                                @click.prevent="route.go('#/providers')">Cancelar</button>
+                        </p>
+
+                        <small class="help-block">{{providers.edit.fields.nome.messages.join(", ")}}</small>
+                    </form>
+                </div>
+
+
+
+
+
+            </div>
+            <!-- Usuários - Listar -->
+            <div v-if="page.current == 'users'">
+                <h2 class="page-header">Usuários</h2>
+
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li class="active">Usuários</li>
+                </ol>
+
+                <p>
+                    <button type="button" class="btn btn-default" @click.prevent="openAddUser()">
+                        <span class="glyphicon glyphicon-plus-sign"></span> Adicionar <b>Usuário</b>
+                    </button>
+                </p>
+
+                <div class="alert" :class="{ 'alert-danger': users.remove.error, 'alert-success': !users.remove.error }"
+                    v-if="users.remove.messages.length > 0">
+                    <p v-for="message in users.remove.messages">{{ message }}</p>
+                </div>
+
+                <!-- Listagem de usuários -->
+                <div class="alert alert-warning" v-if="users.list.length == 0">Nenhum registro encontrado</div>
+                <table class="table table-bordered" v-else>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Cliente</th>
+                            <th>Telefone</th>
+                            <th>Rua</th>
+                            <th>N.</th>
+                            <th>Bairro</th>
+                            <th>Nome</th>
+                            <th>Raça</th>
+
+                            <th width="200">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="user in users.list">
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.codigo }}</a></td>
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.cliente }}</a></td>
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.telefone }}</a></td>
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.rua }}</a></td>
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.numero }}</a></td>
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.bairro }}</a></td>
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.nome }}</a></td>
+                            <td><a href="#" @click.prevent="goEditUser(user.key)">{{ user.raca }}</a></td>
+
+
+
+                            <td>
+                                <!-- goEditUser(user.key)-->
+                                <button type="button" class="btn btn-primary" @click.prevent="openEditUser(user.key)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+
+                                <button type="button" class="btn btn-danger" @click.prevent="goRemoveUser(user.key)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Modal User Add -->
+                <div class="modal fade" id="modalUserAdd" tabindex="-1" role="dialog"
+                    aria-labelledby="modalUserAddLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalUserAddLabel">Adicionar Usuário</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <form @submit.prevent="addUser()">
+
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': users.add.error, 'alert-success': !users.add.error }"
+                                        v-if="users.add.messages.length > 0">
+                                        <p v-for="message in users.add.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b>Dados do Cliente</b></h3>
+
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.codigo.error }">
+                                                    <label for="">Codigo</label>
+                                                    <input type="text" class="form-control" placeholder="xxxx"
+                                                        maxlength="4" v-model="users.add.fields.codigo.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.cliente.error }">
+                                                    <label for="">Cliente</label>
+                                                    <input type="text" class="form-control" placeholder="Cliente"
+                                                        v-model="users.add.fields.cliente.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.telefone.error }">
+                                                    <label for="">Telefone</label>
+                                                    <input type="text" class="form-control" placeholder="9999-9999"
+                                                        maxlength="9" v-model="users.add.fields.telefone.value">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.cep.error }">
+                                                    <label for="">CEP</label>
+                                                    <input type="text" class="form-control"
+                                                        :class="{ 'has-error': users.add.fields.cep.error }"
+                                                        placeholder="CEP" name="cep" id="cep" size="10" value=""
+                                                        maxlength="9" onblur="pesquisacep(this.value);"
+                                                        v-model="users.add.fields.cep.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-7">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.rua.error }">
+                                                    <label for="">Rua</label>
+                                                    <input type="text" class="form-control" placeholder="Rua" name="rua"
+                                                        id="rua" v-model="users.add.fields.rua.value">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.uf.error }">
+                                                    <label for="">Estado</label>
+                                                    <input type="text" class="form-control" placeholder="Estado"
+                                                        v-model="users.add.fields.uf.value" name="uf" id="uf">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <div class="row">
+
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.bairro.error }">
+                                                    <label for="">Bairro</label>
+                                                    <input type="text" class="form-control" placeholder="Bairro"
+                                                        v-model="users.add.fields.bairro.value" name="bairro"
+                                                        id="bairro">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.cidade.error }">
+                                                    <label for="">Cidade</label>
+                                                    <input type="text" class="form-control" placeholder="Cidade"
+                                                        v-model="users.add.fields.cidade.value" name="cidade"
+                                                        id="cidade">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.numero.error }">
+                                                    <label for="">Num.</label>
+                                                    <input type="text" class="form-control" placeholder="0" id="numero"
+                                                        maxlength="6" v-model="users.add.fields.numero.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2"
+                                                :class="{ 'has-error': users.add.fields.complemento.error }">
+                                                <div class="form-group">
+                                                    <label for="">Complemento</label>
+                                                    <input type="text" class="form-control" placeholder="..."
+                                                        maxlength="12" v-model="users.add.fields.complemento.value">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-3"
+                                                :class="{ 'has-error': users.add.fields.datacadastro.error }">
+                                                <div class="form-group">
+                                                    <label for="">Horario Atual</label>
+                                                    <input type="text" class="form-control" min="2019-01-01"
+                                                        max="2050-12-30" v-model="users.add.fields.dataatual.value"
+                                                        disabled>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3"
+                                                :class="{ 'has-error': users.add.fields.datacadastro.error }">
+                                                <div class="form-group">
+                                                    <label for="">Data Cadastro</label>
+                                                    <input type="date" class="form-control" min="2019-01-01"
+                                                        max="2050-12-30" v-model="users.add.fields.datacadastro.value">
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.status.error }">
+                                                    <label for="">Status</label>
+                                                    <select type="text" class="form-control" placeholder="Nome"
+                                                        v-model="users.add.fields.status.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="1º visita">1º visita</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <h3><b>Dados do PET</b></h3>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.nome.error }">
+                                                    <label for="">Nome</label>
+                                                    <input type="text" class="form-control" placeholder="Nome"
+                                                        v-model="users.add.fields.nome.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.pet.error }">
+                                                    <label for="">PET</label>
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.add.fields.pet.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Cachorro">Cachorro</option>
+                                                        <option value="Gato">Gato</option>
+                                                        <option value="Outros">Outros</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2"
+                                                :class="{ 'has-error': users.add.fields.idade.error }">
+                                                <div class="form-group">
+                                                    <label for="">Idade</label>
+                                                    <select type="text" class="form-control" placeholder="Nome"
+                                                        v-model="users.add.fields.idade.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="3-6M">3-6M</option>
+                                                        <option value="6-9M">6-9M</option>
+                                                        <option value="9-12M">9-12M</option>
+                                                        <option value="1A e 3M">1A e 3M</option>
+                                                        <option value="1A e 6M">1A e 6M</option>
+                                                        <option value="1A e 9M">1A e 9M</option>
+                                                        <option value="2A">2A</option>
+                                                        <option value="2A e 6M">2A e 6M</option>
+                                                        <option value="3A">3A</option>
+                                                        <option value="3A e 6M">3A e 6M</option>
+                                                        <option value="4A">4A</option>
+                                                        <option value="4A e 6M">4A e 6M</option>
+                                                        <option value="5A">5A</option>
+                                                        <option value="5A e 6M">5A e 6M</option>
+                                                        <option value="6A">6A</option>
+                                                        <option value="7A">7A</option>
+                                                        <option value="8A">8A</option>
+                                                        <option value="9A">9A</option>
+                                                        <option value="10A">10A</option>
+                                                        <option value="10+">10+</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.genero.error }">
+                                                    <label for="">Genero</label>
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.add.fields.genero.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Macho">Macho</option>
+                                                        <option value="Femea">Femea</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4" :class="{ 'has-error': users.add.fields.raca.error }">
+                                                <div class="form-group">
+                                                    <label for="">Raça</label>
+
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.add.fields.raca.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Akita">Akita</option>
+                                                        <option value="Basset">Basset</option>
+                                                        <option value="Beagle">Beagle</option>
+                                                        <option value="Border Collie">Border Collie</option>
+                                                        <option value="Boxer">Boxer</option>
+                                                        <option value="Bulldog">Bulldog</option>
+                                                        <option value="Bull Terrier">Bull Terrier</option>
+                                                        <option value="Chihuahua">Chihuahua</option>
+                                                        <option value="Chow Chow">Chow Chow</option>
+                                                        <option value="Collie">Collie</option>
+                                                        <option value="Dachshund">Dachshund</option>
+                                                        <option value="Dalmata">Dalmata</option>
+                                                        <option value="Doberman">Doberman</option>
+                                                        <option value="Fox Paulisitinha">Fox Paulisitinha</option>
+                                                        <option value="Golden Retriever">Golden Retriever</option>
+                                                        <option value="Husky Siberiano">Husky Siberiano</option>
+                                                        <option value="Labrador">Labrador</option>
+                                                        <option value="Lhasa Apso">Lhasa Apso</option>
+                                                        <option value="Maltes">Maltes</option>
+                                                        <option value="Pastor">Pastor</option>
+                                                        <option value="Pinscher">Pinscher</option>
+                                                        <option value="Pit Bull">Pit Bull</option>
+                                                        <option value="Poodle">Poodle</option>
+                                                        <option value="Pug">Pug</option>
+                                                        <option value="Rottweiler">Rottweiler</option>
+                                                        <option value="Shih Tzu">Shih Tzu</option>
+                                                        <option value="Yorkshire">Yorkshire</option>
+                                                        <option value="Outro">Outro</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.temperamento.error }">
+                                                    <label for="">Temperamento</label>
+
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.add.fields.temperamento.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Docil">Docil</option>
+                                                        <option value="Arisco">Arisco</option>
+                                                        <option value="Bravo">Bravo</option>
+                                                        <option value="Muito Bravo">Muito Bravo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.add.fields.observacao.error }">
+                                                    <label for="">Observação:</label>
+                                                    <textarea type="text" class="form-control"
+                                                        placeholder="Digite uma observação... (Opcional)" rows="3"
+                                                        v-model="users.add.fields.observacao.value"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <small class="help-block">{{users.add.fields.rua.messages.join(", ")}}</small>
+
+
+                                    <p>
+                                        <button type="submit" class="btn btn-primary">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    </p>
+
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal User Edit -->
+                <div class="modal fade" id="modalUserEdit" tabindex="-1" role="dialog"
+                    aria-labelledby="modalUserEditLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalUserEditLabel">Editar Usuário</h4>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form @submit.prevent="editUser()">
+
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': users.edit.error, 'alert-success': !users.edit.error }"
+                                        v-if="users.edit.messages.length > 0">
+                                        <p v-for="message in users.edit.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b>Dados do Cliente</b></h3>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.codigo.error }">
+                                                    <label for="">Codigo</label>
+                                                    <input type="text" class="form-control" placeholder="xxxx"
+                                                        maxlength="4" v-model="users.edit.fields.codigo.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.cliente.error }">
+                                                    <label for="">Cliente</label>
+                                                    <input type="text" class="form-control" placeholder="Cliente"
+                                                        v-model="users.edit.fields.cliente.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.telefone.error }">
+                                                    <label for="">Telefone</label>
+                                                    <input type="text" class="form-control" placeholder="9999-9999"
+                                                        maxlength="9" v-model="users.edit.fields.telefone.value">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.cep.error }">
+                                                    <label for="">CEP</label>
+                                                    <input type="text" class="form-control"
+                                                        :class="{ 'has-error': users.edit.fields.cep.error }"
+                                                        placeholder="CEP" name="cep" id="cep" size="10" value=""
+                                                        maxlength="9" onblur="pesquisacep(this.value);"
+                                                        v-model="users.edit.fields.cep.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-7">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.rua.error }">
+                                                    <label for="">Rua</label>
+                                                    <input type="text" class="form-control" placeholder="Rua" name="rua"
+                                                        id="rua" v-model="users.edit.fields.rua.value">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-3">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.uf.error }">
+                                                    <label for="">Estado</label>
+                                                    <input type="text" class="form-control" placeholder="Estado"
+                                                        v-model="users.edit.fields.uf.value" name="uf" id="uf">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="row">
+
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.bairro.error }">
+                                                    <label for="">Bairro</label>
+                                                    <input type="text" class="form-control" placeholder="Bairro"
+                                                        v-model="users.edit.fields.bairro.value" name="bairro"
+                                                        id="bairro">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.cidade.error }">
+                                                    <label for="">Cidade</label>
+                                                    <input type="text" class="form-control" placeholder="Cidade"
+                                                        v-model="users.edit.fields.cidade.value" name="cidade"
+                                                        id="cidade">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.numero.error }">
+                                                    <label for="">Num.</label>
+                                                    <input type="text" class="form-control" placeholder="0" id="numero"
+                                                        maxlength="6" v-model="users.edit.fields.numero.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2"
+                                                :class="{ 'has-error': users.edit.fields.complemento.error }">
+                                                <div class="form-group">
+                                                    <label for="">Complemento</label>
+                                                    <input type="text" class="form-control" placeholder="..."
+                                                        id="numero" maxlength="6"
+                                                        v-model="users.edit.fields.complemento.value">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6"
+                                                :class="{ 'has-error': users.edit.fields.datacadastro.error }">
+                                                <div class="form-group">
+                                                    <label for="">Data Cadastro</label>
+                                                    <input type="date" class="form-control" min="2019-01-01"
+                                                        max="2050-12-30" v-model="users.edit.fields.datacadastro.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.status.error }">
+                                                    <label for="">Status</label>
+                                                    <select type="text" class="form-control" placeholder="Nome"
+                                                        v-model="users.edit.fields.status.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="1º visita">1º visita</option>
+                                                        <option value="2º visita">2º visita</option>
+                                                        <option value="3º visita">3º visita</option>
+                                                        <option value="4º visita">4º visita</option>
+                                                        <option value="5º visita">5º visita</option>
+                                                        <option value="6º visita">6º visita</option>
+                                                        <option value="7º visita">7º visita</option>
+                                                        <option value="8º visita">8º visita</option>
+                                                        <option value="9º visita">9º visita</option>
+                                                        <option value="10º visita">10º visita</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <h3><b>Dados do PET</b></h3>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.nome.error }">
+                                                    <label for="">Nome</label>
+                                                    <input type="text" class="form-control" placeholder="Nome"
+                                                        v-model="users.edit.fields.nome.value">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.pet.error }">
+                                                    <label for="">PET</label>
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.edit.fields.pet.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Cachorro">Cachorro</option>
+                                                        <option value="Gato">Gato</option>
+                                                        <option value="Outros">Outros</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2"
+                                                :class="{ 'has-error': users.edit.fields.idade.error }">
+                                                <div class="form-group">
+                                                    <label for="">Idade</label>
+                                                    <select type="text" class="form-control" placeholder="Nome"
+                                                        v-model="users.edit.fields.idade.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="3-6M">3-6M</option>
+                                                        <option value="6-9M">6-9M</option>
+                                                        <option value="9-12M">9-12M</option>
+                                                        <option value="1A e 3M">1A e 3M</option>
+                                                        <option value="1A e 6M">1A e 6M</option>
+                                                        <option value="1A e 9M">1A e 9M</option>
+                                                        <option value="2A">2A</option>
+                                                        <option value="2A e 6M">2A e 6M</option>
+                                                        <option value="3A">3A</option>
+                                                        <option value="3A e 6M">3A e 6M</option>
+                                                        <option value="4A">4A</option>
+                                                        <option value="4A e 6M">4A e 6M</option>
+                                                        <option value="5A">5A</option>
+                                                        <option value="5A e 6M">5A e 6M</option>
+                                                        <option value="6A">6A</option>
+                                                        <option value="7A">7A</option>
+                                                        <option value="8A">8A</option>
+                                                        <option value="9A">9A</option>
+                                                        <option value="10A">10A</option>
+                                                        <option value="10+">10+</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.genero.error }">
+                                                    <label for="">Genero</label>
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.edit.fields.genero.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Macho">Macho</option>
+                                                        <option value="Femea">Femea</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4"
+                                                :class="{ 'has-error': users.edit.fields.raca.error }">
+                                                <div class="form-group">
+                                                    <label for="">Raça</label>
+
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.edit.fields.raca.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Akita">Akita</option>
+                                                        <option value="Basset">Basset</option>
+                                                        <option value="Beagle">Beagle</option>
+                                                        <option value="Border Collie">Border Collie</option>
+                                                        <option value="Boxer">Boxer</option>
+                                                        <option value="Bulldog">Bulldog</option>
+                                                        <option value="Bull Terrier">Bull Terrier</option>
+                                                        <option value="Chihuahua">Chihuahua</option>
+                                                        <option value="Chow Chow">Chow Chow</option>
+                                                        <option value="Collie">Collie</option>
+                                                        <option value="Dachshund">Dachshund</option>
+                                                        <option value="Dalmata">Dalmata</option>
+                                                        <option value="Doberman">Doberman</option>
+                                                        <option value="Fox Paulisitinha">Fox Paulisitinha</option>
+                                                        <option value="Golden Retriever">Golden Retriever</option>
+                                                        <option value="Husky Siberiano">Husky Siberiano</option>
+                                                        <option value="Labrador">Labrador</option>
+                                                        <option value="Lhasa Apso">Lhasa Apso</option>
+                                                        <option value="Maltes">Maltes</option>
+                                                        <option value="Pastor">Pastor</option>
+                                                        <option value="Pinscher">Pinscher</option>
+                                                        <option value="Pit Bull">Pit Bull</option>
+                                                        <option value="Poodle">Poodle</option>
+                                                        <option value="Pug">Pug</option>
+                                                        <option value="Rottweiler">Rottweiler</option>
+                                                        <option value="Shih Tzu">Shih Tzu</option>
+                                                        <option value="Yorkshire">Yorkshire</option>
+                                                        <option value="Outro">Outro</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.temperamento.error }">
+                                                    <label for="">Temperamento</label>
+
+                                                    <select type="text" class="form-control" placeholder="Raça"
+                                                        v-model="users.edit.fields.temperamento.value">
+                                                        <option value="" disabled selected hidden>Selecione...</option>
+                                                        <option value="Docil">Docil</option>
+                                                        <option value="Arisco">Arisco</option>
+                                                        <option value="Bravo">Bravo</option>
+                                                        <option value="Muito Bravo">Muito Bravo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group"
+                                                    :class="{ 'has-error': users.edit.fields.observacao.error }">
+                                                    <label for="">Observação:</label>
+                                                    <textarea type="text" class="form-control"
+                                                        placeholder="Digite uma observação... (Opcional)" rows="3"
+                                                        v-model="users.edit.fields.observacao.value"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <small class="help-block">{{users.edit.fields.rua.messages.join(", ")}}</small>
+
+                                    <p>
+                                        <button type="submit" class="btn btn-success">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+
+                                        <button type="button" class="btn btn-danger"
+                                            @click.prevent="goRemoveUser(users.edit.fields.key)">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </p>
+
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal User Remove -->
+                <div class="modal fade" id="modalUserRemove" tabindex="-1" role="dialog"
+                    aria-labelledby="modalUserRemoveLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalUserRemoveLabel">Remover Usuário</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="alert"
+                                    :class="{ 'alert-danger': users.remove.error, 'alert-success': !users.remove.error }"
+                                    v-if="users.remove.messages.length > 0">
+                                    <p v-for="message in users.remove.messages">{{ message }}</p>
+                                </div>
+
+                                <p class="lead">Deseja realmente excluir o cadastro do usuário
+                                    <b>{{users.remove.cliente}}</b>?</p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="type" class="btn btn-danger" @click.prevent="removeUser()"
+                                    :disabled="!users.remove.key">Excluir</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usuários - Editar -->
+            <div v-if="page.current == 'users-edit'">
+                <h2 class="page-header">Usuários - Editar</h2>
+
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li><a href="#/users">Usuários</a></li>
+                    <li class="active">Editar</li>
+                </ol>
+                <!--  <pre>{{users.edit}}</pre>-->
+                <form @submit.prevent="editUser()">
+                    <!--------------FORM MINIMIZADO------------>
+                    <div id="minimizar form">
+                        <div class="alert"
+                            :class="{ 'alert-danger': users.edit.error, 'alert-success': !users.edit.error }"
+                            v-if="users.edit.messages.length > 0">
+                            <p v-for="message in users.edit.messages">{{ message }}</p>
+                        </div>
+                        <h3><b>Dados do Cliente</b></h3>
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.codigo.error }">
+                            <label for="">Codigo</label>
+
+                            <input type="text" class="form-control" placeholder="xxxx" maxlength="4"
+                                v-model="users.edit.fields.codigo.value">
+                        </div>
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.cliente.error }">
+                            <label for="">Cliente</label>
+
+                            <input type="text" class="form-control" placeholder="Cliente"
+                                v-model="users.edit.fields.cliente.value">
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.telefone.error }">
+                            <label for="">Telefone</label>
+
+                            <input type="text" class="form-control" placeholder="9999-9999" maxlength="9"
+                                v-model="users.edit.fields.telefone.value">
+                        </div>
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.cep.error }">
+                            <label for="">CEP</label>
+
+                            <input type="text" class="form-control"
+                                :class="{ 'has-error': users.edit.fields.cep.error }" placeholder="CEP" name="cep"
+                                id="cep" size="10" value="" maxlength="9" onblur="pesquisacep(this.value);"
+                                v-model="users.edit.fields.cep.value">
+                        </div>
+
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.rua.error }">
+                            <label for="">Rua</label>
+
+                            <input type="text" class="form-control" placeholder="Rua" name="rua" id="rua"
+                                v-model="users.edit.fields.rua.value">
+                        </div>
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.numero.error }">
+                            <label for="">Num.</label>
+
+                            <input type="text" class="form-control" placeholder="0" id="numero" maxlength="6"
+                                v-model="users.edit.fields.numero.value">
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.complemento.error }">
+                            <label for="">Complemento.</label>
+
+                            <input type="text" class="form-control" placeholder="..." id="complemento" maxlength="6"
+                                v-model="users.edit.fields.complemento.value">
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.bairro.error }">
+                            <label for="">Bairro</label>
+
+                            <input type="text" class="form-control" placeholder="Bairro"
+                                v-model="users.edit.fields.bairro.value" name="bairro" id="bairro">
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.cidade.error }">
+                            <label for="">Cidade</label>
+
+                            <input type="text" class="form-control" placeholder="Cidade"
+                                v-model="users.edit.fields.cidade.value" name="cidade" id="cidade">
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.uf.error }">
+                            <label for="">Estado</label>
+
+                            <input type="text" class="form-control" placeholder="Estado"
+                                v-model="users.edit.fields.uf.value" name="uf" id="uf">
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.datacadastro.error }">
+                            <label for="">Data Cadastro</label>
+
+                            <input type="date" class="form-control" min="2019-01-01" max="2050-12-30"
+                                v-model="users.edit.fields.datacadastro.value">
+                        </div>
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.status.error }">
+                            <label for="">Status</label>
+
+                            <select type="text" class="form-control" placeholder="Nome"
+                                v-model="users.edit.fields.status.value">
+                                <option value="" disabled selected hidden>Selecione...</option>
+                                <option value="1º visita">1º visita</option>
+                                <option value="2º visita">2º visita</option>
+                                <option value="3º visita">3º visita</option>
+                                <option value="4º visita">4º visita</option>
+                                <option value="5º visita">5º visita</option>
+                                <option value="6º visita">6º visita</option>
+                                <option value="7º visita">7º visita</option>
+                                <option value="8º visita">8º visita</option>
+                                <option value="9º visita">9º visita</option>
+                                <option value="10º visita">10º visita</option>
+                            </select>
+                        </div>
+
+                        <h3><b>Dados do PET</b></h3>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.nome.error }">
+                            <label for="">Nome</label>
+
+                            <input type="text" class="form-control" placeholder="Nome"
+                                v-model="users.edit.fields.nome.value">
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.idade.error }">
+                            <label for="">Idade</label>
+
+                            <select type="text" class="form-control" placeholder="Nome"
+                                v-model="users.edit.fields.idade.value">
+                                <option value="" disabled selected hidden>Selecione...</option>
+                                <option value="3-6M">3-6M</option>
+                                <option value="6-9M">6-9M</option>
+                                <option value="9-12M">9-12M</option>
+                                <option value="1A e 3M">1A e 3M</option>
+                                <option value="1A e 6M">1A e 6M</option>
+                                <option value="1A e 9M">1A e 9M</option>
+                                <option value="2A">2A</option>
+                                <option value="2A e 6M">2A e 6M</option>
+                                <option value="3A">3A</option>
+                                <option value="3A e 6M">3A e 6M</option>
+                                <option value="4A">4A</option>
+                                <option value="4A e 6M">4A e 6M</option>
+                                <option value="5A">5A</option>
+                                <option value="5A e 6M">5A e 6M</option>
+                                <option value="6A">6A</option>
+                                <option value="7A">7A</option>
+                                <option value="8A">8A</option>
+                                <option value="9A">9A</option>
+                                <option value="10A">10A</option>
+                                <option value="10+">10+</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.pet.error }">
+                            <label for="">PET</label>
+
+                            <select type="text" class="form-control" placeholder="Raça"
+                                v-model="users.edit.fields.pet.value">
+                                <option value="" disabled selected hidden>Selecione...</option>
+                                <option value="Cachorro">Cachorro</option>
+                                <option value="Gato">Gato</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.genero.error }">
+                            <label for="">Genero</label>
+
+                            <select type="text" class="form-control" placeholder="Raça"
+                                v-model="users.edit.fields.genero.value">
+                                <option value="" disabled selected hidden>Selecione...</option>
+                                <option value="Macho">Macho</option>
+                                <option value="Femea">Femea</option>
+                            </select>
+                        </div>
+
+
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.raca.error }">
+                            <label for="">Raça</label>
+
+                            <select type="text" class="form-control" placeholder="Raça"
+                                v-model="users.edit.fields.raca.value">
+                                <option value="" disabled selected hidden>Selecione...</option>
+                                <option value="Akita">Akita</option>
+                                <option value="Basset">Basset</option>
+                                <option value="Beagle">Beagle</option>
+                                <option value="Border Collie">Border Collie</option>
+                                <option value="Boxer">Boxer</option>
+                                <option value="Bulldog">Bulldog</option>
+                                <option value="Bull Terrier">Bull Terrier</option>
+                                <option value="Chihuahua">Chihuahua</option>
+                                <option value="Chow Chow">Chow Chow</option>
+                                <option value="Collie">Collie</option>
+                                <option value="Dalmata">Dalmata</option>
+                                <option value="Doberman">Doberman</option>
+                                <option value="Fox Paulisitinha">Fox Paulisitinha</option>
+                                <option value="Golden Retriever">Golden Retriever</option>
+                                <option value="Husky Siberiano">Husky Siberiano</option>
+                                <option value="Labrador">Labrador</option>
+                                <option value="Lhasa Apso">Lhasa Apso</option>
+                                <option value="Maltes">Maltes</option>
+                                <option value="Pastor">Pastor</option>
+                                <option value="Pinscher">Pinscher</option>
+                                <option value="Pit Bull">Pit Bull</option>
+                                <option value="Poodle">Poodle</option>
+                                <option value="Pug">Pug</option>
+                                <option value="Rottweiler">Rottweiler</option>
+                                <option value="Shih Tzu">Shih Tzu</option>
+                                <option value="Yorkshire">Yorkshire</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.temperamento.error }">
+                            <label for="">Temperamento</label>
+
+                            <select type="text" class="form-control" placeholder="Raça"
+                                v-model="users.edit.fields.temperamento.value">
+                                <option value="" disabled selected hidden>Selecione...</option>
+                                <option value="Docil">Docil</option>
+                                <option value="Arisco">Arisco</option>
+                                <option value="Bravo">Bravo</option>
+                                <option value="Muito Bravo">Muito Bravo</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group" :class="{ 'has-error': users.edit.fields.observacao.error,}">
+                            <label for="">OBS.</label>
+
+                            <textarea type="text" class="form-control" placeholder="Digite uma observacao... (Opcional)"
+                                v-model="users.edit.fields.observacao.value"></textarea>
+                        </div>
+
+                    </div>
+                    <p>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+
+                        <button type="button" class="btn btn-danger"
+                            @click.prevent="goRemoveUser(users.edit.fields.key)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+
+                        <button type="button" class="btn btn-default"
+                            @click.prevent="route.go('#/users')">Cancelar</button>
+                    </p>
+
+                    <small class="help-block">{{users.edit.fields.telefone.messages.join(", ")}}</small>
+            </div>
+
+            </form>
+
+            <!-- Produtos - Remover -->
+            <div v-if="page.current == 'products-remove'">
+                <h2 class="page-header">Mercadorias - Remover</h2>
+
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li><a href="#/products">Mercadorias</a></li>
+                    <li class="active">Remover</li>
+                </ol>
+
+                <div class="alert"
+                    :class="{ 'alert-danger': products.remove.error, 'alert-success': !products.remove.error }"
+                    v-if="products.remove.messages.length > 0">
+                    <p v-for="message in products.remove.messages">{{ message }}</p>
+                </div>
+
+                <p class="lead">Deseja realmente excluir o cadastro do usuário <b>{{ products.remove.produto }}</b>
+                    pertencente a marca
+                    <b>{{products.remove.marca}}?</b></p>
+
+                <button type="type" class="btn btn-danger" @click.prevent="removeProduct()"
+                    :disabled="!products.remove.key">Excluir</button>
+                <button type="button" class="btn btn-default" @click.prevent="route.go('#/products')">Cancelar</button>
+            </div>
+
+            <!-- Usuários - Remover -->
+            <div v-if="page.current == 'users-remove'">
+                <h2 class="page-header">Usuários - Remover</h2>
+
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li><a href="#/users">Usuários</a></li>
+                    <li class="active">Remover</li>
+                </ol>
+
+                <div class="alert" :class="{ 'alert-danger': users.remove.error, 'alert-success': !users.remove.error }"
+                    v-if="users.remove.messages.length > 0">
+                    <p v-for="message in users.remove.messages">{{ message }}</p>
+                </div>
+
+                <p class="lead">Deseja realmente excluir o cadastro do usuário <b>{{ users.remove.cliente }}</b>
+                    pertencente ao
+                    codigo
+                    <b>{{users.remove.codigo}}?</b></p>
+
+                <button type="type" class="btn btn-danger" @click.prevent="removeUser()"
+                    :disabled="!users.remove.key">Excluir</button>
+                <button type="button" class="btn btn-default" @click.prevent="route.go('#/users')">Cancelar</button>
+            </div>
+
+            <!-- Fornecedor - Remover -->
+            <div v-if="page.current == 'providers-remove'">
+                <h2 class="page-header">Fornecedores - Remover</h2>
+
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li><a href="#/providers">Fornecedores</a></li>
+                    <li class="active">Remover</li>
+                </ol>
+
+                <div class="alert"
+                    :class="{ 'alert-danger': providers.remove.error, 'alert-success': !providers.remove.error }"
+                    v-if="providers.remove.messages.length > 0">
+                    <p v-for="message in providers.remove.messages">{{ message }}</p>
+                </div>
+
+                <p class="lead">Deseja realmente excluir o cadastro do fornecedor <b>{{ providers.remove.nome }}</b>
+                    pertencente a
+                    marca
+                    <b>{{providers.remove.marca}}?</b></p>
+
+                <button type="type" class="btn btn-danger" @click.prevent="removeProvider()"
+                    :disabled="!providers.remove.nome">Excluir</button>
+                <button type="button" class="btn btn-default" @click.prevent="route.go('#/providers')">Cancelar</button>
+            </div>
+
+
+        </div>
+
+        
+        
+
+
+
+
+
+
+
+        <!-- Erro 404 -->
+        <div class="container">
+            <div v-if="page.current == '404'">
+                <h2 class="page-header">404 - Página não existe</h2>
+
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li class="active">Pagina 404</li>
+
+                </ol>
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap e jQuery -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+
+
+
+
+
+
+    <!-- VueJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js"></script>
+
+
+    <!--API CEP-->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+            authDomain: "fir-app-1868c.firebaseapp.com",
+            databaseURL: "https://fir-app-1868c.firebaseio.com",
+            projectId: "fir-app-1868c",
+            storageBucket: "fir-app-1868c.appspot.com",
+            messagingSenderId: "517211514277"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script src="fmroute.js"></script>
+    <script src="app.js"></script>
+
+    <footer id="footer-active" class="footergreen" style="margin-top: 15px;">
+        <div class="footer-align">
+
+            <div style="display: flex;">
+                <a href="" class="mr-footer"> Copyright</a> <p class="mr-footer">&copy;</p> <p class="mr-footer" id="yearfooter"></p> - PET
+                Vitoria.
+                All rights reserved.
+            </div>
+            <div>
+                <form name="form_relogio">
+                    <input type="text" id="relogio" class="footercomplemento" size="18" disabled>
+                </form>
+            </div>
+
+        </div>
+    </footer>
+</body>
+
+</html>

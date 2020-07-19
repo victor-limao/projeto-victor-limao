@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="pedidoscss.css">
+
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+
+    <!-- AngularFire -->
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <!-- Arquivo JS -->
+    <script src="Estoque.js"></script>
+    </script src="///home/victor/Documents/EstoqueArquivoJs">
+
+    <title>Pet Vitoria</title>
+</head>
+
+<body ng-app="angularativApp">
+
+    <div class="container">
+
+        <table class="table table-striped" id="tt">
+            <br/><br/><p id="theID"></p><br/>
+            <p id="theID2" style="display:none"></p><br />
+            <!--<input type="text" id="getIDByName" />-->
+            <form ng-controller="angularativController">
+                <h2>Bem vindo</h2>
+                <h3>Cadastre</h3>
+
+                Codigo: <input type="text" id="txtCodigo" size="5px" maxlength="5"></br></br>
+                Produto: <input type="text" id="txtProduto"></br></br>
+                Peso: <select id="selectPeso" name="Peso" >
+                    <option value="Fracionado">Fracionado</option>
+                    <option value="1KG">1KG</option>
+                    <option value="2KG">2KG</option>
+                    <option value="4KG">4KG</option>
+                    <option value="7KG">7KG</option>
+                    <option value="10KG">10KG</option>
+                    <option value="15KG">15KG</option>
+                    <option value="20KG">20KG</option>
+                    <option value="25KG">25KG</option>
+                    <option value="30KG">30KG</option>
+                    <option value="35KG">35KG</option>
+                    <option value="48KG">48KG</option>
+                    <option value="50KG">50KG</option>
+                </select></br></br>
+                Estoque: <input type="text" id="txtEstoque" size="4px"></br></br>
+                Fornecedor: <input type="text" id="txtFornecedor"></br></br>
+                Setor: <input type="text" id="txtSetor"></br></br>
+                Tipo: <select id="selectTipo" name="Tipo" form="carform">
+                    <option value="Racao">Ração</option>
+                    <option value="Miudeza">Miudeza</option>
+                    <option value="Medicamento">Medicamento</option>
+                    <option value="Acessorio">Acessorio</option>
+                    <option value="Outros">Outros</option>
+                </select></br></br>
+                V. Inicial: <input type="text" id="txtValorInicial" size="8px" maxlength="8px"></br></br>
+                V. Final: <input type="text" id="txtValorFinal" size="8px" maxlength="8px"></br></br>
+                %: <input type="text" id="txtPorcentagem" size="4px" maxlength="4px"></br></br><br>
+                
+                
+                <button type="submit" ng-click="insert()">Enviar</button>
+                
+                
+                <button id="btnGetID">Buscar</button><br />
+
+                <label id="txtLblMensagem"></label><br><br><br>
+
+
+
+
+            </form><br>
+
+            <!--Continuar daqui-->
+            <!--Continuar daqui-->
+
+            <!--Fazer o Search para uma tabela, depois criar opcoes de edit e delete (CRUD todo)-->
+
+            <!--Continuar daqui-->
+            <!--Continuar daqui-->
+
+          <!-- <button type="submit" ng-click="record()">Buscar Todos</button><br><br>
+            <div>
+                <thead>
+                    <tr>
+                        <th>Código:</th>
+                        <th>Prod:</th>
+                        <th>Peso:</th>
+                        <th>Estoque:</th>
+                        <th>Fornecedor:</th>
+                        <th>Setor:</th>
+                        <th>Tipo:</th>
+                        <th>V. Inicial:</th>
+                        <th>V. Final:</th>
+                        <th>Porcentagem:</th>
+
+                    </tr>
+                </thead>
+
+                <tr ng-repeat="x in records">
+                    <td>{{x.txtCodigo}}</td>
+                    <td>{{x.txtProduto}}</td>
+                    <td>{{x.selectPeso}}</td>
+                    <td>{{x.txtEstoque}}</td>
+                    <td>{{x.txtFornecedor}}</td>
+                    <td>{{x.txtSetor}}</td>
+                    <td>{{x.selectTipo}}</td>
+                    <td>{{x.txtValorInicial}}</td>
+                    <td>{{x.txtValorFinal}}</td>
+                    <td>{{x.txtPorcentagem}}</td>
+                </tr>
+
+
+            </div>--> 
+        </table>
+    </div>
+
+</body>
+
+</html>

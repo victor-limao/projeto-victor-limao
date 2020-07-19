@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.sosit.alexalum"
+		versionCode = "1"
+        version   = "1.0.1">
+
+    <name>Sosit - Alexalum</name>
+
+    <description>
+        Projeto Final Curso Técnico em Informática, turma INFO-M25, Senac Guarulhos.
+    </description>
+
+    <author href="http://phonegap.com">
+       Sosit
+    </author>
+	
+    <!-- Define app icon for each platform. -->
+    <icon src="Img\Alexalum.jpg" />
+
+    <!-- Define app splash screen for each platform. -->
+    <splash src="img/ldpi.png" platform="android" qualifier="port-ldpi" />
+	<splash src="img/mdpi.png" platform="android" qualifier="port-mdpi" />
+	<splash src="img/hdpi.png" platform="android" qualifier="port-hdpi" />
+	<splash src="img/xhdpi.png" platform="android" qualifier="port-xhdpi" />
+	<splash src="img/xxhdpi.png" platform="android" qualifier="port-xxhdpi" />
+	<splash src="img/xxxhdpi.png" platform="android" qualifier="port-xxxhdpi" />
+	
+	<splash src="Img\Alexalum.jpg" />
+
+	<preference name="SplashScreenDelay" value="3000" />
+	<preference name="orientation" value="portrait" />
+	<preference name="fullscreen" value="true" />
+	
+	<plugin name="cordova-plugin-splashscreen" source="npm" />
+	
+</widget>

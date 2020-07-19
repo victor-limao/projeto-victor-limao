@@ -1,0 +1,91 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+	<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	
+	<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	<!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	<link rel="stylesheet" href="login CSS.css">
+	
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+    authDomain: "fir-app-1868c.firebaseapp.com",
+    databaseURL: "https://fir-app-1868c.firebaseio.com",
+    projectId: "fir-app-1868c",
+    storageBucket: "",
+    messagingSenderId: "517211514277"
+  };
+  firebase.initializeApp(config);
+</script>
+	
+	<script>
+		
+		var myApp = angular.module('foreignerApp',['firebase']);
+		 
+		 myApp.controller("foreignerController", function($scope,$http){
+		
+		var db = firebase.database().ref();
+		
+		
+		 $scope.insert = function(){
+		var data = {
+			nome: $("#txtNome").val(),
+			data: $("#txtData").val(),
+			email: $("#txtEmail").val(),
+			mensagem: $("#txtMensagem").val(),
+			
+		};
+		
+		db.child("Contato").push(data);
+			  $("#txtLblMensagem").text("Dados Cadastrados.");
+		 };
+		 });	
+		
+		 
+	</script>
+	
+<title>Contato</title>
+</head>
+
+<body ng-app="foreignerApp">
+
+			
+	<div class="container">
+<form ng-controller="foreignerController">
+		<h2>Contato Alexalum</h2>
+		<fieldset>
+		<ul><li><a href="Compra2.0.html">Compra de Produto</a></li></ul>
+		<ul><li><a href="Login.html">Sair</a></li></ul>
+		Nome:<input type="text" id="txtNome"  placeholder="Nome" ></br></br>	
+		Data:<input type="date" id="txtData"  placeholder="Data" ></br></br>
+		E-mail:<input type="text" id="txtEmail"  placeholder="E-mail" ></br></br>
+		Mensagem:<br><textarea name="mensagem" id="txtMensagem" cols="50" rows="4" placeholder="Escreva sua mensagem..."></textarea></br></br>
+		<p><input type="checkbox" checked id="cped">
+        <label for="cped"> Desejo receber a resposta no meu e-mail.</label>
+        </p>
+		</fieldset>
+
+		<label id="txtLblMensagem"></label><br>
+	
+		<button type="submit" id="Enviar" placeholder="Enviar" ng-click="insert()">Enviar</button>
+	</form>
+	</div>
+	
+	
+	
+</body>
+</html>
+

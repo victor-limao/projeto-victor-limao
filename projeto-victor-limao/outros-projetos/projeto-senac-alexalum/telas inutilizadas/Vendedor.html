@@ -1,0 +1,51 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+	<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	
+	<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	<!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	
+	<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	<script type="text/javascript" src="CadastroClienteScript.js"></script>
+	
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	
+<title>Venda de Imóveis</title>
+</head>
+
+<body ng-app="foreignerApp">
+
+			
+	<div class="container">
+<form ng-controller="foreignerController">
+		<h2>Cadastro do Imóvel</h2>
+		
+		<ul><li><a href="Compra.html">Compra de Imóvel</a></li></ul>
+		<ul><li><a href="Login.html">Sair</a></li></ul>
+		<input type="text" id="txtNomeVendedor" placeholder="Nome Vendedor" ><br><br>
+		<input type="text" id="txtData" placeholder="Data Cadastro do Imóvel" > <br><br>
+		<input type="text" id="txtEndereço" placeholder="Endereço" > <br><br>
+		<input type="text" id="txtDescricao" placeholder="Descrição" > <br><br>
+		<input type="text" id="txtValor" placeholder="Valor R$" > <br><br>
+		<input type="text" id="txtArea" placeholder="Área" > <br><br>
+		<input type="text" id="txtStatus" placeholder="Status" > <br><br>
+	
+		<input type="submit" id="Enviar" placeholder="Enviar" ng-click="insert()">
+	</form>
+	</div>
+	
+	
+	
+</body>
+</html>

@@ -1,0 +1,72 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!--Angular
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>-->
+
+    <!--CSS-->
+    <link rel="stylesheet" href="login CSS.css">
+
+    <!--JavaScript-->
+    <script type="text/javascript" src="CofreScript.js" charset="iso-8859-1"></script>
+
+
+    <title>Cofre - Descubra o código do cofre</title>
+</head>
+
+<body ng-app="foreignerApp" ng-controller="foreignerController">
+
+
+    <div class="container">
+        <form name="frmcpf" ng-controller="foreignerController">
+            
+            <fieldset>
+
+
+
+
+                <h3>Qual o código do cofre?</h3>
+                <!--Botao gerador de senha-->
+                <button type="button" onclick='GerarSenha()'>Gerar código do cofre</button>
+                <button type="button" id="MostrarSenhaButton" onclick="MostrarSenha()">Mostrar Senha</button><br /><br /><br />
+                <h1 id="h1text"></h1><br /><br />
+
+                <!--TextBox-->
+                Digite o código: <input type="text" id="senha" placeholder="Código" maxlength="6">
+
+
+
+
+                <!--Botões -->
+                <!--Botão Verifica Senha-->
+                <button type="button" id="ValidaSenha" onclick="PegarSenha()">Validar Código</button><br /><br />
+                <!--Botão para Envio de Dados ao FireBase-->
+                <button type="button" id="EnviaDados" onclick="GerarSenha" hidden>Enviar Dados</button><br /><br />
+
+
+
+            </fieldset>
+
+            <!--Label-->
+            <label id="txtLblMensagem"></label><br />
+            <label id="txtLblMensagem2"></label><br />
+            <label id="senhaHidden" hidden></label><br />
+
+
+
+
+        </form>
+    </div>
+
+
+
+</body>
+</html>
+

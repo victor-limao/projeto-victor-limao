@@ -1,0 +1,6 @@
+codigo
+produto
+data
+valor
+descricao
+quantidade

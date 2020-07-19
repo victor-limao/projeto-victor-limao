@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+  <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	  
+	  
+	  <link rel="stylesheet" href="login CSS.css">
+	  
+	  <script src="fonte.js"></script>	 
+  </head>
+<meta charset="utf-8">
+<title>Compra de Produtos</title>
+<body>
+	
+	<div class="container">
+  <h2>Lista dos Produtos</h2>
+		<br/>
+		<ul><li><a href="CadastroImovel.html">Cadastro Produto</a></li></ul>
+		<ul><li><a href="Compra2.0.html">Compra 2.0</a></li></ul>
+		<ul><li><a href="Contato.html">Contato</a></li></ul>
+		<ul><li><a href="Login.html">Sair</a></li></ul>
+		
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Produto:</th>
+        <th>Data:</th>
+		 <th>Valor:</th>
+		  <th>Código:</th>
+		  <th>Descrição:</th>
+		  <th>Quantidade:</th>
+
+      </tr>
+    </thead>
+    <tbody ng-app="CalculatorApp" ng-controller="CalculatorController">
+		<tr ng-repeat="data in meusDados">
+		<td>{{data.produto}}</td>
+		<td>{{data.data}}</td>
+		<td>{{data.valor}}</td>
+		<td>{{data.codigo}}</td>
+		<td>{{data.descricao}}</td>
+		<td>{{data.quantidade}}</td>
+
+		  </tr>
+    </tbody>
+  </table>
+</div>
+	
+	
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+	<meta charset="utf-8">
+
+  <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	  
+	  
+	  <link rel="stylesheet" href="pedidoscss.css">
+	  
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	  
+	  	  <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+	
+	
+	  <!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	  
+	
+	  
+	  <!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	  
+	  <script src="script.js"></script>	 
+	    
+	  	  
+	 <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+    authDomain: "fir-app-1868c.firebaseapp.com",
+    databaseURL: "https://fir-app-1868c.firebaseio.com",
+    projectId: "fir-app-1868c",
+    storageBucket: "",
+    messagingSenderId: "517211514277"
+  };
+  firebase.initializeApp(config);
+</script>
+	  
+  </head>
+<title>Login - Venda de Imóveis</title>
+
+
+<!--<body ng-app="ForeignerApp" ng-controller="ForeignerController">-->
+	<body ng-app="angularativApp" ng-controller="angularativController">
+
+			
+	<div class="container">
+			<h2>Login</h2>
+			<input type="text" placeholder="Login" ng-model="login1" id="txtLogin"><br><br>
+			<input type="password" placeholder="Senha" ng-model="senha1" id="txtSenha"> <br><br>
+		<br>
+		
+			
+		
+		<button type="submit" ng-click="record()">Entrar</button></br></br>
+		
+		
+		
+		<a href="CadastroVendedor.html">Cadastre-se</a><br><br>
+
+		<label id="txtLblMensagem"></label>
+			<table class="table table-striped" id="log" style="display:none">
+	
+			<thead>
+		
+				<tr>
+			
+					<th>login</th>
+					<th>senha</th>
+
+				</tr>
+
+			</thead>
+
+			<tbody>
+			
+				<tr ng-repeat="x in records">
+
+					<td ng-model="loginn">{{x.login}}</td>
+					<td ng-model="senhaa">{{x.senha}}</td>
+							
+				</tr>
+		
+			</tbody>
+
+			</table> 
+	
+		</div>
+
+</body>
+</html>
