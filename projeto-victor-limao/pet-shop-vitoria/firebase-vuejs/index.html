@@ -899,25 +899,36 @@
                             </div>
                             <!--------------FORM MINIMIZADO------------>
                             <div id="minimizarform">
-                                <h3><b>Dados das Mercadorias</b></h3>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr style="text-align: center;">
-                                            <th>Produto</th>
-                                            <th class="text-right">Preço Unitário (R$)</th>
-                                            <th class="text-right">Qtd. Estoque</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="item in sales.add.addlist">
-                                            <td>{{item.produto}}</td>
-                                            <td>{{item.valorfinal}}</td>
-                                            <td>{{item.quantidade}}</td>
-
-                                        </tr>
-                                    </tbody>
+                                <form >
+                                    <h3><b>Dados das Mercadorias</b></h3>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr style="text-align: center;">
+                                                <th>Produto</th>
+                                                <th class="text-right">Preço Unitário (R$)</th>
+                                                <th class="text-right">Qtd. Estoque</th>
+                                                <th class="text-right">Incluir Prod.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <input type="text" id="quantidadeselecionada" hidden>
+                                            <tr v-for="item in sales.add.addlist">
+                                                <td id="keyproduto" hidden>{{item.key}}</td>
+                                                <td id="posicao" hidden>{{item.posicao}}</td>
+                                                <td id="produtoselecionado">{{item.produto}}</td>
+                                                <td id="valorfinal">{{item.valorfinal}}</td>
+                                                <td id="quantidadeemestoque">{{item.quantidade}}</td>
+                                                <td style="width: 120px;"><input type="number" style="width: 50px; height: 30px;" placeholder="Qtd."
+                                                        name="quantiadeselecionadaestoque" onchange="document.getElementById('quantidadeselecionada').value = this.value">
+                                                        <button class="btn btn-primary"
+                                                        style="margin-left: 5px;" @click.prevent="editSelectedItem(item.produto, item.key, item.valorfinal, item.quantidade, document.getElementById('quantidadeselecionada').value);"><i
+                                                            class="glyphicon glyphicon-plus-sign"></i></button></td>
+                            
+                                            </tr>
+                                        </tbody>
+                                </form>
                                 </table>
-
+                            
                                 <small class="help-block">{{providers.add.fields.nome.messages.join(", ")}}</small>
                             </div>
                         </div>
@@ -1030,7 +1041,7 @@
                                             <td class="text-right">{{sale.totalFormat}}</td>
                                             <td>
                                                 <button class="btn btn-danger btn-xs"
-                                                    @click.prevent="removeSaleProduct(sale, i)">
+                                                    @click.prevent="removeSaleProduct(sale, i, sales.list.key)">
                                                     <span class="glyphicon glyphicon-remove"></span>
                                                 </button>
                                             </td>

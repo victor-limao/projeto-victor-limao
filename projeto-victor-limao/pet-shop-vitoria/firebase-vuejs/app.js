@@ -529,6 +529,7 @@ var App = new Vue({
 
                 },
                 list: [],
+                
                 addlist: [],
             },
 
@@ -630,24 +631,24 @@ var App = new Vue({
 
             list: [],
         },
-        
+
         aberturacaixa: {
             select: {
                 selectlist: [],
             },
             abrircaixa: {
                 fields: {
-                    valor:{
+                    valor: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    data:{
+                    data: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    admin:{
+                    admin: {
                         value: '',
                         error: false,
                         messages: [],
@@ -655,39 +656,39 @@ var App = new Vue({
                 },
                 list: [],
             },
-            fecharcaixa:{
+            fecharcaixa: {
                 fields: {
-                    totalcartao:{
+                    totalcartao: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    totaldinheiro:{
+                    totaldinheiro: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    totalreforco:{
+                    totalreforco: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    totalsangria:{
+                    totalsangria: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    totalbalanca:{
+                    totalbalanca: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    totalrecebidocash:{
+                    totalrecebidocash: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    totalrecebidocard:{
+                    totalrecebidocard: {
                         value: '',
                         error: false,
                         messages: [],
@@ -699,35 +700,35 @@ var App = new Vue({
             },
 
         },
-        sangria: { 
+        sangria: {
             add: {
-                fields:{
-                    valor:{
+                fields: {
+                    valor: {
                         value: '',
                         error: false,
                         messages: [],
-                    }, comentario:{
+                    }, comentario: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    
+
                 },
             },
         },
-        reforco: { 
+        reforco: {
             add: {
-                fields:{
-                    valor:{
+                fields: {
+                    valor: {
                         value: '',
                         error: false,
                         messages: [],
-                    }, comentario:{
+                    }, comentario: {
                         value: '',
                         error: false,
                         messages: [],
                     },
-                    
+
                 },
             },
         },
@@ -739,7 +740,7 @@ var App = new Vue({
                 messages: [],
 
                 fields: {
-                    teste:{
+                    teste: {
                         value: '',
                         error: false,
                         messages: [],
@@ -951,6 +952,47 @@ var App = new Vue({
         },
         list: [],
 
+        getselecteditem: {
+            add: {
+                fields: {
+                    produto: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    valorfinal: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    quantidadeemestoque: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    quantidadeselec: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    produto: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+
+                },
+            },
+            remove: {
+                list: [],
+            }
+        },
+
         footer: {
 
             messages: [],
@@ -972,9 +1014,9 @@ var App = new Vue({
 
                     var product = item.val();
                     product.key = item.key;
-                    product.lucroporcentagem = product.lucroporcentagem.toFixed(2).replace(".", ",");
-                    product.gastototal = product.gastototal.toFixed(2).replace(".", ",");
-                    product.lucrodinheiro = product.lucrodinheiro.toFixed(2).replace(".", ",");
+                    product.lucroporcentagem = parseFloat(product.lucroporcentagem).toFixed(2).replace(".", ",");
+                    product.gastototal = parseFloat(product.gastototal).toFixed(2).replace(".", ",");
+                    product.lucrodinheiro = parseFloat(product.lucrodinheiro).toFixed(2).replace(".", ",");
                     product.valorinicial = parseFloat(product.valorinicial).toFixed(2).replace(".", ",");
                     product.valorfinal = parseFloat(product.valorfinal).toFixed(2).replace(".", ",").replace(" ", "");
                     //console.log(product)
@@ -1306,9 +1348,8 @@ var App = new Vue({
             return number_format(number, precision, ',', '.');
         },
 
-        addNewSale: function () {
-
-
+        addNewSale: function (keyproduct) {
+            
             var product = App.sales.add.fields.nome.value;
             var price = parseFloat(App.sales.add.fields.precoproduto.value);
             var amount = parseFloat(App.sales.add.fields.quantidade.value);
@@ -1328,9 +1369,13 @@ var App = new Vue({
 
             product.total = product.amount * product.price;
             product.totalFormat = App.numberFormat(product.total);
-
+            console.log("product");
+            console.log(product);
+            console.log("product");
+            App.sales.list.key = keyproduct;
 
             App.sales.list.push(product);
+            //console.log(App.sales.list);
             App.calcTotalCaixa();
 
             App.sales.add.fields.nome.value = '';
@@ -1339,6 +1384,7 @@ var App = new Vue({
             App.sales.add.messages = [];
             App.sales.add.fields.quantidade.value = '';
             App.sales.add.messages = [];
+            //console.log(App.sales.list);
 
 
 
@@ -1350,87 +1396,125 @@ var App = new Vue({
             //console.log(inputprocuraestoque);
             App.sales.add.addlist = [];
             firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
-              
-               var nomeproduto = inputprocuraestoque;
-               //var concat = "/"+nomeproduto+"*/";
-               //console.log(concat)
+
+                var nomeproduto = inputprocuraestoque;
+                //var concat = "/"+nomeproduto+"*/";
+                //console.log(concat)
                 var concatenando = new RegExp(nomeproduto, "i");
                 var testando = [];
-                
+                var posicao = 0;
                 data.forEach(function (item) {
                     var listsales = item.val();
                     listsales.key = item.key;
                     var arrayteste = {
-                        "key" : listsales.key,
-                        product : [
+                        "key": listsales.key,
+                        product: [
                             listsales
                         ]
                     };
-                    
-                    
-                    if(arrayteste.product[0].produto.match(concatenando)){
-                        listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".",",");
+
+
+                    if (arrayteste.product[0].produto.match(concatenando)) {
+                        listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
+                        listsales.posicao = posicao++;
                         App.sales.add.addlist.push(listsales);
-                       
                     }
                 })
-                console.log(App.sales.add.addlist);
-                
+                //console.log(App.sales.add.addlist);
+
 
             })
+
         },
-      
-        getAberturadeCaixa: function (){
+        editSelectedItem: function (produto, keyproduto, valorfinal, quantidadeemestoque, quantidadeselecionada) {
+            // alert(quantidadeselecionada) 
+            //  alert(produto);
+            //  alert(keyproduto);
+            //  alert(quantidadeemestoque);
+            valorfinal = valorfinal.replace(",", ".");
+            valorfinal = parseFloat(valorfinal);
+            //alert(valorfinal);
+            //quantiadeselecionadaestoque = document.getElementById("quantiadeselecionadaestoque").value
+            // var quantiadeselecionadaestoque = document.getElementById("quantiadeselecionadaestoque").value;
+            //alert(quantiadeselecionadaestoque);
+
+            var quantidadefinal = parseFloat(quantidadeemestoque) - parseFloat(quantidadeselecionada);
+            //console.log(quantidadefinal);
+            if (isNaN(quantidadefinal)) {
+                alert("Preencha a quantidade.");
+            }
+            else {
+                // alert(quantidadefinal);
+                //alert(quantidadefinal);
+                //console.log(keyproduto);
+
+                firebase.database().ref(App.firebase.path + '/products/' + keyproduto).child("quantidade").set(
+                    quantidadefinal
+                )
+                App.sales.add.fields.nome.value = produto;
+                App.sales.add.fields.precoproduto.value = valorfinal;
+                App.sales.add.fields.quantidade.value = quantidadeselecionada;
+                $('#openSearchProduct').modal('hide');
+                document.getElementById("quantidadeselecionada").value = "";
+
+                App.addNewSale(keyproduto);
+            }
+
+        },
+
+        getAberturadeCaixa: function () {
             var data = new Date();
             var dia = data.getDate();
             var mes = parseInt(data.getMonth()) + 1;
             var ano = data.getFullYear();
 
 
-            if(dia < 10){
+            if (dia < 10) {
                 dia = "0" + dia;
             }
-            if(mes < 10){
+            if (mes < 10) {
                 mes = "0" + mes;
             }
 
-            var dataconcat = dia+"/"+mes+"/"+ano;
+            var dataconcat = dia + "/" + mes + "/" + ano;
 
             App.aberturacaixa.select.selectlist = [];
             //console.log( App.aberturacaixa.select.selectlist);
             firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
-              
+
                 var concatenando = new RegExp(dataconcat, "i");
                 //console.log(concatenando);
                 data.forEach(function (item) {
                     var abertura = item.val();
                     abertura.key = item.key;
                     var arrayteste = {
-                        "key" : abertura.key,
-                        aberturadecaixa : [
+                        "key": abertura.key,
+                        aberturadecaixa: [
                             abertura
                         ]
                     };
-                    
-                    
-                    if(arrayteste.aberturadecaixa[0].data.match(concatenando)){
-                       
+
+
+                    if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+
                         App.aberturacaixa.select.selectlist.push(abertura);
                         //console.log(App.aberturacaixa.select.selectlist);
-                        
+
                     }
                 })
                 //console.log(App.aberturacaixa.select.selectlist);
-                
+
 
             })
 
 
         },
 
+
+
         getSales: function () {
             firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
-               
+
                 var totaldinheiro = 0;
                 var totalcartao = 0;
                 var totalgeral = 0;
@@ -1474,6 +1558,7 @@ var App = new Vue({
 
 
         calcTotalCaixa: function () {
+            
             var subtotal = 0;
             var discount = parseFloat(App.sales.add.fields.desconto.value);
             var recebido = parseFloat(App.sales.add.fields.valortotalrecebido.value);
@@ -1486,13 +1571,12 @@ var App = new Vue({
             if (typeof somaValorRecebido != 'number' || isNaN(somaValorRecebido)) somaValorRecebido = 0;
             if (typeof discount != 'number' || isNaN(discount)) discount = 0;
 
-            for (var i in App.sales.list) {
+            for (var i = 0; i < App.sales.list.length; i++) {
                 subtotal += App.sales.list[i].total;
             }
             //console.log(subtotal);
 
-
-
+            
             var somaValorRecebido = cash + card;
 
             App.sales.add.fields.valortotalrecebido.value = somaValorRecebido;
@@ -1542,7 +1626,7 @@ var App = new Vue({
 
                 alert("Valor recebido abaixo do esperado.");
             }
-            else if (somarecebido >= App.sales.add.fields.totalcompra.value){
+            else if (somarecebido >= App.sales.add.fields.totalcompra.value) {
 
                 // limpando erros do form
                 App.sales.add.error = false;
@@ -1621,12 +1705,53 @@ var App = new Vue({
                         App.sales.add.messages = [];
                         App.sales.add.messages.push('Aconteceu um erro interno. Tente novamente.');
                     });
-                    document.location.reload(true);
+                document.location.reload(true);
             }
         },
 
-        removeSaleProduct: function (sale, i) {
+        removeSaleProduct: function (sale, i, keyproduct) {
+            //console.log(keyproduct);
+            //console.log(sale.amount);
             App.sales.list.splice(i, 1);
+
+
+            App.getselecteditem.remove.list = [];
+            firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
+                var quantidadeestoque;
+
+
+                App.getselecteditem.remove.list = [];
+                //var concat = "/"+nomeproduto+"*/";
+                //console.log(concat)
+                var concatenando = new RegExp(keyproduct, "i");
+                var testando = [];
+                var posicao = 0;
+                data.forEach(function (item) {
+                    var listsales = item.val();
+                    listsales.key = item.key;
+                    var arrayteste = {
+                        "key": listsales.key,
+                        product: [
+                            listsales
+                        ]
+                    };
+
+
+                    if (arrayteste.product[0].key.match(concatenando)) {
+                        listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
+                        listsales.posicao = posicao++;
+                        App.getselecteditem.remove.list.push(listsales);
+                    }
+                })
+
+            })
+            console.log(App.getselecteditem.remove.list[0].quantidade);
+
+            var repoeestoque = parseFloat(App.getselecteditem.remove.list[0].quantidade) + parseFloat(sale.amount);
+            firebase.database().ref(App.firebase.path + '/products/' + keyproduct).child("quantidade").set(
+                repoeestoque,
+
+            )
             App.calcTotalCaixa();
 
         },
@@ -2325,9 +2450,9 @@ var App = new Vue({
             var davaconvertida = dataconvert[2] + "/" + dataconvert[1] + "/" + dataconvert[0];
 
             App.aberturacaixa.abrircaixa.list = [];
-           
+
             firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
-              
+
                 var concatenando = new RegExp(davaconvertida, "i");
                 //console.log(concatenando);
                 data.forEach(function (item) {
@@ -2343,98 +2468,145 @@ var App = new Vue({
 
                         App.aberturacaixa.abrircaixa.list.push(abertura);
                         console.log(App.aberturacaixa.abrircaixa.list);
-                       
+
 
                     }
                 })
             })
             if (App.aberturacaixa.abrircaixa.fields.valor.value == "" || App.aberturacaixa.abrircaixa.fields.data.value == "" || App.aberturacaixa.abrircaixa.fields.admin.value == "") {
-              alert("Preencha todos os campos.");               
+                alert("Preencha todos os campos.");
             }
-            else if(App.aberturacaixa.abrircaixa.list.length != 0){
+            else if (App.aberturacaixa.abrircaixa.list.length != 0) {
                 alert("Já foi feita a abertura de caixa na data informada.");
             }
-            else if(App.aberturacaixa.abrircaixa.list.length == 0){ 
+            else if (App.aberturacaixa.abrircaixa.list.length == 0) {
                 firebase.database().ref(App.firebase.path + '/aberturadecaixa').push({
                     data: davaconvertida,
                     usuario: App.aberturacaixa.abrircaixa.fields.admin.value,
                     valor: App.aberturacaixa.abrircaixa.fields.valor.value
                 })
-                alert("Caixa aberto no dia " +davaconvertida+ " com sucesso.");
+                alert("Caixa aberto no dia " + davaconvertida + " com sucesso.");
             }
-           
-           
+
+
 
         },
         addsangria: function () {
             var data = new Date();
             var dia = data.getDate();
-            var mes = parseFloat(data.getMonth()) +1;
+            var mes = parseFloat(data.getMonth()) + 1;
             var ano = data.getFullYear();
             var hora = data.getHours();
             var minuto = data.getMinutes();
-            
-            if(dia < 10){
-                dia = "0"+dia;
+
+            if (dia < 10) {
+                dia = "0" + dia;
             }
-            if(mes < 10){
-                mes = "0"+mes;
+            if (mes < 10) {
+                mes = "0" + mes;
             }
-            var dataconvertida = dia+"/"+mes+"/"+ano+" "+hora+":"+minuto;
+            var dataconvertida = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto;
             // alert(dataconvertida);
 
             console.log(App.sangria.add.fields.valor.value);
             console.log(App.sangria.add.fields.comentario.value);
             console.log(dataconvertida);
 
-            if(App.sangria.add.fields.comentario.value == "" || App.sangria.add.fields.valor.value == ""){
+            if (App.sangria.add.fields.comentario.value == "" || App.sangria.add.fields.valor.value == "") {
                 alert("Preencha todos os campos");
             }
 
-            if(App.sangria.add.fields.comentario.value !=  "" && App.sangria.add.fields.valor.value !=  "" && dataconvertida!=  "" ){
-            
-                  firebase.database().ref(App.firebase.path + '/sangrias').push({
-                      data: dataconvertida,
-                      comentario: App.sangria.add.fields.valor.value,
-                      valor: App.sangria.add.fields.valor.value,
-                 })
-                 alert("Sangria realizada com sucesso.");
-                 document.location.reload();
+            if (App.sangria.add.fields.comentario.value != "" && App.sangria.add.fields.valor.value != "" && dataconvertida != "") {
+
+                firebase.database().ref(App.firebase.path + '/sangrias').push({
+                    data: dataconvertida,
+                    comentario: App.sangria.add.fields.valor.value,
+                    valor: App.sangria.add.fields.valor.value,
+                })
+                alert("Sangria realizada com sucesso.");
+                document.location.reload();
             }
         },
         addreforco: function () {
             var data = new Date();
             var dia = data.getDate();
-            var mes = parseFloat(data.getMonth()) +1;
+            var mes = parseFloat(data.getMonth()) + 1;
             var ano = data.getFullYear();
             var hora = data.getHours();
             var minuto = data.getMinutes();
-            
-            if(dia < 10){
-                dia = "0"+dia;
+
+            if (dia < 10) {
+                dia = "0" + dia;
             }
-            if(mes < 10){
-                mes = "0"+mes;
+            if (mes < 10) {
+                mes = "0" + mes;
             }
-            var dataconvertida = dia+"/"+mes+"/"+ano+" "+hora+":"+minuto;
+            var dataconvertida = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto;
             // alert(dataconvertida);
 
 
-            if(App.reforco.add.fields.comentario.value == "" || App.reforco.add.fields.valor.value == ""){
+            if (App.reforco.add.fields.comentario.value == "" || App.reforco.add.fields.valor.value == "") {
                 alert("Preencha todos os campos");
             }
 
-            if(App.reforco.add.fields.comentario.value !=  "" && App.reforco.add.fields.valor.value !=  "" && dataconvertida!=  "" ){
-            
-                  firebase.database().ref(App.firebase.path + '/reforcos').push({
-                      data: dataconvertida,
-                      comentario: App.reforco.add.fields.valor.value,
-                      valor: App.reforco.add.fields.valor.value,
-                 })
-                 alert("Reforço realizado com sucesso.");
-                 document.location.reload();
+            if (App.reforco.add.fields.comentario.value != "" && App.reforco.add.fields.valor.value != "" && dataconvertida != "") {
+
+                firebase.database().ref(App.firebase.path + '/reforcos').push({
+                    data: dataconvertida,
+                    comentario: App.reforco.add.fields.valor.value,
+                    valor: App.reforco.add.fields.valor.value,
+                })
+                alert("Reforço realizado com sucesso.");
+                document.location.reload();
             }
         },
+        // editestoque: function () {
+
+        //     var data = new Date();
+        //     var dia = data.getDate();
+        //     var mes = parseFloat(data.getMonth()) +1;
+        //     var ano = data.getFullYear();
+        //     var hora = data.getHours();
+        //     var minuto = data.getMinutes();
+
+        //     if(dia < 10){
+        //         dia = "0"+dia;
+        //     }
+        //     if(mes < 10){
+        //         mes = "0"+mes;
+        //     }
+        //     var dataconvertida = dia+"/"+mes+"/"+ano;
+
+
+        //     var estoque = [];
+        //     var somaestoque = 0;
+        //     firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
+        //         var concatenando = new RegExp(dataconvertida, "i");
+
+        //         data.forEach(function (item) {
+        //             var abertura = item.val();
+        //             abertura.key = item.key;
+        //             console.log(abertura);
+        //             var arrayteste = {
+        //                 "key": abertura.key,
+        //                 aberturadecaixa: [
+        //                     abertura
+        //                 ]
+        //             };
+
+        //             if(arrayteste.aberturadecaixa.length > 0){
+
+        //                 estoque.push(abertura);
+        //                 console.log(estoque);
+        //                 console.log("entrou aqui rapaziada.");
+        //             }
+
+        //         })
+
+
+        //     })
+        // },
+
 
     },
 
@@ -2448,6 +2620,7 @@ App.getUsers();
 App.getProviders();
 App.getSales();
 App.getAberturadeCaixa();
+// App.editestoque();
 
 
 document.cookie;
@@ -2530,7 +2703,7 @@ route.get('/fechamentodecaixa', function (vars, next) {
         next();
     }
 
-  
+
 });
 
 route.get('/caixa', function (vars, next) {
@@ -2541,7 +2714,7 @@ route.get('/caixa', function (vars, next) {
     }
     else {
         window.location.href = "/login.html"
-    }  
+    }
     next();
 });
 
@@ -3149,7 +3322,7 @@ function number_format(number, decimals, decPoint, thousandsSep) {// eslint-disa
     return s.join(dec);
 }
 
-function procuraestoque(){
+function procuraestoque() {
     var inputprocuraestoque = document.getElementById("inputprocuraestoque").value;
     App.getEstoque(inputprocuraestoque);
 }
@@ -3214,7 +3387,7 @@ $(function maskmoney() {
 
 
 
-function CalctotalCaixa() {
+function CalctotalCaixa() { 
     var subtotal = 0;
     var discount = parseFloat(App.sales.add.fields.desconto.value);
     var recebido = parseFloat(App.sales.add.fields.valortotalrecebido.value);
@@ -3226,9 +3399,10 @@ function CalctotalCaixa() {
     if (typeof card != 'number' || isNaN(card)) card = 0;
     if (typeof somaValorRecebido != 'number' || isNaN(somaValorRecebido)) somaValorRecebido = 0;
     if (typeof discount != 'number' || isNaN(discount)) discount = 0;
-
+   
     for (var i in App.sales.list) {
         subtotal += App.sales.list[i].total;
+        
     }
 
     var somaValorRecebido = parseFloat(cash + card).toFixed(2);
