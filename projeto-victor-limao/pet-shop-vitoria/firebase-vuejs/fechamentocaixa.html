@@ -121,9 +121,9 @@
     </script>
 
     <script src="fmroute.js"></script>
-    <script src="app.js"></script>
 
     <script>
+        var Apppath = '/PETSHOP';
         $(document).ready(function () {
 
 
@@ -146,7 +146,7 @@
 
             var totalsomacard = [];
             var somacard = 0;
-            firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
+            firebase.database().ref(Apppath + '/sales').on('value', function (data) {
                 var concatenando = new RegExp(dataconvertida, "i");
 
                 data.forEach(function (item) {
@@ -182,7 +182,7 @@
 
             var totalsomacash = [];
             var somacash = 0;
-            firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
+            firebase.database().ref(Apppath + '/sales').on('value', function (data) {
                 var concatenando = new RegExp(dataconvertida, "i");
 
                 data.forEach(function (item) {
@@ -237,7 +237,7 @@
 
             var sangria = [];
             var somasangria = 0;
-            firebase.database().ref(App.firebase.path + '/sangrias').on('value', function (data) {
+            firebase.database().ref(Apppath + '/sangrias').on('value', function (data) {
                 var concatenando = new RegExp(dataconvertida, "i");
 
                 data.forEach(function (item) {
@@ -267,7 +267,7 @@
 
             var reforco = [];
             var somareforco = 0;
-            firebase.database().ref(App.firebase.path + '/reforcos').on('value', function (data) {
+            firebase.database().ref(Apppath + '/reforcos').on('value', function (data) {
                 var concatenando = new RegExp(dataconvertida, "i");
                 data.forEach(function (item) {
                     var abertura = item.val();
