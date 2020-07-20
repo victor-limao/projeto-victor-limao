@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="pp2.png" color="#111">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Pet Vitória</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/fa7c25d18c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="fechamentocaixa.css" media="screen" />
+
+</head>
+
+<body>
+    <div>
+        <!--Fechamento de Caixa-->
+        <div class="container">
+            <div class="content">
+
+                <image src="/pp.png" class="imglogin"></image>
+                <div class="first-content" v-if="page.current == 'fechamentocaixa'">
+                    <div class="first-content-align">
+                        <div class="titles">
+                            <h2 class="formtitle textform">PET </h2>
+                            <h2 class="formtitle2">Vitória</h2>
+
+                        </div>
+                        <div>
+                            <p class="pfirst-content">Comércio de Rações & Banho e Tosa.</p>
+                        </div>
+                        <h2 class="fechamentotitle"><strong>Fechamento de Caixa ref.</strong></h2>
+                        <h2 id="datatitle" class="datatitle"></h2>
+                        <div class="serapreenchido" id="serapreenchido">
+                            <h3>Valores serão exibidos após preenchimento</h3>
+                        </div>
+                    </div>
+                    <form>
+                        <div id="itemstotal" style="visibility: hidden;">
+                            <div class="divtotal">
+                                <label>Total Cartão:</label>
+                                <input type="text" name="totalcard" id="totalcard" disabled />
+                            </div>
+                            <div class="divtotal">
+                                <label>Total Dinheiro:</label>
+                                <input type="text" name="totalcash" id="totalcash" disabled />
+
+                            </div>
+                            <div class="divtotal">
+                                <label>Total Reforço:</label>
+                                <input type="text" name="totalreforco" id="totalreforco" disabled />
+
+                            </div>
+                            <div class="divtotal">
+                                <label>Total Sangria:</label>
+                                <input type="text" name="totalsangria" id="totalsangria" disabled />
+                            </div>
+                            <div class="divtotal">
+                                <label>Balança:</label>
+                                <input type="text" name="totalbalance" id="totalbalance" disabled />
+                            </div>
+                        </div>
+
+                </div>
+                <div class="second-content">
+                    <h1 class="h1login form">Preencha</h1>
+                    <p class="textlogin form">Insira os valores para que possa visualizar o balanço do dia e fechar o
+                        caixa.</p>
+
+                    <div class="divinput">
+                        <label for="" class="labelinput">
+                            <i class="glyphicon glyphicon-usd iinput"></i>
+                            <input type="text" class="forminput itemsform" onchange="enviavalores()"
+                                id="totalrecebidocash" name="totalrecebidocash" placeholder="" />
+                        </label>
+                        <label for="" class="labelinput">
+                            <i class="glyphicon glyphicon-credit-card iinput"></i>
+                            <input type="text" class="forminput itemsform si" onchange="enviavalores()"
+                                id="totalrecebidocard" name="totalrecebidocard" placeholder="" />
+                        </label>
+                    </div>
+                    <button type="button" onclick="fechamentocaixa()" class="itemsform btnlogin">Fechar
+                        Caixa</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="footerfechamento">
+                <p class="footertext">Copyright reserved - Victor Limão Developer &copy; </p>
+                <a href="/index.html" style="margin-right: 15%">Voltar ao sistema</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap e jQuery -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <!-- VueJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyAbjq9WT60PjchcQcnVRlVKDGQQgxWsBmY",
+            authDomain: "fir-app-1868c.firebaseapp.com",
+            databaseURL: "https://fir-app-1868c.firebaseio.com",
+            projectId: "fir-app-1868c",
+            storageBucket: "fir-app-1868c.appspot.com",
+            messagingSenderId: "517211514277"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script src="fmroute.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+
+
+
+            
+
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseFloat(data.getMonth()) + 1;
+            var ano = data.getFullYear();
+            if (dia < 10) {
+                dia = "0" + dia;
+            }
+            if (mes < 10) {
+                mes = "0" + mes;
+            }
+            var dataconvertida = (dia + "/" + mes + "/" + ano);
+
+
+            var totalsomacard = [];
+            var somacard = 0;
+            firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
+                var concatenando = new RegExp(dataconvertida, "i");
+
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+                    
+                    if(arrayteste.aberturadecaixa[0].datavenda.match(concatenando) && arrayteste.aberturadecaixa[0].card > 0){
+                       
+                        totalsomacard.push(abertura);
+                        // console.log(totalsomacard)
+                        // console.log(totalsomacard.length)
+                        // console.log(abertura);
+                    }
+
+                   
+                })
+
+                for(i = 0; i< totalsomacard.length; i++){
+                    somacard += parseFloat(totalsomacard[i].card);
+                    
+                    //console.log(somacard);
+                    }
+                document.getElementById("totalcard").value = parseFloat(somacard).toFixed(2); 
+            
+            })
+
+
+            var totalsomacash = [];
+            var somacash = 0;
+            firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
+                var concatenando = new RegExp(dataconvertida, "i");
+
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+                    
+                    if(arrayteste.aberturadecaixa[0].datavenda.match(concatenando) && arrayteste.aberturadecaixa[0].cash > 0){
+                       
+                        totalsomacash.push(abertura);
+                        // console.log(totalsomacash)
+                        // console.log(totalsomacash.length)
+                        // console.log(abertura);
+                    }
+
+                   
+                })
+
+                for(i = 0; i< totalsomacash.length; i++){
+                    somacash += (parseFloat(totalsomacash[i].cash) - parseFloat(totalsomacash[i].troco));
+                    
+                    //console.log(somacash);
+                    }
+                document.getElementById("totalcash").value = parseFloat(somacash).toFixed(2); 
+            
+            })
+
+
+
+
+
+
+
+
+
+
+            //console.log(dataconvertida);
+            document.getElementById("datatitle").innerHTML = dataconvertida;
+
+            var totalcard = document.getElementById("totalcard").value;
+            var totalcash = document.getElementById("totalcash").value;
+            var totalreforco = document.getElementById("totalreforco").value;
+            var totalsangria = document.getElementById("totalsangria").value;
+            var totalbalance = document.getElementById("totalbalance").value;
+            var totalrecebidocash = document.getElementById("totalrecebidocash").value;
+            var totalrecebidocard = document.getElementById("totalrecebidocard").value;
+
+            var sangria = [];
+            var somasangria = 0;
+            firebase.database().ref(App.firebase.path + '/sangrias').on('value', function (data) {
+                var concatenando = new RegExp(dataconvertida, "i");
+
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+                    if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                        // somasangria += sangria.valor;
+                        sangria.push(abertura);
+                        //console.log(somasangria);
+
+                    }
+                })
+
+                for (i = 0; i < sangria.length; i++) {
+                    somasangria += parseFloat(sangria[i].valor);
+                    //console.log(somasangria);
+                }
+                document.getElementById("totalsangria").value = somasangria.toFixed(2);
+            })
+
+
+            var reforco = [];
+            var somareforco = 0;
+            firebase.database().ref(App.firebase.path + '/reforcos').on('value', function (data) {
+                var concatenando = new RegExp(dataconvertida, "i");
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+                    if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                        // somareforco += reforco.valor;
+                        reforco.push(abertura);
+                        //console.log(somareforco);
+
+                    }
+                })
+
+                for (i = 0; i < reforco.length; i++) {
+                    somareforco += parseFloat(reforco[i].valor);
+                    //console.log(somareforco);
+                }
+                document.getElementById("totalreforco").value = somareforco.toFixed(2);
+            })
+
+
+        });
+
+
+        function enviavalores() {
+           
+           var cash = document.getElementById("totalrecebidocash").value;
+           var card = document.getElementById("totalrecebidocard").value;
+           if (cash != "" && card != "") {
+               document.getElementById("itemstotal").style.visibility = "visible";
+               document.getElementById("serapreenchido").style.display = "none";
+           }
+
+
+            var totalcard = parseFloat(document.getElementById("totalcard").value);
+            var totalcash = parseFloat(document.getElementById("totalcash").value);                            
+            var totalreforco = parseFloat(document.getElementById("totalreforco").value);
+            var totalsangria = parseFloat(document.getElementById("totalsangria").value);
+            var totalrecebidocard = parseFloat(document.getElementById("totalrecebidocard").value);
+            var totalrecebidocash = parseFloat(document.getElementById("totalrecebidocash").value);
+
+
+            var totalcardcash = totalcard + totalcash;
+            
+            //console.log(totalrecebidocard + totalrecebidocash);
+            //console.log(totalreforco - totalsangria);
+            var totalrefsan = totalreforco - totalsangria;
+            //console.log((totalrefsan -  totalcardcash));
+
+           somatudo = 0;
+           if(totalrefsan < 0){
+               var somatudo = ((totalrecebidocard + totalrecebidocash)- ((totalrefsan * -1) + totalcardcash));
+               //console.log(somatudo);
+           }
+           else if (totalrefsan => 0){
+               
+            var somatudo = (( totalrecebidocard + totalrecebidocash )-((totalrefsan -  totalcardcash)*-1));
+               //console.log(somatudo);
+           }
+
+            document.getElementById("totalbalance").value = parseFloat(somatudo).toFixed(2);
+            if(somatudo < 0){
+                document.getElementById("totalbalance").style.color = "red";
+            };
+            if(somatudo > 0){
+                document.getElementById("totalbalance").style.color = "green";
+            };
+        }
+
+
+
+
+
+
+
+        function fechamentocaixa() {
+            alert("entrou");
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseFloat(data.getMonth()) + 1;
+            var ano = data.getFullYear();
+            if (dia < 10) {
+                dia = "0" + dia;
+            }
+            if (mes < 10) {
+                mes = "0" + mes;
+            }
+            var dataconvertida = (dia + "/" + mes + "/" + ano);
+
+            var totalcard = document.getElementById("totalcard").value;
+            var totalcash = document.getElementById("totalcash").value;
+            var totalreforco = document.getElementById("totalreforco").value;
+            var totalsangria = document.getElementById("totalsangria").value;
+            var totalbalance = document.getElementById("totalbalance").value;
+            var totalrecebidocash = document.getElementById("totalrecebidocash").value;
+            var totalrecebidocard = document.getElementById("totalrecebidocard").value;
+
+            console.log(totalcard);
+            console.log(totalcash);
+            console.log(totalreforco);
+            console.log(totalsangria);
+            console.log(totalbalance);
+            console.log(totalrecebidocash);
+            console.log(totalrecebidocard);
+
+
+        }
+    </script>
+
+
+
+</body>
+
+
+</html>
