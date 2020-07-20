@@ -630,6 +630,107 @@ var App = new Vue({
 
             list: [],
         },
+        
+        aberturacaixa: {
+            select: {
+                selectlist: [],
+            },
+            abrircaixa: {
+                fields: {
+                    valor:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    data:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    admin:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                },
+                list: [],
+            },
+            fecharcaixa:{
+                fields: {
+                    totalcartao:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    totaldinheiro:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    totalreforco:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    totalsangria:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    totalbalanca:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    totalrecebidocash:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    totalrecebidocard:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+
+                },
+
+                list: [],
+            },
+
+        },
+        sangria: { 
+            add: {
+                fields:{
+                    valor:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    }, comentario:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    
+                },
+            },
+        },
+        reforco: { 
+            add: {
+                fields:{
+                    valor:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    }, comentario:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    
+                },
+            },
+        },
 
 
         products: {
@@ -1270,15 +1371,7 @@ var App = new Vue({
                     if(arrayteste.product[0].produto.match(concatenando)){
                         listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".",",");
                         App.sales.add.addlist.push(listsales);
-                        
-              
-                        //console.log(App.sales.add.addlist);
-                        //listsales.produto = arrayteste.product[0];
-                        //listsales.produtovalorfinal = parseFloat(App.sales.add.addlist.valorfinal).toFixed(2).replace(".",",");
-                        //listsale.valorfinal = arrayteste.product[0].valorfinal;
-                        
-                        //console.log(arrayteste.product[0]);
-
+                       
                     }
                 })
                 console.log(App.sales.add.addlist);
@@ -1286,6 +1379,55 @@ var App = new Vue({
 
             })
         },
+      
+        getAberturadeCaixa: function (){
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseInt(data.getMonth()) + 1;
+            var ano = data.getFullYear();
+
+
+            if(dia < 10){
+                dia = "0" + dia;
+            }
+            if(mes < 10){
+                mes = "0" + mes;
+            }
+
+            var dataconcat = dia+"/"+mes+"/"+ano;
+
+            App.aberturacaixa.select.selectlist = [];
+            //console.log( App.aberturacaixa.select.selectlist);
+            firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+              
+                var concatenando = new RegExp(dataconcat, "i");
+                //console.log(concatenando);
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key" : abertura.key,
+                        aberturadecaixa : [
+                            abertura
+                        ]
+                    };
+                    
+                    
+                    if(arrayteste.aberturadecaixa[0].data.match(concatenando)){
+                       
+                        App.aberturacaixa.select.selectlist.push(abertura);
+                        //console.log(App.aberturacaixa.select.selectlist);
+                        
+                    }
+                })
+                //console.log(App.aberturacaixa.select.selectlist);
+                
+
+            })
+
+
+        },
+
         getSales: function () {
             firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
                
@@ -1938,6 +2080,7 @@ var App = new Vue({
 
         },
 
+
         // Abrindo Modal Edit User
         openEditUser: function (key) {
             firebase.database().ref(App.firebase.path + '/users/' + key).once('value').then(function (data) {
@@ -2177,6 +2320,121 @@ var App = new Vue({
                     App.users.remove.messages.push('Aconteceu um erro interno. Tente novamente.');
                 });
         },
+        abrircaixa: function () {
+            var dataconvert = App.aberturacaixa.abrircaixa.fields.data.value.split("-");
+            var davaconvertida = dataconvert[2] + "/" + dataconvert[1] + "/" + dataconvert[0];
+
+            App.aberturacaixa.abrircaixa.list = [];
+           
+            firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+              
+                var concatenando = new RegExp(davaconvertida, "i");
+                //console.log(concatenando);
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+                    if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+
+                        App.aberturacaixa.abrircaixa.list.push(abertura);
+                        console.log(App.aberturacaixa.abrircaixa.list);
+                       
+
+                    }
+                })
+            })
+            if (App.aberturacaixa.abrircaixa.fields.valor.value == "" || App.aberturacaixa.abrircaixa.fields.data.value == "" || App.aberturacaixa.abrircaixa.fields.admin.value == "") {
+              alert("Preencha todos os campos.");               
+            }
+            else if(App.aberturacaixa.abrircaixa.list.length != 0){
+                alert("Já foi feita a abertura de caixa na data informada.");
+            }
+            else if(App.aberturacaixa.abrircaixa.list.length == 0){ 
+                firebase.database().ref(App.firebase.path + '/aberturadecaixa').push({
+                    data: davaconvertida,
+                    usuario: App.aberturacaixa.abrircaixa.fields.admin.value,
+                    valor: App.aberturacaixa.abrircaixa.fields.valor.value
+                })
+                alert("Caixa aberto no dia " +davaconvertida+ " com sucesso.");
+            }
+           
+           
+
+        },
+        addsangria: function () {
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseFloat(data.getMonth()) +1;
+            var ano = data.getFullYear();
+            var hora = data.getHours();
+            var minuto = data.getMinutes();
+            
+            if(dia < 10){
+                dia = "0"+dia;
+            }
+            if(mes < 10){
+                mes = "0"+mes;
+            }
+            var dataconvertida = dia+"/"+mes+"/"+ano+" "+hora+":"+minuto;
+            // alert(dataconvertida);
+
+            console.log(App.sangria.add.fields.valor.value);
+            console.log(App.sangria.add.fields.comentario.value);
+            console.log(dataconvertida);
+
+            if(App.sangria.add.fields.comentario.value == "" || App.sangria.add.fields.valor.value == ""){
+                alert("Preencha todos os campos");
+            }
+
+            if(App.sangria.add.fields.comentario.value !=  "" && App.sangria.add.fields.valor.value !=  "" && dataconvertida!=  "" ){
+            
+                  firebase.database().ref(App.firebase.path + '/sangrias').push({
+                      data: dataconvertida,
+                      comentario: App.sangria.add.fields.valor.value,
+                      valor: App.sangria.add.fields.valor.value,
+                 })
+                 alert("Sangria realizada com sucesso.");
+                 document.location.reload();
+            }
+        },
+        addreforco: function () {
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseFloat(data.getMonth()) +1;
+            var ano = data.getFullYear();
+            var hora = data.getHours();
+            var minuto = data.getMinutes();
+            
+            if(dia < 10){
+                dia = "0"+dia;
+            }
+            if(mes < 10){
+                mes = "0"+mes;
+            }
+            var dataconvertida = dia+"/"+mes+"/"+ano+" "+hora+":"+minuto;
+            // alert(dataconvertida);
+
+
+            if(App.reforco.add.fields.comentario.value == "" || App.reforco.add.fields.valor.value == ""){
+                alert("Preencha todos os campos");
+            }
+
+            if(App.reforco.add.fields.comentario.value !=  "" && App.reforco.add.fields.valor.value !=  "" && dataconvertida!=  "" ){
+            
+                  firebase.database().ref(App.firebase.path + '/reforcos').push({
+                      data: dataconvertida,
+                      comentario: App.reforco.add.fields.valor.value,
+                      valor: App.reforco.add.fields.valor.value,
+                 })
+                 alert("Reforço realizado com sucesso.");
+                 document.location.reload();
+            }
+        },
 
     },
 
@@ -2189,7 +2447,7 @@ App.getProducts();
 App.getUsers();
 App.getProviders();
 App.getSales();
-App.getEstoque();
+App.getAberturadeCaixa();
 
 
 document.cookie;
@@ -2217,11 +2475,13 @@ route.get('/logado', function (vars, next) {
     alert("entrou logado");
     document.cookie = "username=logado; path=/";
     window.location.href = "/"
+    next();
 });
 route.get('/deslogado', function (vars, next) {
     alert("entrou deslogado");
     document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/"
+    next();
 });
 
 route.get('/home', function (vars, next) {
@@ -2229,6 +2489,15 @@ route.get('/home', function (vars, next) {
 
     next();
 });
+route.get('/aberturadecaixa', function (vars, next) {
+    App.page.current = "aberturadecaixa"
+    next();
+});
+route.get('/sangria', function (vars, next) {
+    App.page.current = "sangria"
+    next();
+});
+
 // Fornecedores - Providers
 route.get('/providers', function (vars, next) {
     App.page.current = 'providers';
@@ -2250,6 +2519,22 @@ route.get('/graficos', function (vars, next) {
 
     next();
 });
+route.get('/fechamentodecaixa', function (vars, next) {
+
+    logado = true;
+    if (document.cookie) {
+        window.location.href = "/fechamentocaixa.html";
+        next();
+    }
+    else {
+        App.page.current = 'caixa';
+        next();
+    }
+
+  
+});
+
+
 
 route.get('/caixa', function (vars, next) {
 
@@ -2259,8 +2544,7 @@ route.get('/caixa', function (vars, next) {
     }
     else {
         window.location.href = "/login.html"
-    }
-    next();
+    }  
     next();
 });
 

@@ -166,10 +166,10 @@
 
                                 </span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="">Abertura de Caixa</a></li>
-                                <li><a href="">Fechamento de Caixa</a></li>
+                                <li><a href="#/aberturadecaixa">Abertura de Caixa</a></li>
+                                <li><a href="#/fechamentodecaixa">Fechamento de Caixa</a></li>
                                 <li><a href="#/vendas">Relatórios</a></li>
-                                <li><a href="">Sangria</a></li>
+                                <li><a href="#/sangria">Sangria e Reforço</a></li>
                                 <li><a href="#/graficos">Gráficos</a></li>
                             </ul>
                         </li>
@@ -804,12 +804,12 @@
                             <div id="minimizarform">
                                 <h3><b>Dados da Venda</b></h3>
                                 <div class="form-group"
-                                :class="{ 'has-error': sales.view.fields.subtotalcompra.error }">
-                                <label for="">Valor Bruto da Compra</label>
+                                    :class="{ 'has-error': sales.view.fields.subtotalcompra.error }">
+                                    <label for="">Valor Bruto da Compra</label>
 
-                                <input type="text" class="form-control" placeholder="Subtotal" maxlength="30"
-                                    v-model="sales.view.fields.subtotalcompra.value" disabled>
-                            </div>
+                                    <input type="text" class="form-control" placeholder="Subtotal" maxlength="30"
+                                        v-model="sales.view.fields.subtotalcompra.value" disabled>
+                                </div>
                                 <div class="form-group" :class="{ 'has-error': sales.view.fields.desconto.error }">
                                     <label for="">Desconto</label>
 
@@ -817,17 +817,17 @@
                                         v-model="sales.view.fields.desconto.value" disabled>
                                 </div>
 
-                              
+
                                 <div class="form-group" :class="{ 'has-error': providers.edit.fields.nome.error }">
                                     <label for="">Valor Recebido</label>
 
-                                    <input type="text" class="form-control" placeholder="Valor Recebido" id="valorrecebido" maxlength="30"
+                                    <input type="text" class="form-control" placeholder="Valor Recebido"
+                                        id="valorrecebido" maxlength="30"
                                         v-model="sales.view.fields.valortotalrecebido.value" disabled>
                                 </div>
 
 
-                                <div class="form-group"
-                                    :class="{ 'has-error': sales.view.fields.total.error }">
+                                <div class="form-group" :class="{ 'has-error': sales.view.fields.total.error }">
                                     <label for="">Valor Líquido da Compra</label>
 
                                     <input type="text" class="form-control" placeholder="Total" maxlength="30"
@@ -878,7 +878,8 @@
             </div>
 
             <!-- Show sale -->
-            <div class="modal fade" id="openSearchProduct" tabindex="-1" role="dialog" aria-labelledby="modalSaleEditLabel">
+            <div class="modal fade" id="openSearchProduct" tabindex="-1" role="dialog"
+                aria-labelledby="modalSaleEditLabel">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -889,37 +890,36 @@
 
                         <div class="modal-body">
 
-                           
 
-                                <div class="alert"
-                                    :class="{ 'alert-danger': providers.add.error, 'alert-success': !providers.add.error }"
-                                    v-if="providers.add.messages.length > 0">
-                                    <p v-for="message in providers.add.messages">{{ message }}</p>
-                                </div>
-                                <!--------------FORM MINIMIZADO------------>
-                                <div id="minimizarform">
-                                    <h3><b>Dados das Mercadorias</b></h3>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr style="text-align: center;">
-                                                <th>Produto</th>
-                                                <th class="text-right">Preço Unitário (R$)</th>
-                                                <th class="text-right">Qtd. Estoque</th>                                          
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="item in sales.add.addlist">
-                                                <td>{{item.produto}}</td>
-                                                <td>{{item.valorfinal}}</td>
-                                                <td>{{item.quantidade}}</td>
-                    
-                                            </tr>
-                                        </tbody>
-                                    </table>
 
-                                    <small
-                                        class="help-block">{{providers.add.fields.nome.messages.join(", ")}}</small>
-                                </div>
+                            <div class="alert"
+                                :class="{ 'alert-danger': providers.add.error, 'alert-success': !providers.add.error }"
+                                v-if="providers.add.messages.length > 0">
+                                <p v-for="message in providers.add.messages">{{ message }}</p>
+                            </div>
+                            <!--------------FORM MINIMIZADO------------>
+                            <div id="minimizarform">
+                                <h3><b>Dados das Mercadorias</b></h3>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th>Produto</th>
+                                            <th class="text-right">Preço Unitário (R$)</th>
+                                            <th class="text-right">Qtd. Estoque</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in sales.add.addlist">
+                                            <td>{{item.produto}}</td>
+                                            <td>{{item.valorfinal}}</td>
+                                            <td>{{item.quantidade}}</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <small class="help-block">{{providers.add.fields.nome.messages.join(", ")}}</small>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -936,93 +936,77 @@
                             <div class="container-fluid">
 
                                 <form @submit.prevent="addNewSale()">
-
-                                    <!-- <button class="btn btn-success"><i
-                                        class="glyphicon glyphicon-plus"></i></button><br><br> -->
-
-
-                                    <div class="form-group">
-                                        <label for="">Produto</label><br>
-                                        <input type="text" class="form-control" placeholder="Produto" maxlength="30   "
-                                            v-model="sales.add.fields.nome.value">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Preço Unitário (R$)</label><br>
-                                        <input type="text" class="form-control text-right" placeholder="Preço Unitário"
-                                            maxlength="30" v-model="sales.add.fields.precoproduto.value" step="any"
-                                            id="iptPrice">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Quantidade</label><br>
-                                        <input type="text" class="form-control text-right" placeholder="Qtd."
-                                            maxlength="30" v-model="sales.add.fields.quantidade.value" step="any">
-                                    </div>
-                                    <p>
-                                        <button class="btn btn-primary btn-block"
-                                            @click.prevent="addNewSale()">Adicionar</button>
-                                    </p><br>
-                                    <div class="form-group">
-                                        <label for="">Data Atual</label><br>
-                                        <input type="text" class="form-control text-right" maxlength="30"
-                                            v-model="sales.add.fields.dataatual.value" disabled>
-                                    </div>
-                                    <div class="form-group" style="display: flex;"> 
-                                    <input type="text" id="inputprocuraestoque" style="width: 124px; margin-right: 5px; border-radius: 3px;" placeholder="Pesquisar Produto...">
-                                    <button class="btn btn-primary btn-block" @click.prevent="openSearchProduct();" onclick="procuraestoque()"><i class="glyphicon glyphicon-search"></i></button>
-                                    </div>
-                                    <!-- 
-                                    <div class="form-group" :class="{ 'has-error': products.add.fields.marca.error }">
-                                            <label for="" >Tipo</label><br>
-                                            <select v-model="sales.add.fields.tipodevenda.value" class="form-control">
-                                                <option value="" disabled selected hidden>Selecione...</option>
-                                                <option value="Pet Shop">Pet Shop</option>
-                                                <option value="Banho e Tosa">Banho e Tosa</option>
-                                                <option value="Outro">Outro</option>
-                                            </select>
-                                    </div> -->
-
-                                    <!-- <p>
-                                        <button class="btn btn-default btn-block" @click.prevent="openAddSale()"><b>Nova
-                                                Venda </b><i class="glyphicon glyphicon-usd"></i></button>
-                                    </p> -->
-                                    <br><br><br><br><br><br><br><br><br><br><br><br>
-
-
-
-                                    <label for="">Forma de Pagamento</label><br>
-                                    <p>
-                                        <div class="input-group">
-                                            <span class="input-group-addon" class="input-group-addon"><b><i
-                                                        class="glyphicon glyphicon-usd"></i></b>
-                                                <input type="checkbox">
-                                            </span>
-                                            <input type="number" class="form-control text-right" placeholder="0,00"
-                                                maxlength="30" v-model="sales.add.fields.cash.value" id="cash"
-                                                onblur="CalctotalCaixa()">
+                                    <div style="margin-bottom: 250px;">
+                                        <div class="form-group">
+                                            <label for="">Produto</label><br>
+                                            <input type="text" class="form-control" placeholder="Produto"
+                                                maxlength="30   " v-model="sales.add.fields.nome.value">
                                         </div>
-                                    </p>
-
-                                    <p>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><b> <i
-                                                        class="glyphicon glyphicon-credit-card"></i></b>
-                                                <input type="checkbox">
-                                            </span>
-                                            <input type="number" class="form-control text-right" placeholder="0,00"
-                                                maxlength="30" v-model="sales.add.fields.card.value" id="card"
-                                                onblur="CalctotalCaixa()">
+                                        <div class="form-group">
+                                            <label for="">Preço Unitário (R$)</label><br>
+                                            <input type="text" class="form-control text-right"
+                                                placeholder="Preço Unitário" maxlength="30"
+                                                v-model="sales.add.fields.precoproduto.value" step="any" id="iptPrice">
                                         </div>
-                                    </p>
+                                        <div class="form-group">
+                                            <label for="">Quantidade</label><br>
+                                            <input type="text" class="form-control text-right" placeholder="Qtd."
+                                                maxlength="30" v-model="sales.add.fields.quantidade.value" step="any">
+                                        </div>
+                                        <p>
+                                            <button class="btn btn-primary btn-block"
+                                                @click.prevent="addNewSale()">Adicionar</button>
+                                        </p><br>
+                                        <div class="form-group">
+                                            <label for="">Data Atual</label><br>
+                                            <input type="text" class="form-control text-right" maxlength="30"
+                                                v-model="sales.add.fields.dataatual.value" disabled>
+                                        </div>
+                                        <div class="form-group" style="display: flex;">
+                                            <input type="text" id="inputprocuraestoque"
+                                                style="width: 124px; margin-right: 5px; border-radius: 3px;"
+                                                placeholder="Pesquisar Produto...">
+                                            <button class="btn btn-primary btn-block"
+                                                @click.prevent="openSearchProduct();" onclick="procuraestoque()"><i
+                                                    class="glyphicon glyphicon-search"></i></button>
+                                        </div>
+                                    </div>
 
-                                    <p>
-                                        <button class="btn btn-success" @click.prevent="addSale()"
-                                            >Finalizar Compra <i
-                                                class="glyphicon glyphicon-ok"></i></button>
-                                    </p>
 
+
+                                    <div>
+                                        <label for="">Formas de Pagamento</label><br>
+                                        <p>
+                                            <div class="input-group">
+                                                <span class="input-group-addon" class="input-group-addon"><b><i
+                                                            class="glyphicon glyphicon-usd"></i></b>
+                                                    <input type="checkbox">
+                                                </span>
+                                                <input type="number" class="form-control text-right" placeholder="0,00"
+                                                    maxlength="30" v-model="sales.add.fields.cash.value" id="cash"
+                                                    onblur="CalctotalCaixa()">
+                                            </div>
+                                        </p>
+
+                                        <p>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><b> <i
+                                                            class="glyphicon glyphicon-credit-card"></i></b>
+                                                    <input type="checkbox">
+                                                </span>
+                                                <input type="number" class="form-control text-right" placeholder="0,00"
+                                                    maxlength="30" v-model="sales.add.fields.card.value" id="card"
+                                                    onblur="CalctotalCaixa()">
+                                            </div>
+                                        </p>
+
+                                        <p>
+                                            <button class="btn btn-success" @click.prevent="addSale()">Finalizar Compra
+                                                <i class="glyphicon glyphicon-ok"></i></button>
+                                        </p>
+
+                                    </div>
                                 </form>
-
-
                             </div>
                         </div>
                         <div class="box-center">
@@ -2587,16 +2571,98 @@
             </div>
 
 
+            <!-- Abertura de Caixa -->
+            <div v-if="page.current == 'aberturadecaixa'">
+                <h2 class="page-header">Abertura de Caixa</h2>
+
+                <ol class="breadcrumb">
+                    <li class="active"><a href="/#/">Home</a></li>
+                    <li class="active">Abertura de Caixa</li>
+                </ol>
+
+                <div class="container">
+                    <div class="row">
+                        <form @submit.prevent="abrircaixa();">
+                            <h3 style="margin-bottom:30px; margin-left:15px;">Preencha os valores de abertura de caixa para iniciar o sistema.</h3>
+                            <div class="form-group col-md-12">
+                                <label>Valor total abertura</label>
+                                <input type="text" class="form-control" style="width: 25%;" placeholder="R$0,00" v-model="aberturacaixa.abrircaixa.fields.valor.value">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Data para abertura do caixa</label>
+                                <input type="date" class="form-control" style="width: 25%;"  placeholder="Data abertura" v-model="aberturacaixa.abrircaixa.fields.data.value">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Usuário - Admin</label>
+                                <input type="text" class="form-control" style="width: 25%;"  placeholder="Usuário" v-model="aberturacaixa.abrircaixa.fields.admin.value">
+                            </div>
+                            <button class="btn btn-success" style="margin-left: 15px;" type="submit">Salvar <i class=" glyphicon glyphicon-floppy-disk"></i></button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        
+            <!-- Tela Sangria -->
+            <div v-if="page.current == 'sangria'">
+                <h2 class="page-header">Sangria e Reforço</h2>
+
+                <ol class="breadcrumb">
+                    <li class="active"><a href="/#/">Home</a></li>
+                    <li class="active">Sangria e Reforço</li>
+                </ol>
+            
+                <div class="container">
+                    <div class="row" style="display: flex;">
+                        <form @submit.prevent="addsangria();">
+                            <div class="titlesangriareforco" style="display: flex;">
+                            <h3 style="margin-bottom:30px; margin-left:15px;">Informe os dados abaixo para realizar a <h3 style="color:#d9534f; margin-left: 5px;">sangria</h3></h3>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Valor sangria</label>
+                                <input type="text" class="form-control" style="width: 75%;" placeholder="R$0,00"
+                                    v-model="sangria.add.fields.valor.value">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Comentário</label>
+                                <textarea type="text" class="form-control" style="width:75%;" rows="6" cols="33"
+                                    placeholder="Faça uma observação..." v-model="sangria.add.fields.comentario.value"></textarea>
+                            </div>
+                
+                            <button class="btn btn-danger" style="margin-left: 15px;" type="submit">Salvar <i
+                                    class=" glyphicon glyphicon-floppy-disk"></i></button>
+                        </form>
+                        <div>
+                            <form @submit.prevent="addreforco();">
+                                <div class="titlesangriareforco" style="display: flex;">
+                                    <h3 style="margin-bottom:30px; margin-left:15px;">Informe os dados abaixo para realizar o <h3 style="color:#337ab7; margin-left: 5px;">reforço</h3></h3>
+                                    </div>
+                                <div class="form-group col-md-12">
+                                    <label>Valor reforço</label>
+                                    <input type="text" class="form-control" style="width: 75%;" placeholder="R$0,00"
+                                        v-model="reforco.add.fields.valor.value">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Comentário</label>
+                                    <textarea type="text" class="form-control" style="width:75%;" rows="6" cols="33"
+                                        placeholder="Faça uma observação..." v-model="reforco.add.fields.comentario.value"></textarea>
+                                </div>
+                    
+                                <button class="btn btn-primary" style="margin-left: 15px;" type="submit">Salvar <i
+                                        class=" glyphicon glyphicon-floppy-disk"></i></button>
+                            </form>
+                        </div>
+
+                    </div>
+                
+                </div>
+
+            </div>
+
         </div>
-
-
-
-
-
-
-
-
-
 
         <!-- Erro 404 -->
         <div class="container">
@@ -2608,14 +2674,11 @@
                     <li class="active">Pagina 404</li>
 
                 </ol>
-
-
-
             </div>
 
         </div>
     </div>
-   
+
     <!-- Bootstrap e jQuery -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
