@@ -18,38 +18,39 @@
     <!--Login-->
     <div class="container">
         <div class="content">
+            <div >
+                <image src="/pp.png" class="imglogin"></image>
+                <div class="first-content">
+                    <div class="first-content-align">
+                        <div class="titles">
+                            <h2 class="formtitle textform">PET </h2>
+                            <h2 class="formtitle2">Vitória</h2>
 
-            <image src="/pp.png" class="imglogin"></image>
-            <div class="first-content">
-                <div class="first-content-align">
-                    <div class="titles">
-                        <h2 class="formtitle textform">PET </h2>
-                        <h2 class="formtitle2">Vitória</h2>
-
-                    </div>
-                    <div>
-                        <p class="pfirst-content">Comércio de Rações & Banho e Tosa.</p>
+                        </div>
+                        <div>
+                            <p class="pfirst-content">Comércio de Rações & Banho e Tosa.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="second-content">
-                <h1 class="h1login form">Login</h1>
-                <p class="textlogin form">Entre com um usuário e senha para acessar o sistema.</p>
-                <form class="form">
-                    <div class="divinput">
-                        <label for="" class="labelinput">
-                            <i class="fas fa-user iinput"></i>
-                            <input type="text" class="forminput itemsform" v-model="login.select.fields.login.value"
-                                id="login" placeholder="Usuário">
-                        </label>
-                        <label for="" class="labelinput">
-                            <i class="fas fa-lock iinput"></i>
-                            <input type="password" class="forminput itemsform si"
-                                v-model="login.select.fields.login.senha" id="senha" placeholder="Senha">
-                        </label>
-                    </div>
-                    <button type="button" onclick="logando()" class="itemsform btnlogin">Entrar</button>
-                </form>
+                <div class="second-content">
+                    <h1 class="h1login form">Login</h1>
+                    <p class="textlogin form">Entre com um usuário e senha para acessar o sistema.</p>
+                    <form class="form">
+                        <div class="divinput">
+                            <label for="" class="labelinput">
+                                <i class="fas fa-user iinput"></i>
+                                <input type="text" class="forminput itemsform" v-model="login.select.fields.login.value"
+                                    id="login" placeholder="Usuário">
+                            </label>
+                            <label for="" class="labelinput">
+                                <i class="fas fa-lock iinput"></i>
+                                <input type="password" class="forminput itemsform si"
+                                    v-model="login.select.fields.login.senha" id="senha" placeholder="Senha">
+                            </label>
+                        </div>
+                        <button type="button" onclick="logando()" class="itemsform btnlogin">Entrar</button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -58,22 +59,22 @@
         </div>
     </div>
     <script>
-        
+
         function logando() {
-           
+
             var login = document.getElementById("login").value;
             var senha = document.getElementById("senha").value;
 
-            if(login == "cido" && senha == "143359"){
+            if (login == "cido" && senha == "143359") {
                 document.cookie = "username=Victor; path=/;";
                 window.location.href = "/"
             }
-            else{
-               alert("Usuário e/ou senha inválido(s).")
-               document.getElementById("login").value = "";
-               document.getElementById("senha").value = ""
+            else {
+                alert("Usuário e/ou senha inválido(s).")
+                document.getElementById("login").value = "";
+                document.getElementById("senha").value = ""
             }
-           
+
         } 
     </script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>

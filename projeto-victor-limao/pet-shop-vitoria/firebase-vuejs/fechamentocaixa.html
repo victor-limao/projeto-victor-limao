@@ -18,7 +18,7 @@
     <div>
         <!--Fechamento de Caixa-->
         <div class="container">
-            <div class="content">
+            <div class="content" v-if="page.current == 'fechamentodecaixa'">
 
                 <image src="/pp.png" class="imglogin"></image>
                 <div class="first-content">
@@ -121,6 +121,7 @@
     </script>
 
     <script src="fmroute.js"></script>
+    <script src="app.js"></script>
 
     <script>
         $(document).ready(function () {

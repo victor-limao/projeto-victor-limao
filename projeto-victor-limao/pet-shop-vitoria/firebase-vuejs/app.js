@@ -13,7 +13,7 @@ var App = new Vue({
     },
     data: {
         page: {
-            current: '/login.html',
+            current: '',
         },
         firebase: {
             path: '/PETSHOP',
@@ -2513,7 +2513,6 @@ route.get('/vendas', function (vars, next) {
 
 
 route.get('/graficos', function (vars, next) {
-
     window.location.href = "/graficoscanvas.html"
 
 
@@ -2523,18 +2522,16 @@ route.get('/fechamentodecaixa', function (vars, next) {
 
     logado = true;
     if (document.cookie) {
-        window.location.href = "/fechamentocaixa.html";
+        window.location.href = "/fechamentocaixa.html"
         next();
     }
     else {
-        App.page.current = 'caixa';
+        App.page.current = 'login';
         next();
     }
 
   
 });
-
-
 
 route.get('/caixa', function (vars, next) {
 
