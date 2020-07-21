@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="pp2.png" color="#111">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
     <title>Pet Vitória</title>
+    <script src="https://kit.fontawesome.com/fa7c25d18c.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 
     <style>
         html,
@@ -114,8 +117,19 @@
         }
     </style>
 </head>
-
-<body onload="moveRelogio()">
+<script>
+    $(function () {
+        $(".mascara").maskMoney({
+           
+            allowNegative: false,
+            thousands: '',
+            decimal: ','
+        });
+    });
+   
+    
+</script>
+<body>
 
     <div id="AppVue">
 
@@ -953,29 +967,31 @@
                                             <div class="form-group">
                                                 <label for="">Produto</label><br>
                                                 <input type="text" class="form-control" placeholder="Produto"
-                                                       maxlength="30   " v-model="sales.add.fields.nome.value">
+                                                       maxlength="30" v-model="sales.add.fields.nome.value">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="">Preço Unitário (R$)</label><br>
-                                                <input type="text" class="form-control text-right"
-                                                       placeholder="Preço Unitário" maxlength="30"
-                                                       v-model="sales.add.fields.precoproduto.value" step="any" id="iptPrice">
-                                            </div>
+                                          
                                             <div class="form-group">
                                                 <label for="">Quantidade</label><br>
                                                 <input type="text" class="form-control text-right" placeholder="Qtd."
                                                        maxlength="30" v-model="sales.add.fields.quantidade.value" step="any">
                                             </div>
-                                            <p>
+                                            <div class="form-group">
+                                                <label for="">Preço Unitário (R$)</label><br>
+                                                <input type="text" class="form-control text-right mascara"
+                                                       placeholder="Preço Unitário" maxlength="30"
+                                                       step="any" id="iptPrice">
+
+                                                
+                                               
+                                            </div>
                                                 <button class="btn btn-primary btn-block"
                                                         @click.prevent="addNewSale()">
                                                     Adicionar
-                                                </button>
-                                            </p><br>
+                                                </button><br>
                                             <div class="form-group">
                                                 <label for="">Data Atual</label><br>
                                                 <input type="text" class="form-control text-right" maxlength="30"
-                                                       v-model="sales.add.fields.dataatual.value" disabled>
+                                                        id="dataatualll" disabled/>
                                             </div>
                                             <div class="form-group" style="display: flex;">
                                                 <input type="text" id="inputprocuraestoque"
@@ -1000,8 +1016,8 @@
                                                         </b>
                                                         <input type="checkbox">
                                                     </span>
-                                                    <input type="number" class="form-control text-right" placeholder="0,00"
-                                                           maxlength="30" v-model="sales.add.fields.cash.value" id="cash"
+                                                    <input type="text" class="form-control text-right mascara" placeholder="0,00" 
+                                                           maxlength="30"  id="cash" value="0,00"
                                                            onblur="calcTotalCaixa()">
                                                 </div>
                                             </p>
@@ -1014,8 +1030,8 @@
                                                         </b>
                                                         <input type="checkbox">
                                                     </span>
-                                                    <input type="number" class="form-control text-right" placeholder="0,00"
-                                                           maxlength="30" v-model="sales.add.fields.card.value" id="card"
+                                                    <input type="text" class="form-control text-right mascara" placeholder="0,00" 
+                                                           maxlength="30"  id="card" value="0,00"
                                                            onblur="calcTotalCaixa()">
                                                 </div>
                                             </p>
@@ -1691,9 +1707,8 @@
                                                 :class="{ 'has-error': users.add.fields.datacadastro.error }">
                                                 <div class="form-group">
                                                     <label for="">Horario Atual</label>
-                                                    <input type="text" class="form-control" min="2019-01-01"
-                                                        max="2050-12-30" v-model="users.add.fields.dataatual.value"
-                                                        disabled>
+                                                    <input type="text" class="form-control" id="dataatuall"/>
+                                                    
                                                 </div>
                                             </div>
 
@@ -2755,6 +2770,67 @@
 
         </div>
     </footer>
+    <script>
+    $(document).ready(moveRelogio());
+    function moveRelogio() {
+    //console.log("entrou");
+    var date = new Date();
+    var year = date.getFullYear();
+
+    momentoAtual = new Date()
+    var correct = 1;
+
+
+    var dia = momentoAtual.getDate();
+    if (dia < 10) {
+        dia = "0" + dia;
+    }
+
+    var mes = momentoAtual.getMonth() + correct;
+    if (mes < 10) {
+        mes = "0" + mes;
+    }
+
+    var ano = momentoAtual.getFullYear();
+
+
+    var hora = momentoAtual.getHours();
+    if (hora < 10) {
+        hora = "0" + hora;
+    }
+
+
+    var minuto = momentoAtual.getMinutes();
+    if (minuto < 10) {
+        minuto = "0" + minuto;
+    }
+
+
+    var segundo = momentoAtual.getSeconds();
+    if (segundo < 10) {
+        segundo = "0" + segundo;
+    }
+
+
+
+    horaImprimivel = dia + "/" + mes + "/" + ano + " - " + hora + ":" + minuto + ":" + segundo;
+    horaImprimivel2 = dia + "/" + mes + "/" + ano;
+    //console.log(year);
+    var splitwindowlocation = window.location.href.split("/", 5);
+    var splitadowindow = splitwindowlocation[4];
+    //console.log(splitadowindow);
+    if(splitadowindow == "caixa"){
+        var teste = document.getElementById("dataatualll").value;
+        document.getElementById("dataatualll").value = horaImprimivel;
+    }
+    document.getElementById("relogio").value = horaImprimivel;
+    
+    //document.getElementById("yearfooter").innerHTML = year;
+   
+
+    setTimeout("moveRelogio()", 1000)
+}
+    </script>
 </body>
 
 </html>

@@ -403,7 +403,7 @@ var App = new Vue({
                     },
 
                     quantidade: {
-                        value: '',
+                        value: '1',
                         error: false,
                         messages: [],
 
@@ -474,7 +474,7 @@ var App = new Vue({
 
                     precoproduto: {
 
-                        value: '',
+                        value: '0,00',
                         error: false,
                         messages: [],
 
@@ -1351,9 +1351,11 @@ var App = new Vue({
         addNewSale: function (keyproduct) {
             
             var product = App.sales.add.fields.nome.value;
-            var price = parseFloat(App.sales.add.fields.precoproduto.value);
+            var price = parseFloat((document.getElementById("iptPrice").value).replace(",","."));
             var amount = parseFloat(App.sales.add.fields.quantidade.value);
-
+            //console.log(product);
+            //console.log(price);
+            //console.log(amount);
             if (!product || !price || !amount) {
                 alert('Informe o produto!');
                 return;
@@ -1616,16 +1618,21 @@ var App = new Vue({
 
         // Adicionando Venda  
         addSale: function () {
-
-            if (App.sales.add.fields.card.value == "") {
-                App.sales.add.fields.card.value = 0
+            
+            if (document.getElementById("cash") == "") {
+                document.getElementById("cash") = "0,00"
             }
-            if (App.sales.add.fields.cash.value == "") {
-                App.sales.add.fields.cash.value = 0
+            if (document.getElementById("card")== "") {
+                document.getElementById("card") = "0,00";
             }
-            var cashfloat = parseFloat(App.sales.add.fields.cash.value);
-            var cardfloat = parseFloat(App.sales.add.fields.card.value);
+            var cashfloat = document.getElementById("cash").value.replace(",",".");
+            var cardfloat = document.getElementById("card").value.replace(",",".");
+            cardfloat = parseFloat(cashfloat);
+            cashfloat = parseFloat(cardfloat);
+            console.log(cashfloat);
+            console.log(cardfloat);
             var somarecebido = cardfloat + cashfloat;
+            console.log(somarecebido);
             if (somarecebido < App.sales.add.fields.totalcompra.value) {
 
                 alert("Valor recebido abaixo do esperado.");
@@ -1651,8 +1658,47 @@ var App = new Vue({
                     error = true;
                 }
 
+                var date = new Date();
+                var year = date.getFullYear();
+
+                momentoAtual = new Date()
+                var correct = 1;
 
 
+                var dia = momentoAtual.getDate();
+                if (dia < 10) {
+                    dia = "0" + dia;
+                }
+
+                var mes = momentoAtual.getMonth() + correct;
+                if (mes < 10) {
+                    mes = "0" + mes;
+                }
+
+                var ano = momentoAtual.getFullYear();
+
+
+                var hora = momentoAtual.getHours();
+                if (hora < 10) {
+                    hora = "0" + hora;
+                }
+
+
+                var minuto = momentoAtual.getMinutes();
+                if (minuto < 10) {
+                    minuto = "0" + minuto;
+                }
+
+
+                var segundo = momentoAtual.getSeconds();
+                if (segundo < 10) {
+                    segundo = "0" + segundo;
+                }
+
+
+
+                horaImprimivel = dia + "/" + mes + "/" + ano + " - " + hora + ":" + minuto + ":" + segundo;
+                //alert(horaImprimivel);
                 // e todos os demais campos aqui...
 
                 // se deu algum erro...
@@ -1665,15 +1711,15 @@ var App = new Vue({
                 App.sales.list = App.sales.list.slice();
                 console.log(App.sales.list);
                 firebase.database().ref(App.firebase.path + '/sales').push({
-                    cash: App.sales.add.fields.cash.value,
-                    card: App.sales.add.fields.card.value,
+                    cash: cashfloat,
+                    card: cardfloat,
                     desconto: App.sales.add.fields.desconto.value + " " + App.sales.add.fields.discountType,
                     totalcompra: App.sales.add.fields.totalcompra.value,
                     subtotalcompra: App.sales.add.fields.subtotalcompra.value,
                     valortotalrecebido: App.sales.add.fields.valortotalrecebido.value,
                     troco: App.sales.add.fields.troco.value,
                     produtos: App.sales.list,
-                    datavenda: App.sales.add.fields.dataatual.value,
+                    datavenda: horaImprimivel,
 
 
 
@@ -2613,7 +2659,7 @@ var App = new Vue({
         //     })
         // },
 
-
+       
     },
 
 
@@ -3339,7 +3385,7 @@ function procuraestoque() {
 $(function maskmoney() {
    
 
-    $(App. sales.add.fields.precoproduto.value).maskMoney({
+    $(App.sales.add.fields.precoproduto.value).maskMoney({
         thousands: '.',
         decimal: ','
     });
@@ -3393,15 +3439,17 @@ $(function maskmoney() {
     var subtotal = 0;
     var discount = parseFloat(App.sales.add.fields.desconto.value);
     var recebido = parseFloat(App.sales.add.fields.valortotalrecebido.value);
-    var cash = parseFloat(App.sales.add.fields.cash.value);
-    var card = parseFloat(App.sales.add.fields.card.value);
+    var cash = parseFloat(document.getElementById("cash").value.replace(",","."));
+    var card = parseFloat(document.getElementById("card").value.replace(",","."));
     var total = parseFloat(App.sales.add.fields.totalcompra.value);
+  
 
-    if (typeof cash != 'number' || isNaN(cash)) cash = 0;
-    if (typeof card != 'number' || isNaN(card)) card = 0;
+    if (typeof cash != 'number' || isNaN(cash || cash == "")) document.getElementById("cash").value = "0,00";
+    if (typeof card != 'number' || isNaN(card) || card == "") document.getElementById("card").value = "0,00";
     if (typeof somaValorRecebido != 'number' || isNaN(somaValorRecebido)) somaValorRecebido = 0;
     if (typeof discount != 'number' || isNaN(discount)) discount = 0;
-
+    console.log(cash);
+    console.log(card);
 
     //console.log(subtotal)
     //console.log(App.sales.list[0].total);
