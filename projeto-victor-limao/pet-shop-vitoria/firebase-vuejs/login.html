@@ -70,8 +70,8 @@
 
             firebase.database().ref(Apppath + '/admin').on('value', function (data) {
 
-                var concatenandologin = new RegExp(login, "i");
-                var concatenandosenha = new RegExp(senha, "i");
+                var concatenandologin = new RegExp(login);
+                var concatenandosenha = new RegExp(senha);
                 //console.log(concatenando);
                 data.forEach(function (item) {
                     var abertura = item.val();
@@ -86,19 +86,19 @@
                     if (arrayteste.aberturadecaixa[0].usuario.match(concatenandologin) && arrayteste.aberturadecaixa[0].senha.match(concatenandosenha)) {
 
                         acessologin.push(abertura);
-                        //console.log(acessologin);
-
-
+                        console.log(acessologin);
+                        
                     }
+                  
                     
                 })
-                if(acessologin.length > 0){
+                if(acessologin[0].usuario == login && acessologin[0].senha == senha){
                  
                      document.cookie = "username="+acessologin[0].usuario+"; path=/;";
                      window.location.href = "/"
                      //alert(document.cookie);
                 }
-                else if(acessologin.length <= 0){
+                else if(acessologin[0].usuario != login || acessologin[0].senha != senha){
                     alert("Usuário e/ou senha inválido(s).")
                      document.getElementById("login").value = "";
                      document.getElementById("senha").value = ""
