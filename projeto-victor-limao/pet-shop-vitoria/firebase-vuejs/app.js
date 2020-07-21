@@ -1414,6 +1414,7 @@ var App = new Vue({
                     };
                     //console.log(arrayteste);
                     //console.log(concatenando);
+                    //console.log(arrayteste.product[0]);
                     if (arrayteste.product[0].produto.match(concatenando)) {
                         listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
                         listsales.posicao = posicao++;
@@ -1660,7 +1661,9 @@ var App = new Vue({
                     App.sales.add.messages.push('Verifique todos os campos.');
                     return;
                 }
-
+               
+                App.sales.list = App.sales.list.slice();
+                console.log(App.sales.list);
                 firebase.database().ref(App.firebase.path + '/sales').push({
                     cash: App.sales.add.fields.cash.value,
                     card: App.sales.add.fields.card.value,
