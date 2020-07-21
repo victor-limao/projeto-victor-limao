@@ -11,9 +11,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/fa7c25d18c.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="fechamentocaixa.css" media="screen" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 
 </head>
-
+<script>
+    $(function () {
+        $(".mascara").maskMoney({
+            prefix: 'R$ ',
+            allowNegative: false,
+            thousands: '',
+            decimal: ','
+        });
+    });
+</script>
 <body>
     <div>
         <!--Fechamento de Caixa-->
@@ -72,14 +83,15 @@
                     <div class="divinput">
                         <label for="" class="labelinput">
                             <i class="glyphicon glyphicon-usd iinput"></i>
-                            <input type="text" class="forminput itemsform" onchange="enviavalores()"
-                                id="totalrecebidocash" name="totalrecebidocash" placeholder="" />
+                            <input type="text" class="forminput itemsform mascara" onchange="enviavalores()"
+                                id="totalrecebidocash" name="totalrecebidocash" placeholder="R$ 0,00" />
                         </label>
                         <label for="" class="labelinput">
                             <i class="glyphicon glyphicon-credit-card iinput"></i>
-                            <input type="text" class="forminput itemsform si" onchange="enviavalores()"
-                                id="totalrecebidocard" name="totalrecebidocard" placeholder="" />
+                            <input type="text" class="forminput itemsform si mascara" onchange="enviavalores()"
+                                id="totalrecebidocard" name="totalrecebidocard" placeholder="R$ 0,00" />
                         </label>
+                      
                     </div>
                     <button type="button" onclick="fechamentocaixa()" class="itemsform btnlogin">Fechar
                         Caixa</button>
@@ -121,16 +133,10 @@
     </script>
 
     <script src="fmroute.js"></script>
-    <script src="app.js"></script>
 
     <script>
         var Apppath = '/PETSHOP';
         $(document).ready(function () {
-
-
-
-
-            
 
             var data = new Date();
             var dia = data.getDate();
@@ -144,6 +150,30 @@
             }
             var dataconvertida = (dia + "/" + mes + "/" + ano);
 
+            var valorabertura;
+            var getaberturacaixa = [];
+            firebase.database().ref(Apppath + '/aberturadecaixa').on('value', function (data) {
+                var concatenando = new RegExp(dataconvertida, "i");
+                data.forEach(function (item) {
+                    var dados = item.val();
+                    dados.key = item.key;
+                    var arrayteste = {
+                        "key": dados.key,
+                        dadosdecaixa: [
+                            dados
+                        ]
+                    };
+                    //console.log(dados);
+                     if(arrayteste.dadosdecaixa[0].data.match(concatenando)){
+                        
+                        getaberturacaixa.push(dados);
+                        //console.log(arrayteste.dadosdecaixa[0].valor);
+                        //console.log(getaberturacaixa[0].valor);
+                        valorabertura = parseFloat(getaberturacaixa[0].valor).toFixed(2);
+                     }
+                })
+                   
+            })
 
             var totalsomacard = [];
             var somacard = 0;
@@ -291,7 +321,8 @@
                     somareforco += parseFloat(reforco[i].valor);
                     //console.log(somareforco);
                 }
-                document.getElementById("totalreforco").value = somareforco.toFixed(2);
+              
+                document.getElementById("totalreforco").value = (parseFloat(somareforco) + parseFloat(valorabertura)).toFixed(2);
             })
 
 
@@ -299,24 +330,56 @@
 
 
         function enviavalores() {
-           
+           //console.log("entrou");
            var cash = document.getElementById("totalrecebidocash").value;
            var card = document.getElementById("totalrecebidocard").value;
-           if (cash != "" && card != "") {
+            cash = parseFloat(cash.replace("R$ ","").replace(",","."));
+            card = parseFloat(card.replace("R$ ","").replace(",","."));
+
+            //console.log(card);
+            if(isNaN(card)){
+               card = 0;
+               //alert(card);
+           }
+           if(isNaN(cash)){
+               cash = 0;
+               //alert(cash)
+           }
+           if (!isNaN(cash) && !isNaN(card)) {
                document.getElementById("itemstotal").style.visibility = "visible";
                document.getElementById("serapreenchido").style.display = "none";
            }
-
+         
+          
+           //alert(card + cash);
 
             var totalcard = parseFloat(document.getElementById("totalcard").value);
             var totalcash = parseFloat(document.getElementById("totalcash").value);                            
             var totalreforco = parseFloat(document.getElementById("totalreforco").value);
             var totalsangria = parseFloat(document.getElementById("totalsangria").value);
-            var totalrecebidocard = parseFloat(document.getElementById("totalrecebidocard").value);
-            var totalrecebidocash = parseFloat(document.getElementById("totalrecebidocash").value);
+            var totalrecebidocard = document.getElementById("totalrecebidocard").value;
+            var totalrecebidocash = document.getElementById("totalrecebidocash").value;
 
+            totalrecebidocard = parseFloat(totalrecebidocard.replace("R$ ","").replace(",","."));
+            totalrecebidocash = parseFloat(totalrecebidocash.replace("R$ ","").replace(",","."));
+
+          
+           if(isNaN(totalrecebidocash)){
+                totalrecebidocash = 0;
+                document.getElementById("totalrecebidocash").value = "R$ 0,00";
+           }
+           if(isNaN(totalrecebidocard)){
+                totalrecebidocard = 0;
+                document.getElementById("totalrecebidocard").value = "R$ 0,00";
+                
+               //alert(totalrecebidocard);
+           }
+           
+
+            //alert(totalrecebidocard + totalrecebidocash);
 
             var totalcardcash = totalcard + totalcash;
+           
             
             //console.log(totalrecebidocard + totalrecebidocash);
             //console.log(totalreforco - totalsangria);
@@ -338,7 +401,7 @@
             if(somatudo < 0){
                 document.getElementById("totalbalance").style.color = "red";
             };
-            if(somatudo > 0){
+            if(somatudo >= 0){
                 document.getElementById("totalbalance").style.color = "green";
             };
         }

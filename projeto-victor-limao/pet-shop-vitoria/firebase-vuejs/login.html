@@ -61,19 +61,49 @@
     <script>
 
         function logando() {
-
+            var Apppath = '/PETSHOP';
             var login = document.getElementById("login").value;
             var senha = document.getElementById("senha").value;
 
-            if (login == "cido" && senha == "143359") {
-                document.cookie = "username=Victor; path=/;";
-                window.location.href = "/"
-            }
-            else {
-                alert("Usuário e/ou senha inválido(s).")
-                document.getElementById("login").value = "";
-                document.getElementById("senha").value = ""
-            }
+
+            var acessologin = [];
+
+            firebase.database().ref(Apppath + '/admin').on('value', function (data) {
+
+                var concatenandologin = new RegExp(login, "i");
+                var concatenandosenha = new RegExp(senha, "i");
+                //console.log(concatenando);
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+                  
+                    if (arrayteste.aberturadecaixa[0].usuario.match(concatenandologin) && arrayteste.aberturadecaixa[0].senha.match(concatenandosenha)) {
+
+                        acessologin.push(abertura);
+                        //console.log(acessologin);
+
+
+                    }
+                    
+                })
+                if(acessologin.length > 0){
+                 
+                     document.cookie = "username="+acessologin[0].usuario+"; path=/;";
+                     window.location.href = "/"
+                     //alert(document.cookie);
+                }
+                else if(acessologin.length <= 0){
+                    alert("Usuário e/ou senha inválido(s).")
+                     document.getElementById("login").value = "";
+                     document.getElementById("senha").value = ""
+                }
+            })
 
         } 
     </script>
@@ -104,7 +134,6 @@
         };
         firebase.initializeApp(config);
     </script>
-
 
 </body>
 

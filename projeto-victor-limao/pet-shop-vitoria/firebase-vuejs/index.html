@@ -8,6 +8,8 @@
     <link rel="shortcut icon" href="pp2.png" color="#111">
     <title>Pet Vitória</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <style>
         html,
         body {
@@ -919,7 +921,7 @@
                                                 <td id="valorfinal">{{item.valorfinal}}</td>
                                                 <td id="quantidadeemestoque">{{item.quantidade}}</td>
                                                 <td style="width: 120px;"><input type="number" style="width: 50px; height: 30px;" placeholder="Qtd."
-                                                        name="quantiadeselecionadaestoque" onchange="document.getElementById('quantidadeselecionada').value = this.value">
+                                                        name="quantiadeselecionadaestoque" onchange="document.getElementById('quantidadeselecionada').value = this.value" min="0">
                                                         <button class="btn btn-primary"
                                                         style="margin-left: 5px;" @click.prevent="editSelectedItem(item.produto, item.key, item.valorfinal, item.quantidade, document.getElementById('quantidadeselecionada').value);"><i
                                                             class="glyphicon glyphicon-plus-sign"></i></button></td>
@@ -2605,7 +2607,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <label>Usuário - Admin</label>
-                                <input type="text" class="form-control" style="width: 25%;"  placeholder="Usuário" v-model="aberturacaixa.abrircaixa.fields.admin.value">
+                                <input type="text" class="form-control" style="width: 25%;"  placeholder="Usuário" v-model="aberturacaixa.abrircaixa.fields.admin.value" disabled>
                             </div>
                             <button class="btn btn-success" style="margin-left: 15px;" type="submit">Salvar <i class=" glyphicon glyphicon-floppy-disk"></i></button>
                         </form>
@@ -2696,11 +2698,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-
-
-
-
-
 
 
     <!-- VueJS -->

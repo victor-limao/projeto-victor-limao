@@ -2664,6 +2664,8 @@ route.get('/home', function (vars, next) {
 });
 route.get('/aberturadecaixa', function (vars, next) {
     App.page.current = "aberturadecaixa"
+    var usercookies = document.cookie.split("=")
+    App.aberturacaixa.abrircaixa.fields.admin.value = usercookies[1];
     next();
 });
 route.get('/sangria', function (vars, next) {
@@ -3329,18 +3331,12 @@ function procuraestoque() {
 
 
 $(function maskmoney() {
+   
 
-    $(App.sales.add.fields.precoproduto.value).maskMoney({
+    $(App. sales.add.fields.precoproduto.value).maskMoney({
         thousands: '.',
         decimal: ','
     });
-
-
-    $(App.sales.add.fields.precoproduto.value).maskMoney({
-        thousands: '.',
-        decimal: ','
-    });
-
 
     $(App.sales.add.fields.desconto.value).maskMoney({
         thousands: '.',
