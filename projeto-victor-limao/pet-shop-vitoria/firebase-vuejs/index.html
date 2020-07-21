@@ -155,7 +155,7 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#/users">Usuário </a></li>
+                                <li><a href="#/users">Cliente </a></li>
                                 <li><a href="#/providers">Fornecedor</a></li>
                                 <li><a href="#/products">Mercadoria</a></li>
                             </ul>
@@ -1488,18 +1488,18 @@
 
 
             </div>
-            <!-- Usuários - Listar -->
+            <!-- Clientes - Listar -->
             <div v-if="page.current == 'users'">
-                <h2 class="page-header">Usuários</h2>
+                <h2 class="page-header">Clientes</h2>
 
                 <ol class="breadcrumb">
                     <li><a href="#/">Home</a></li>
-                    <li class="active">Usuários</li>
+                    <li class="active">Clientes</li>
                 </ol>
 
                 <p>
                     <button type="button" class="btn btn-default" @click.prevent="openAddUser()">
-                        <span class="glyphicon glyphicon-plus-sign"></span> Adicionar <b>Usuário</b>
+                        <span class="glyphicon glyphicon-plus-sign"></span> Adicionar <b>Cliente</b>
                     </button>
                 </p>
 
@@ -1508,7 +1508,7 @@
                     <p v-for="message in users.remove.messages">{{ message }}</p>
                 </div>
 
-                <!-- Listagem de usuários -->
+                <!-- Listagem de Clientes -->
                 <div class="alert alert-warning" v-if="users.list.length == 0">Nenhum registro encontrado</div>
                 <table class="table table-bordered" v-else>
                     <thead>
@@ -1561,7 +1561,7 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                         aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="modalUserAddLabel">Adicionar Usuário</h4>
+                                <h4 class="modal-title" id="modalUserAddLabel">Adicionar Cliente</h4>
                             </div>
                             <div class="modal-body">
 
