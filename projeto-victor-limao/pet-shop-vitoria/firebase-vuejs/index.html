@@ -997,7 +997,7 @@
                                                 </span>
                                                 <input type="number" class="form-control text-right" placeholder="0,00"
                                                     maxlength="30" v-model="sales.add.fields.cash.value" id="cash"
-                                                    onblur="CalctotalCaixa()">
+                                                    onblur="calcTotalCaixa()">
                                             </div>
                                         </p>
 
@@ -1009,7 +1009,7 @@
                                                 </span>
                                                 <input type="number" class="form-control text-right" placeholder="0,00"
                                                     maxlength="30" v-model="sales.add.fields.card.value" id="card"
-                                                    onblur="CalctotalCaixa()">
+                                                    onblur="calcTotalCaixa()">
                                             </div>
                                         </p>
 
@@ -1072,10 +1072,10 @@
                                         <label for="">Desconto</label>
                                         <div class=input-group>
                                             <input type="text" class="form-control text-right" maxlength="30"
-                                                v-model="sales.add.fields.desconto.value" onblur="CalctotalCaixa()">
+                                                v-model="sales.add.fields.desconto.value" onblur="calcTotalCaixa()">
                                             <span class="input-group-addon" id="basic-addon1"></span>
                                             <select class="form-control" v-model="sales.add.fields.discountType"
-                                                onblur="CalctotalCaixa()">
+                                                onblur="calcTotalCaixa()">
                                                 <option value="value">R$</option>
                                                 <option value="percent">%</option>
                                             </select>

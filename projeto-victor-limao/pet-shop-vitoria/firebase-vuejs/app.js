@@ -1369,9 +1369,9 @@ var App = new Vue({
 
             product.total = product.amount * product.price;
             product.totalFormat = App.numberFormat(product.total);
-            console.log("product");
-            console.log(product);
-            console.log("product");
+            // console.log("product");
+            // console.log(product);
+            // console.log("product");
             App.sales.list.key = keyproduct;
 
             App.sales.list.push(product);
@@ -1412,8 +1412,8 @@ var App = new Vue({
                             listsales
                         ]
                     };
-
-
+                    //console.log(arrayteste);
+                    //console.log(concatenando);
                     if (arrayteste.product[0].produto.match(concatenando)) {
                         listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
                         listsales.posicao = posicao++;
@@ -1565,32 +1565,36 @@ var App = new Vue({
             var cash = parseFloat(App.sales.add.fields.cash.value);
             var card = parseFloat(App.sales.add.fields.card.value);
             var total = parseFloat(App.sales.add.fields.totalcompra.value);
-
+        
             if (typeof cash != 'number' || isNaN(cash)) cash = 0;
             if (typeof card != 'number' || isNaN(card)) card = 0;
             if (typeof somaValorRecebido != 'number' || isNaN(somaValorRecebido)) somaValorRecebido = 0;
             if (typeof discount != 'number' || isNaN(discount)) discount = 0;
-
+        
+        
+            //console.log(subtotal)
+            //console.log(App.sales.list[0].total);
+           
             for (var i = 0; i < App.sales.list.length; i++) {
                 subtotal += App.sales.list[i].total;
             }
             //console.log(subtotal);
-
+        
             
-            var somaValorRecebido = cash + card;
-
-            App.sales.add.fields.valortotalrecebido.value = somaValorRecebido;
-
-
-            App.sales.add.fields.subtotalcompra.value = subtotal;
+            var somaValorRecebido = (cash + card).toFixed(2);
+        
+            App.sales.add.fields.valortotalrecebido.value = parseFloat(somaValorRecebido).toFixed(2);
+        
+        
+            App.sales.add.fields.subtotalcompra.value = (subtotal).toFixed(2);
             // console.log(subtotal);
-
+        
             if (App.sales.add.fields.discountType == 'value') {
-                App.sales.add.fields.totalcompra.value = subtotal - discount;
+                App.sales.add.fields.totalcompra.value = (subtotal - discount).toFixed(2);
             } else if (App.sales.add.fields.discountType == 'percent') {
-                App.sales.add.fields.totalcompra.value = subtotal * (100 - discount) / 100;
+                App.sales.add.fields.totalcompra.value = (subtotal * (100 - discount) / 100).toFixed(2);
             }
-
+        
             if (App.sales.add.fields.valortotalrecebido.value < App.sales.add.fields.totalcompra.value) {
                 // console.log("Algo de errado, você está recebendo menos do que deve...");
                 App.sales.add.fields.troco.error = true;
@@ -1598,15 +1602,14 @@ var App = new Vue({
                 // console.log("Ok, você está recebendo tanto quanto deve, confira o troco...");
                 App.sales.add.fields.troco.error = false;
             }
-
-            App.sales.add.fields.troco.value = (cash + card) - App.sales.add.fields.totalcompra.value;
-            parseFloat(App.sales.add.fields.troco.value).toFixed(2);
+        
+            App.sales.add.fields.troco.value = (cash + card).toFixed(2) - parseFloat(App.sales.add.fields.totalcompra.value).toFixed(2);
+            App.sales.add.fields.troco.value.toFixed(2);
             // App.sales.add.fields.subtotalFormat = App.numberFormat(App.sales.add.fields.addsubtotal);
             // App.sales.add.fields.totalFormat = App.numberFormat(App.sales.add.fields.total);
-
+        
             // App.sales.add.fields.subtotalcompra.value = App.sales.add.fields.subtotalFormat;
             // App.sales.add.fields.totalcompra.value = App.sales.add.fields.totalFormat;
-
         },
 
 
@@ -3056,9 +3059,9 @@ function calcRecebido() {
     var somaValorRecebido = cash + card;
     var somaTroco = somaValorRecebido - somaValorFinal;
     var somaDesconto = parseFloat(somaTroco + desconto).toFixed(2);
-    App.sales.add.fields.valortotalrecebido.value = somaValorRecebido;
+    App.sales.add.fields.valortotalrecebido.value = somaValorRecebido.toFixed(2);
 
-    App.sales.add.fields.troco.value = somaDesconto;
+    App.sales.add.fields.troco.value = somaDesconto.toFixed(2);
 
     if (App.sales.add.fields.cash.value == '') {
         App.sales.add.fields.cash.value = 0;
@@ -3074,7 +3077,7 @@ function calcRecebido() {
         console.log("Ok, você está recebendo tanto quanto deve, confira o troco...");
 
     }
-
+    App.sales.add.fields.troco.value.toFixed(2);
 }
 
 
@@ -3382,8 +3385,8 @@ $(function maskmoney() {
 
 
 
-
-function CalctotalCaixa() { 
+ function calcTotalCaixa() {
+    console.log("aqui");
     var subtotal = 0;
     var discount = parseFloat(App.sales.add.fields.desconto.value);
     var recebido = parseFloat(App.sales.add.fields.valortotalrecebido.value);
@@ -3395,38 +3398,45 @@ function CalctotalCaixa() {
     if (typeof card != 'number' || isNaN(card)) card = 0;
     if (typeof somaValorRecebido != 'number' || isNaN(somaValorRecebido)) somaValorRecebido = 0;
     if (typeof discount != 'number' || isNaN(discount)) discount = 0;
+
+
+    //console.log(subtotal)
+    //console.log(App.sales.list[0].total);
    
-    for (var i in App.sales.list) {
+    for (var i = 0; i < App.sales.list.length; i++) {
         subtotal += App.sales.list[i].total;
-        
     }
+    //console.log(subtotal);
 
-    var somaValorRecebido = parseFloat(cash + card).toFixed(2);
+    
+    var somaValorRecebido = cash + card;
 
-    App.sales.add.fields.valortotalrecebido.value = somaValorRecebido;
-    var totalcompra = parseFloat(App.sales.add.fields.totalcompra.value).toFixed(2);
+    App.sales.add.fields.valortotalrecebido.value = somaValorRecebido.toFixed(2);
 
-    App.sales.add.fields.subtotalcompra.value = subtotal;
-    console.log(subtotal);
+
+    App.sales.add.fields.subtotalcompra.value = subtotal.toFixed(2);
+    // console.log(subtotal);
 
     if (App.sales.add.fields.discountType == 'value') {
-        App.sales.add.fields.totalcompra.value = parseFloat(subtotal - discount).toFixed(2);
+        App.sales.add.fields.totalcompra.value = (subtotal - discount).toFixed(2);
     } else if (App.sales.add.fields.discountType == 'percent') {
-        App.sales.add.fields.totalcompra.value = parseFloat(subtotal * (100 - discount) / 100).toFixed(2);
+        App.sales.add.fields.totalcompra.value = (subtotal * (100 - discount) / 100).toFixed(2);
     }
 
     if (App.sales.add.fields.valortotalrecebido.value < App.sales.add.fields.totalcompra.value) {
-        console.log("Algo de errado, você está recebendo menos do que deve...");
+        // console.log("Algo de errado, você está recebendo menos do que deve...");
         App.sales.add.fields.troco.error = true;
     } else {
-        console.log("Ok, você está recebendo tanto quanto deve, confira o troco...");
+        // console.log("Ok, você está recebendo tanto quanto deve, confira o troco...");
         App.sales.add.fields.troco.error = false;
     }
 
-    App.sales.add.fields.troco.value = (somaValorRecebido - totalcompra).toFixed(2);
-}
+    App.sales.add.fields.troco.value = (parseFloat(cash + card) - parseFloat(App.sales.add.fields.totalcompra.value)).toFixed(2);
+    
+    // App.sales.add.fields.subtotalFormat = App.numberFormat(App.sales.add.fields.addsubtotal);
+    // App.sales.add.fields.totalFormat = App.numberFormat(App.sales.add.fields.total);
 
-if (App.sales.add.fields.tipodevenda.value == 'Pet Shop') {
-    alert("Esta vazio o campo de tipo de venda");
+    // App.sales.add.fields.subtotalcompra.value = App.sales.add.fields.subtotalFormat;
+    // App.sales.add.fields.totalcompra.value = App.sales.add.fields.totalFormat;
 
 }
