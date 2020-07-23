@@ -939,11 +939,9 @@
                             <!--------------FORM MINIMIZADO------------>
                             <div id="minimizarform">
                                 <form>
-
                                     <h3><b>Dados das Mercadorias</b></h3>
-                                <div>
-                                    <div class="alert alert-warning" v-if="sales.add.addlist.length == 0">Nenhuma
-                                        mercadoria encontrada</div>
+                                    <div>
+                                    <div class="alert alert-warning" v-if="sales.add.addlist.length == 0">Nenhuma mercadoria encontrada.</div>
                                     <table class="table table-bordered" v-if="sales.add.addlist.length > 0">
                                         <thead>
                                             <tr style="text-align: center;">
@@ -962,50 +960,44 @@
                                                 <td id="valorfinal" style="text-align:right">{{item.valorfinal}}</td>
                                                 <td id="quantidadeemestoque" style="text-align:right">
                                                     {{item.quantidade}}</td>
-                                                <td style="width: 120px;"><input type="number"
-                                                        style="width: 50px; height: 30px;" placeholder="Qtd."
+                                                <td style="width: 120px;"><input type="number" style="width: 50px; height: 30px;" placeholder="Qtd."
                                                         name="quantiadeselecionadaestoque"
-                                                        onchange="document.getElementById('quantidadeselecionada').value = this.value"
-                                                        min="0">
+                                                        onchange="document.getElementById('quantidadeselecionada').value = this.value" min="0">
                                                     <button class="btn btn-primary" style="margin-left: 5px;"
                                                         @click.prevent="editSelectedItem(item.produto, item.key, item.valorfinal, item.quantidade, document.getElementById('quantidadeselecionada').value);"><i
                                                             class="glyphicon glyphicon-plus-sign"></i></button></td>
-
+                                    
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                                <div>
-                                    <div class="alert alert-warning" v-if="sales.add.addlist1.length == 0">Nenhuma
-                                        ordem de serviço encontrada</div>
-                                    <table class="table table-bordered" v-if="sales.add.addlist1.length > 0">
-                                        <thead>
-                                            <tr style="text-align: center;">
-                                                <th>Cliente - PET</th>
-                                                <th class="text-right">Preço Serviço (R$)</th>
-                                                <th class="text-right">Serviço</th>
-                                                <th class="text-right">Data Serviço</th>
-                                                <th class=""></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <input type="text" id="quantidadeselecionada" hidden>
-                                            <tr v-for="item in sales.add.addlist1">
-                                                <td id="keyproduto" hidden>{{item.key}}</td>
-                                                <td id="cliente">{{item.cliente}} - {{item.nome}}</td>
-                                                <td id="valorfinal" style="text-align:right">{{item.valorservico}}</td>
-                                                <td id="servico" style="text-align:right">{{item.servico}}</td>
-                                                <td id="dataservico" style="text-align:right">{{item.dataservico}}</td>
-                                                <td style="width: 66px;">
-                                                    <button class="btn btn-primary" style="margin-left: 5px;"
-                                                        @click.prevent="editSelectedItemOrdem(item.cliente, item.key, item.nome, item.valorservico, item.dataservico, item.servico, 1)"><i
-                                                            class="glyphicon glyphicon-plus-sign"></i></button></td>
+                                    
+                                    </div>
+                                    <div>
+                                        <div class="alert alert-warning" v-if="sales.add.addlistordem.length == 0">Nenhuma mercadoria encontrada.</div>
+                                        <table class="table table-bordered" v-if="sales.add.addlistordem.length > 0">
+                                            <thead>
+                                                <tr style="text-align: center;">
+                                                    <th>Cliente</th>
+                                                    <th class="text-right">Valor Serviço (R$)</th>
+                                                    <th class="text-right">Serviço</th>
+                                                    <th class="text-right">Data Serviço</th>
+                                                    <th class="text-right" style="width: 52px;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="item in sales.add.addlistordem">
+                                                    
+                                                    <td>{{item.cliente}} - {{item.nome}}</td>
+                                                    <td class="text-right">{{item.valorservico}}</td>
+                                                    <td class="text-right">{{item.servico}}</td>
+                                                    <td class="text-right">{{item.dataservico}}</td>
+                                                    <td><button class="btn btn-primary form-group glyphicon glyphicon glyphicon-chevron-right"  @click.prevent="editSelectedItemOrdem(item.cliente, item.nome, item.valorservico, item.servico, item.dataservico, item.key);"></button></td>
 
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-                                </div>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    
+                                    </div>
                                 </form>
 
                                 <small class="help-block">{{providers.add.fields.nome.messages.join(", ")}}</small>
@@ -1133,8 +1125,6 @@
                                             <td class="text-right">{{sale.priceFormat}}</td>
                                             <td class="text-right">{{sale.amountFormat}}</td>
                                             <td class="text-right">{{sale.totalFormat}}</td>
-                                            <td class="text-right" hidden>{{sale.key}}</td>
-                                            <td class="text-right" hidden>{{sale.key1}}</td>
                                             <td>
                                                 <button class="btn btn-danger btn-xs"
                                                     @click.prevent="removeSaleProduct(sale, i, sale.key, sale.key1)">
@@ -2722,7 +2712,8 @@
                                 para iniciar o sistema.</h3>
                             <div class="form-group col-md-12">
                                 <label>Valor total abertura</label>
-                                <input type="text" class="form-control mascara" style="width: 25%;" placeholder="R$0,00" id="valorabertura">
+                                <input type="text" class="form-control" style="width: 25%;" placeholder="R$0,00"
+                                    v-model="aberturacaixa.abrircaixa.fields.valor.value">
                             </div>
                             <div class="form-group col-md-12">
                                 <label>Data para abertura do caixa</label>
@@ -3293,11 +3284,11 @@
                                                     <input type="text"
                                                         v-model="ordemdeservicosbanhoetosa.edit2.fields.keyclient.value"
                                                         hidden>
-                                                    <input type="text"
-                                                        v-model="ordemdeservicosbanhoetosa.edit2.fields.keypedido.value"
-                                                        hidden>
+                                                        <input type="text"
+                                                        v-model="ordemdeservicosbanhoetosa.edit2.fields.keypedido.value" hidden
+                                                        >
                                                 </div>
-
+                                             
                                             </div>
 
                                             <div class="col-md-6">
@@ -3582,8 +3573,7 @@
                                                     :class="{ 'has-error': ordemdeservicosbanhoetosa.edit2.fields.servico.error }">
                                                     <label for="">Serviço:</label>
                                                     <select type="text" class="form-control" placeholder="Serviço"
-                                                        v-model="ordemdeservicosbanhoetosa.edit2.fields.servico.value"
-                                                        id="editordemservico">
+                                                        v-model="ordemdeservicosbanhoetosa.edit2.fields.servico.value" id="editordemservico">
                                                         <option selected>Banho</option>
                                                         <option>Banho e Tosa</option>
                                                         <option>Banho e Tosa Higiênica</option>
@@ -3602,9 +3592,7 @@
                                                 <div>
                                                     <label for="">Valor:</label>
                                                     <input type="text" class="form-control mascaraordem mascaraordem"
-                                                        placeholder="R$" i
-                                                        v-model="ordemdeservicosbanhoetosa.edit2.fields.valorservico.value"
-                                                        id="editordemvalorservico">
+                                                        placeholder="R$" i v-model="ordemdeservicosbanhoetosa.edit2.fields.valorservico.value" id="editordemvalorservico">
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -3623,7 +3611,7 @@
                                             <div class="col-md-12 form-group">
                                                 <label for="">Status Ordem</label>
                                                 <select class="col-md-6 form-control" id="editstatuspedido">
-
+                                                    
                                                     <option value="Não chegou">Não chegou</option>
                                                     <option value="Chegou">Chegou</option>
                                                     <option value="Saiu">Saiu</option>
@@ -3643,8 +3631,7 @@
                                         </div>
                                     </div>
 
-                                    <small
-                                        class="help-block">{{ordemdeservicosbanhoetosa.edit.fields.rua.messages.join(", ")}}</small>
+                                    <small class="help-block">{{ordemdeservicosbanhoetosa.edit.fields.rua.messages.join(", ")}}</small>
 
                                     <p>
                                         <button type="submit" class="btn btn-success">Salvar <i
@@ -3842,9 +3829,9 @@
             }
 
             if (document.getElementsByClassName("tdstatuspedido").length) {
-
+               
                 for (i = 0; i < document.getElementsByClassName("tdstatuspedido").length; i++) {
-
+                  
                     if (document.getElementsByClassName("tdstatuspedido")[i].innerHTML.trim(" ") == "Não chegou") {
                         document.getElementsByClassName("tdstatuspedido")[i].style.backgroundColor = "#FF3333";
                     }
