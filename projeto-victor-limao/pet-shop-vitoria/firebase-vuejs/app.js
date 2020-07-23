@@ -489,13 +489,13 @@ var App = new Vue({
                     messages: [],
                     key: '',
                     nome: '',
-    
+
                 },
                 getlist: {
                     list: [],
                 },
                 list: [],
-               
+
             },
 
             edit: {
@@ -649,7 +649,7 @@ var App = new Vue({
                         error: false,
                         messages: [],
                     },
-                    
+
 
 
                 },
@@ -825,7 +825,7 @@ var App = new Vue({
                 nome: '',
 
             },
-            getlist:{
+            getlist: {
                 list: [],
             },
             list: [],
@@ -1000,8 +1000,10 @@ var App = new Vue({
 
                 },
                 list: [],
-                
+
                 addlist: [],
+                addlist1: [],
+                addlist2: [],
             },
 
             edit: {
@@ -1425,6 +1427,8 @@ var App = new Vue({
 
         getselecteditem: {
             add: {
+                error: false,
+                messages: [],
                 fields: {
                     produto: {
                         value: '',
@@ -1821,9 +1825,9 @@ var App = new Vue({
         },
 
         addNewSale: function (keyproduct) {
-            
+     
             var product = App.sales.add.fields.nome.value;
-            var price = parseFloat((document.getElementById("iptPrice").value).replace(",","."));
+            var price = parseFloat((document.getElementById("iptPrice").value).replace(",", "."));
             var amount = parseFloat(App.sales.add.fields.quantidade.value);
             //console.log(product);
             //console.log(price);
@@ -1838,7 +1842,9 @@ var App = new Vue({
                 price: price,
                 priceFormat: App.numberFormat(price),
                 amount: amount,
-                amountFormat: App.numberFormat(amount, 3)
+                amountFormat: App.numberFormat(amount, 3),
+                key: keyproduct,
+                key1: 0
             };
 
             product.total = product.amount * product.price;
@@ -1846,7 +1852,57 @@ var App = new Vue({
             // console.log("product");
             // console.log(product);
             // console.log("product");
-            App.sales.list.key = keyproduct;
+          
+
+            App.sales.list.push(product);
+            //console.log(App.sales.list);
+            App.calcTotalCaixa();
+
+            App.sales.add.fields.nome.value = '';
+            App.sales.add.messages = [];
+            document.getElementById("iptPrice").value = '';
+            App.sales.add.messages = [];
+            App.sales.add.fields.quantidade.value = 1;
+            App.sales.add.messages = [];
+            //console.log(App.sales.list);
+            //console.log(App.sales.list);
+
+
+
+        },
+        addNewSaleOrdem: function (keyordem) {
+           
+            var product = App.sales.add.fields.nome.value;
+            var price = parseFloat((document.getElementById("iptPrice").value).replace(",", "."));
+            var amount = parseFloat(App.sales.add.fields.quantidade.value);
+            //console.log(product);
+            //console.log(price);
+            //console.log(amount);
+            if (!product || !price || !amount) {
+                alert('Informe o produto!');
+                return;
+            }
+
+            var product = {
+                product: product,
+                price: price,
+                priceFormat: App.numberFormat(price),
+                amount: amount,
+                amountFormat: App.numberFormat(amount, 3),
+                key: 0,
+                key1: keyordem
+            };
+
+            firebase.database().ref(App.firebase.path + '/ordemdeservico/' + keyordem).child("quantidade").set(
+                0
+            )
+
+            product.total = product.amount * product.price;
+            product.totalFormat = App.numberFormat(product.total);
+            // console.log("product");
+            // console.log(product);
+            // console.log("product");
+
 
             App.sales.list.push(product);
             //console.log(App.sales.list);
@@ -1860,7 +1916,7 @@ var App = new Vue({
             App.sales.add.messages = [];
             //console.log(App.sales.list);
 
-
+            $('#openSearchProduct').modal('toggle');
 
 
         },
@@ -1869,9 +1925,10 @@ var App = new Vue({
         getEstoque: function (inputprocuraestoque) {
             //console.log(inputprocuraestoque);
             App.sales.add.addlist = [];
+            App.sales.add.addlist1 = [];
+            var nomeproduto = inputprocuraestoque;
             firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
 
-                var nomeproduto = inputprocuraestoque;
                 //var concat = "/"+nomeproduto+"*/";
                 //console.log(concat)
                 var concatenando = new RegExp(nomeproduto, "i");
@@ -1899,6 +1956,34 @@ var App = new Vue({
 
 
             })
+            firebase.database().ref(App.firebase.path + '/ordemdeservico').on('value', function (data) {
+
+                var concatenando = new RegExp(nomeproduto, "i");
+                var concatqtd = new RegExp("1", "i");
+                var posicao = 0;
+                data.forEach(function (item) {
+                    var listsales = item.val();
+                    listsales.key = item.key;
+                    var arrayteste = {
+                        "key": listsales.key,
+                        product: [
+                            listsales
+                        ]
+                    };
+                    //console.log(arrayteste);
+                    //console.log(concatenando);
+                    //console.log(arrayteste.product[0]);
+                    var strqtd = (arrayteste.product[0].quantidade).toString();                   
+                    if ((arrayteste.product[0].cliente.match(concatenando) || arrayteste.product[0].nome.match(concatenando)) && strqtd.match(concatqtd)) {                       
+                        listsales.valorservico = parseFloat(listsales.valorservico).toFixed(2).replace(".", ",");
+                        listsales.posicao = posicao++;
+                        App.sales.add.addlist1.push(listsales);
+
+                    }
+                })
+                //console.log(App.sales.add.addlist1);
+            })
+
 
         },
         editSelectedItem: function (produto, keyproduto, valorfinal, quantidadeemestoque, quantidadeselecionada) {
@@ -1923,9 +2008,10 @@ var App = new Vue({
                 //alert(quantidadefinal);
                 //console.log(keyproduto);
 
-                firebase.database().ref(App.firebase.path + '/products/' + keyproduto).child("quantidade").set(
+            firebase.database().ref(App.firebase.path + '/products/' + keyproduto).child("quantidade").set(
                     quantidadefinal
-                )
+            )
+
                 App.sales.add.fields.nome.value = produto;
                 document.getElementById("iptPrice").value = valorfinal;
                 App.sales.add.fields.quantidade.value = quantidadeselecionada;
@@ -1936,8 +2022,33 @@ var App = new Vue({
             }
 
         },
+        editSelectedItemOrdem: function (cliente, keyordem, nome, valorservico, dataservico, servico, quantidade) {
+            //console.log(cliente + ", "+nome+" -- "+servico);
+            //console.log(keyordem);
+            //console.log(nome);
+            valorservico = parseFloat(valorservico.replace(",", "."))
+            //console.log(valorservico);
+            //console.log(dataservico);
+            //console.log(servico);
+            //console.log(quantidade);
+            var quantidadefinal = quantidade - 1;
+            //console.log(quantidadefinal);
+
+            firebase.database().ref(App.firebase.path + '/ordemdeservico/' + keyordem).child("quantidade").set(
+                quantidadefinal
+            )
+
+
+
+            App.sales.add.fields.nome.value = cliente + ", " + nome + " -- " + servico;
+            App.sales.add.fields.quantidade.value = 1;
+            document.getElementById("iptPrice").value = valorservico;
+            App.addNewSaleOrdem(keyordem);
+        },
+
 
         getAberturadeCaixa: function () {
+        
             document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             var data = new Date();
             var dia = data.getDate();
@@ -1974,11 +2085,72 @@ var App = new Vue({
                     if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
 
                         App.aberturacaixa.select.selectlist.push(abertura);
+                       
                         //console.log(App.aberturacaixa.select.selectlist);
 
                     }
                 })
                 //console.log(App.aberturacaixa.select.selectlist);
+
+
+            })
+
+
+        },
+        getAberturadeCaixaAtivo: function () {
+            
+            document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            logado = true;
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseInt(data.getMonth()) + 1;
+            var ano = data.getFullYear();
+
+
+            if (dia < 10) {
+                dia = "0" + dia;
+            }
+            if (mes < 10) {
+                mes = "0" + mes;
+            }
+
+            var dataconcat = dia + "/" + mes + "/" + ano;
+
+            firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+
+                var concatenando = new RegExp(dataconcat, "i");
+                var arrayteste = [];
+                //console.log(concatenando);
+                data.forEach(function (item) {
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+
+
+                    if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                        App.aberturacaixa.select.selectlist.push(abertura);
+
+                    }
+                    else if (!arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+
+
+                    }
+                })
+                if (document.cookie && arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                    App.page.current = '/';
+                }
+                else if (document.cookie && !arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                    window.location.href = "/#/aberturadecaixa"
+                }
+                else {
+                    window.location.href = "/login.html"
+                }
+
 
 
             })
@@ -2008,7 +2180,7 @@ var App = new Vue({
 
                     totaldinheiro += parseFloat(listsales.cash);
                     totalcartao += parseFloat(listsales.card);
-                   
+
                     //console.log(totalcartao);
                     //totalgeral += totalizando;
                     //console.log("total cash é igual a: "+ totalcartao);
@@ -2019,7 +2191,7 @@ var App = new Vue({
                     listsales.totalcompra = parseFloat(listsales.totalcompra).toFixed(2).replace(".", ",");
                     App.sales.add.fields.dinheiro.value = totaldinheiro.toFixed(2).replace(".", ",");
                     App.sales.add.fields.totalcartao.value = parseFloat(totalcartao).toFixed(2).replace(".", ",");
-                    App.sales.add.fields.relatoriototal.value = (parseFloat(totalcartao) + parseFloat(totaldinheiro)).toFixed(2).replace(".",",");
+                    App.sales.add.fields.relatoriototal.value = (parseFloat(totalcartao) + parseFloat(totaldinheiro)).toFixed(2).replace(".", ",");
 
                     // console.log(subtotal)
                     // if (typeof subtotal != 'number' || isNaN(subtotal)) subtotal = 0;
@@ -2034,45 +2206,45 @@ var App = new Vue({
 
         },
 
-
+  
         calcTotalCaixa: function () {
-            
+
             var subtotal = 0;
             var discount = parseFloat(App.sales.add.fields.desconto.value);
             var recebido = parseFloat(App.sales.add.fields.valortotalrecebido.value);
             var cash = parseFloat(App.sales.add.fields.cash.value);
             var card = parseFloat(App.sales.add.fields.card.value);
             var total = parseFloat(App.sales.add.fields.totalcompra.value);
-        
+
             if (typeof cash != 'number' || isNaN(cash)) cash = 0;
             if (typeof card != 'number' || isNaN(card)) card = 0;
             if (typeof somaValorRecebido != 'number' || isNaN(somaValorRecebido)) somaValorRecebido = 0;
             if (typeof discount != 'number' || isNaN(discount)) discount = 0;
-        
-        
+
+
             //console.log(subtotal)
             //console.log(App.sales.list[0].total);
-           
+
             for (var i = 0; i < App.sales.list.length; i++) {
                 subtotal += App.sales.list[i].total;
             }
             //console.log(subtotal);
-        
-            
+
+
             var somaValorRecebido = (cash + card).toFixed(2);
-        
+
             App.sales.add.fields.valortotalrecebido.value = parseFloat(somaValorRecebido).toFixed(2);
-        
-        
+
+
             App.sales.add.fields.subtotalcompra.value = (subtotal).toFixed(2);
             // console.log(subtotal);
-        
+
             if (App.sales.add.fields.discountType == 'value') {
                 App.sales.add.fields.totalcompra.value = (subtotal - discount).toFixed(2);
             } else if (App.sales.add.fields.discountType == 'percent') {
                 App.sales.add.fields.totalcompra.value = (subtotal * (100 - discount) / 100).toFixed(2);
             }
-        
+
             if (App.sales.add.fields.valortotalrecebido.value < App.sales.add.fields.totalcompra.value) {
                 // console.log("Algo de errado, você está recebendo menos do que deve...");
                 App.sales.add.fields.troco.error = true;
@@ -2080,12 +2252,12 @@ var App = new Vue({
                 // console.log("Ok, você está recebendo tanto quanto deve, confira o troco...");
                 App.sales.add.fields.troco.error = false;
             }
-        
+
             App.sales.add.fields.troco.value = (cash + card).toFixed(2) - parseFloat(App.sales.add.fields.totalcompra.value).toFixed(2);
             App.sales.add.fields.troco.value.toFixed(2);
             // App.sales.add.fields.subtotalFormat = App.numberFormat(App.sales.add.fields.addsubtotal);
             // App.sales.add.fields.totalFormat = App.numberFormat(App.sales.add.fields.total);
-        
+
             // App.sales.add.fields.subtotalcompra.value = App.sales.add.fields.subtotalFormat;
             // App.sales.add.fields.totalcompra.value = App.sales.add.fields.totalFormat;
         },
@@ -2234,60 +2406,74 @@ var App = new Vue({
             }
         },
 
-        removeSaleProduct: function (sale, i, keyproduct) {
+        removeSaleProduct: function (sale, i, keyproduct, keyordem) {
+            console.log(keyproduct +"produto");
+            console.log(keyordem +"ordem");
             //console.log(keyproduct);
             //console.log(sale.amount);
             App.sales.list.splice(i, 1);
 
 
             App.getselecteditem.remove.list = [];
-            firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
-                var quantidadeestoque;
-
-
-                App.getselecteditem.remove.list = [];
-                //var concat = "/"+nomeproduto+"*/";
-                //console.log(concat)
-                var concatenando = new RegExp(keyproduct, "i");
-                var testando = [];
-                var posicao = 0;
-                data.forEach(function (item) {
-                    var listsales = item.val();
-                    listsales.key = item.key;
-                    var arrayteste = {
-                        "key": listsales.key,
-                        product: [
-                            listsales
-                        ]
-                    };
-
-
-                    if (arrayteste.product[0].key.match(concatenando)) {
-                        listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
-                        listsales.posicao = posicao++;
-                        App.getselecteditem.remove.list.push(listsales);
-                    }
-                })
-
-            })
-            console.log(App.getselecteditem.remove.list[0].quantidade);
-
-            var repoeestoque = parseFloat(App.getselecteditem.remove.list[0].quantidade) + parseFloat(sale.amount);
-            firebase.database().ref(App.firebase.path + '/products/' + keyproduct).child("quantidade").set(
-                repoeestoque,
-
-            )
+            if(keyproduct != 0 && keyordem == 0){
+                
+               
+                    firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
+    
+                        App.getselecteditem.remove.list = [];
+                        //var concat = "/"+nomeproduto+"*/";
+                        //console.log(concat)
+                        var concatenando = new RegExp(keyproduct, "i");
+                        var testando = [];
+                        var posicao = 0;
+                        data.forEach(function (item) {
+                            var listsales = item.val();
+                            listsales.key = item.key;
+                            var arrayteste = {
+                                "key": keyproduct,
+                                product: [
+                                    listsales
+                                ]
+                            };
+    
+    
+                            if (arrayteste.product[0].key.match(concatenando)) {
+                                listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
+                                listsales.posicao = posicao++;
+                                App.getselecteditem.remove.list.push(listsales);
+                            }
+                          
+                        })
+    
+                    })
+                    console.log(App.getselecteditem.remove.list[0].quantidade);
+    
+                    var repoeestoque = parseFloat(App.getselecteditem.remove.list[0].quantidade) + parseFloat(sale.amount);
+                    firebase.database().ref(App.firebase.path + '/products/' + keyproduct).child("quantidade").set(
+                        repoeestoque,
+    
+                    )
+                
+            }
+            if(keyordem != 0 && keyproduct == 0){
+               
+                firebase.database().ref(App.firebase.path + '/ordemdeservico/' + keyordem).child("quantidade").set(
+                    1
+                )
+            }
+           
+            
             App.calcTotalCaixa();
 
         },
-         // Abrindo Modal User
-         openAddOrdemdeServico: function () {
+        // Abrindo Modal User
+        openAddOrdemdeServico: function () {
             $('#modalSeachClienteOrdemServico').modal();
         },
-        searchClienteOrdemServico: function () {    
+        searchClienteOrdemServico: function () {
             App.ordemdeservicosbanhoetosa.list = [];
             var inpcliente = document.getElementById("inp-searchcliente").value;
-            
+
             firebase.database().ref(App.firebase.path + '/users').on('value', function (data) {
 
                 var concatenando = new RegExp(inpcliente, "i");
@@ -2304,7 +2490,7 @@ var App = new Vue({
                     };
                     //console.log(arrayteste.aberturadecaixa[0].cliente);
                     if (arrayteste.aberturadecaixa[0].cliente.match(concatenando) || arrayteste.aberturadecaixa[0].nome.match(concatenando)) {
-                       
+
                         App.ordemdeservicosbanhoetosa.list.push(abertura);
                         //console.log(App.ordemdeservicosbanhoetosa.list);
 
@@ -2313,10 +2499,10 @@ var App = new Vue({
                 })
             })
         },
-        selectedClienteOrdem: function(ordemdeservicosbanhoetosatable){
-            
+        selectedClienteOrdem: function (ordemdeservicosbanhoetosatable) {
+
             $('#modalSeachClienteOrdemServico').modal('toggle');
-           
+
 
             var splitstatus = App.ordemdeservicosbanhoetosa.list[0].status.split("º");
             //console.log(splitstatus[0]);
@@ -2342,109 +2528,112 @@ var App = new Vue({
             App.ordemdeservicosbanhoetosa.edit.fields.raca.value = ordemdeservicosbanhoetosatable.raca;
             App.ordemdeservicosbanhoetosa.edit.fields.temperamento.value = ordemdeservicosbanhoetosatable.temperamento;
             App.ordemdeservicosbanhoetosa.edit.fields.observacao.value = ordemdeservicosbanhoetosatable.observacao;
-            
+
 
             $('#modalAddOrdemdeServico').modal();
         },
-        addOrdemServico: function()
-        {
-            if(!App.ordemdeservicosbanhoetosa.edit.fields.servico.value) App.ordemdeservicosbanhoetosa.edit.fields.servico.value = "Banho";
+        addOrdemServico: function () {
+            App.ordemdeservicosbanhoetosa.getlist.list = [];
+            console.log(App.ordemdeservicosbanhoetosa.getlist.list);
+            if (!App.ordemdeservicosbanhoetosa.edit.fields.servico.value) App.ordemdeservicosbanhoetosa.edit.fields.servico.value = "Banho";
             //alert(App.ordemdeservicosbanhoetosa.edit.fields.servico.value);
-            if(document.getElementById("valorservico").value == "") {
+            if (document.getElementById("valorservico").value == "") {
                 document.getElementById("valorservico").value = "R$ 0,00";
             }
-            if(App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value == "") {
+            if (App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value == "") {
                 App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value = "R$ 0,00";
             }
-            
+
             var splitvalorservico = document.getElementById("valorservico").value;
-            
+
             var valorconvertido;
-          
-            if(isNaN(splitvalorservico)){
-                valorconvertido = parseFloat(splitvalorservico.split(" ")[1].replace(",","."));
+
+            if (isNaN(splitvalorservico)) {
+                valorconvertido = parseFloat(splitvalorservico.split(" ")[1].replace(",", "."));
             }
-            else{
+            else {
                 valorconvertido = document.getElementById("valorservico").value;
             }
-            
-            console.log(valorconvertido);
-            App.ordemdeservicosbanhoetosa.list[0].key;
+
+          
+           
             var data = App.ordemdeservicosbanhoetosa.edit.fields.dataservico.value;
-            console.log(data);
+          
             var datasplit = data.split("T");
             var dataconvert = datasplit[0].split("-");
-            var dateconvertida = dataconvert[2]+"/"+dataconvert[1]+"/"+dataconvert[0];
+            var dateconvertida = dataconvert[2] + "/" + dataconvert[1] + "/" + dataconvert[0];
             var permitedata;
-            if(!data) {permitedata = 0;}
-            else{permitedata = 1}
+            if (!data) { permitedata = 0; }
+            else { permitedata = 1 }
            
-            if(valorconvertido > 0 && permitedata != 0){
-            
-                var datacompleta = dateconvertida +" "+datasplit[1];
-            
-            firebase.database().ref(App.firebase.path + '/ordemdeservico').push({
-                keyclient: App.ordemdeservicosbanhoetosa.edit.fields.keyclient.value,
-                cliente: App.ordemdeservicosbanhoetosa.edit.fields.cliente.value,
-                telefone: App.ordemdeservicosbanhoetosa.edit.fields.telefone.value,
-                cep: App.ordemdeservicosbanhoetosa.edit.fields.cep.value,
-                rua: App.ordemdeservicosbanhoetosa.edit.fields.rua.value,
-                uf: App.ordemdeservicosbanhoetosa.edit.fields.uf.value,
-                bairro: App.ordemdeservicosbanhoetosa.edit.fields.bairro.value,
-                cidade: App.ordemdeservicosbanhoetosa.edit.fields.cidade.value,
-                numero: App.ordemdeservicosbanhoetosa.edit.fields.numero.value,
-                complemento: App.ordemdeservicosbanhoetosa.edit.fields.complemento.value,
-                status: App.ordemdeservicosbanhoetosa.edit.fields.status.value,
-                nome: App.ordemdeservicosbanhoetosa.edit.fields.nome.value,
-                pet: App.ordemdeservicosbanhoetosa.edit.fields.pet.value,
-                idade: App.ordemdeservicosbanhoetosa.edit.fields.idade.value,
-                genero: App.ordemdeservicosbanhoetosa.edit.fields.genero.value,
-                raca: App.ordemdeservicosbanhoetosa.edit.fields.raca.value,
-                temperamento: App.ordemdeservicosbanhoetosa.edit.fields.temperamento.value,
-                observacao: App.ordemdeservicosbanhoetosa.edit.fields.observacao.value,
-                servico: App.ordemdeservicosbanhoetosa.edit.fields.servico.value,
-                dataservico: App.ordemdeservicosbanhoetosa.edit.fields.dataservico.value,
-                taxidog: App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value,
-                obsservico: App.ordemdeservicosbanhoetosa.edit.fields.obsservico.value,
-                valorservico: valorconvertido,
-                dataservico: datacompleta,
-                statuspedido: "Não chegou",
-            })
-            .then(function(){     
-                App.ordemdeservicosbanhoetosa.list = [];
-                App.ordemdeservicosbanhoetosa.edit.fields.cliente.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.telefone.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.cep.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.rua.value = ''; 
-                App.ordemdeservicosbanhoetosa.edit.fields.uf.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.bairro.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.cidade.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.numero.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.complemento.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.status.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.nome.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.pet.value = ''; 
-                App.ordemdeservicosbanhoetosa.edit.fields.idade.value = ''; 
-                App.ordemdeservicosbanhoetosa.edit.fields.genero.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.raca.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.temperamento.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.observacao.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.servico.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.dataservico.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.obsservico.value = '';
-                App.ordemdeservicosbanhoetosa.edit.fields.valorservico.value = '',
-                App.ordemdeservicosbanhoetosa.edit.messages.push('Ordem de serviço criada com sucesso!');
-            })
-            .catch(function(){
-                alert("deu ruim");
-            })
-        }
-        else{
-            alert("Verifique todos os campos necessários.");
-        }
+            if (valorconvertido > 0 && permitedata != 0) {
 
-         
+                var datacompleta = dateconvertida + " " + datasplit[1];
+                App.ordemdeservicosbanhoetosa.list = [];
+                firebase.database().ref(App.firebase.path + '/ordemdeservico').push({
+                    
+                    keyclient: App.ordemdeservicosbanhoetosa.edit.fields.keyclient.value,
+                    cliente: App.ordemdeservicosbanhoetosa.edit.fields.cliente.value,
+                    telefone: App.ordemdeservicosbanhoetosa.edit.fields.telefone.value,
+                    cep: App.ordemdeservicosbanhoetosa.edit.fields.cep.value,
+                    rua: App.ordemdeservicosbanhoetosa.edit.fields.rua.value,
+                    uf: App.ordemdeservicosbanhoetosa.edit.fields.uf.value,
+                    bairro: App.ordemdeservicosbanhoetosa.edit.fields.bairro.value,
+                    cidade: App.ordemdeservicosbanhoetosa.edit.fields.cidade.value,
+                    numero: App.ordemdeservicosbanhoetosa.edit.fields.numero.value,
+                    complemento: App.ordemdeservicosbanhoetosa.edit.fields.complemento.value,
+                    status: App.ordemdeservicosbanhoetosa.edit.fields.status.value,
+                    nome: App.ordemdeservicosbanhoetosa.edit.fields.nome.value,
+                    pet: App.ordemdeservicosbanhoetosa.edit.fields.pet.value,
+                    idade: App.ordemdeservicosbanhoetosa.edit.fields.idade.value,
+                    genero: App.ordemdeservicosbanhoetosa.edit.fields.genero.value,
+                    raca: App.ordemdeservicosbanhoetosa.edit.fields.raca.value,
+                    temperamento: App.ordemdeservicosbanhoetosa.edit.fields.temperamento.value,
+                    observacao: App.ordemdeservicosbanhoetosa.edit.fields.observacao.value,
+                    servico: App.ordemdeservicosbanhoetosa.edit.fields.servico.value,
+                    dataservico: App.ordemdeservicosbanhoetosa.edit.fields.dataservico.value,
+                    taxidog: App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value,
+                    obsservico: App.ordemdeservicosbanhoetosa.edit.fields.obsservico.value,
+                    valorservico: valorconvertido,
+                    dataservico: datacompleta,
+                    quantidade: 1,
+                    statuspedido: "Não chegou",
+                })
+                    .then(function () {
+                        App.ordemdeservicosbanhoetosa.list = [];
+                        App.ordemdeservicosbanhoetosa.edit.fields.cliente.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.telefone.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.cep.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.rua.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.uf.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.bairro.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.cidade.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.numero.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.complemento.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.status.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.nome.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.pet.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.idade.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.genero.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.raca.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.temperamento.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.observacao.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.servico.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.dataservico.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value = '';
+                        App.ordemdeservicosbanhoetosa.edit.fields.obsservico.value = '';
+                        document.getElementById("valorservico").value = '',
+                        App.ordemdeservicosbanhoetosa.edit.messages.push('Ordem de serviço criada com sucesso!');
+                    })
+                    .catch(function () {
+                     
+                    })
+            }
+            else {
+                alert("Verifique todos os campos necessários.");
+            }
+            console.log(App.ordemdeservicosbanhoetosa.getlist.list);
+
         },
 
 
@@ -2740,27 +2929,32 @@ var App = new Vue({
         },
 
         getOrdensdeservico: function () {
+          
+            App.ordemdeservicosbanhoetosa.getlist.list = [],
             document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             firebase.database().ref(App.firebase.path + '/ordemdeservico').on('value', function (data) {
 
-                App.ordemdeservicosbanhoetosa.getlist.list = [];
-
+                var concatenando = new RegExp("1", "i");
+                //console.log(concatenando);
                 data.forEach(function (item) {
-
-                    var user = item.val();
-                    user.key = item.key;
-                    // console.log(user);
-                    // console.log(item.key);
-                     App.ordemdeservicosbanhoetosa.getlist.list.push(user);
-                });
-               
-               
-                for(var i = 0; i < App.ordemdeservicosbanhoetosa.getlist.list.length; i++){
-                    App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico.toFixed(2);
-                }
-                
-            });
-           
+                    var abertura = item.val();
+                    abertura.key = item.key;
+                    var arrayteste = {
+                        "key": abertura.key,
+                        aberturadecaixa: [
+                            abertura
+                        ]
+                    };
+                    //console.log(abertura.quantidade)
+                    var strqtd = (abertura.quantidade).toString();
+                    //console.log(strqtd);
+                    //console.log(strqtd);
+                        if(strqtd.match(concatenando)){
+                            App.ordemdeservicosbanhoetosa.getlist.list.push(abertura);
+                            //console.log(App.ordemdeservicosbanhoetosa.getlist.list);
+                        }             
+                })
+            })
         },
 
         //CLIENTES 
@@ -3053,20 +3247,20 @@ var App = new Vue({
 
 
         },
-        openEditOrdem: function (data){
+        openEditOrdem: function (data) {
             console.log(data.dataservico);
             var datasplit = data.dataservico.split(" ");
             console.log(datasplit);
             var splitdata = datasplit[0].split("/");
             console.log(splitdata);
 
-            var dataconvertida = splitdata[2]+"-"+splitdata[1]+"-"+splitdata[0]+"T"+datasplit[1];
-                console.log(data.key);
-                App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value = data.key,
+            var dataconvertida = splitdata[2] + "-" + splitdata[1] + "-" + splitdata[0] + "T" + datasplit[1];
+            console.log(data.key);
+            App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value = data.key,
                 App.ordemdeservicosbanhoetosa.edit2.fields.keyclient.value = data.keyclient,
                 App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value = data.cliente,
                 App.ordemdeservicosbanhoetosa.edit2.fields.telefone.value = data.telefone,
-                App.ordemdeservicosbanhoetosa.edit2.fields.cep.value = data.cep, 
+                App.ordemdeservicosbanhoetosa.edit2.fields.cep.value = data.cep,
                 App.ordemdeservicosbanhoetosa.edit2.fields.rua.value = data.rua,
                 App.ordemdeservicosbanhoetosa.edit2.fields.uf.value = data.uf,
                 App.ordemdeservicosbanhoetosa.edit2.fields.bairro.value = data.bairro,
@@ -3074,7 +3268,7 @@ var App = new Vue({
                 App.ordemdeservicosbanhoetosa.edit2.fields.numero.value = data.numero,
                 App.ordemdeservicosbanhoetosa.edit2.fields.complemento.value = data.complemento,
                 App.ordemdeservicosbanhoetosa.edit2.fields.status.value = data.status,
-                App.ordemdeservicosbanhoetosa.edit2.fields.nome.value = data.nome, 
+                App.ordemdeservicosbanhoetosa.edit2.fields.nome.value = data.nome,
                 App.ordemdeservicosbanhoetosa.edit2.fields.pet.value = data.pet,
                 App.ordemdeservicosbanhoetosa.edit2.fields.idade.value = data.idade,
                 App.ordemdeservicosbanhoetosa.edit2.fields.genero.value = data.genero,
@@ -3088,53 +3282,89 @@ var App = new Vue({
                 App.ordemdeservicosbanhoetosa.edit2.fields.obsservico.value = data.obsservico,
                 App.ordemdeservicosbanhoetosa.edit2.fields.dataservico.value = data.dataservico,
                 App.ordemdeservicosbanhoetosa.edit2.fields.valorservico.value = data.valorservico,
-                
-                        
-            $('#modalEditOrdemdeServico').modal();
+
+
+                $('#modalEditOrdemdeServico').modal();
         },
 
-        editOrdem: function(){
-            //alert(document.getElementById("editordemvalorservico").value);
+        editOrdem: function () {
+           
+            App.ordemdeservicosbanhoetosa.getlist.list = [];
+            
             var convertvalor = document.getElementById("editordemvalorservico").value.split(" ");
             var valorsplit = convertvalor[1];
             var valorconvertido;
-          
-            if(valorsplit == undefined){
+
+            if (valorsplit == undefined) {
                 valorconvertido = parseFloat(document.getElementById("editordemvalorservico").value);
                 //alert(valorconvertido);
             }
-            else if(valorsplit != undefined){
-                valorconvertido = parseFloat(valorsplit.replace(",","."));
+            else if (valorsplit != undefined) {
+                valorconvertido = parseFloat(valorsplit.replace(",", "."));
             }
+
+            var testepush = { 
+                keyclient: App.ordemdeservicosbanhoetosa.edit2.fields.keyclient.value,
+                cliente: App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value,
+                telefone: App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value,
+                cep: App.ordemdeservicosbanhoetosa.edit2.fields.cep.value,
+                rua: App.ordemdeservicosbanhoetosa.edit2.fields.rua.value,
+                uf: App.ordemdeservicosbanhoetosa.edit2.fields.uf.value,
+                cidade: App.ordemdeservicosbanhoetosa.edit2.fields.cidade.value,
+                numero: App.ordemdeservicosbanhoetosa.edit2.fields.numero.value,
+                complemento: App.ordemdeservicosbanhoetosa.edit2.fields.complemento.value,
+                status: App.ordemdeservicosbanhoetosa.edit2.fields.status.value,
+                nome: App.ordemdeservicosbanhoetosa.edit2.fields.nome.value,
+                pet: App.ordemdeservicosbanhoetosa.edit2.fields.pet.value,
+                idade: App.ordemdeservicosbanhoetosa.edit2.fields.idade.value,
+                genero: App.ordemdeservicosbanhoetosa.edit2.fields.genero.value,
+                raca: App.ordemdeservicosbanhoetosa.edit2.fields.raca.value,
+                temperamento: App.ordemdeservicosbanhoetosa.edit2.fields.temperamento.value,
+                observacao: App.ordemdeservicosbanhoetosa.edit2.fields.observacao.value,
+                servico: App.ordemdeservicosbanhoetosa.edit2.fields.servico.value,
+                dataservico: App.ordemdeservicosbanhoetosa.edit2.fields.dataservico.value,
+                taxidog: App.ordemdeservicosbanhoetosa.edit2.fields.taxidog.value,
+                obsservico: App.ordemdeservicosbanhoetosa.edit2.fields.obsservico.value,
+                statuspedido: document.getElementById("editstatuspedido").value,
+                valorservico: valorconvertido,
+                quantidade: 1
+            }
+            
+
             //alert(valorconvertido)
             firebase.database().ref(App.firebase.path + '/ordemdeservico/' + App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value).set({
-                keyclient: App.ordemdeservicosbanhoetosa.edit2.fields.keyclient.value, 
-                cliente: App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value, 
-                telefone: App.ordemdeservicosbanhoetosa.edit2.fields.telefone.value, 
-                cep: App.ordemdeservicosbanhoetosa.edit2.fields.cep.value, 
-                rua: App.ordemdeservicosbanhoetosa.edit2.fields.rua.value, 
-                uf: App.ordemdeservicosbanhoetosa.edit2.fields.uf.value, 
-                cidade: App.ordemdeservicosbanhoetosa.edit2.fields.cidade.value, 
-                numero: App.ordemdeservicosbanhoetosa.edit2.fields.numero.value, 
-                complemento: App.ordemdeservicosbanhoetosa.edit2.fields.complemento.value, 
-                status: App.ordemdeservicosbanhoetosa.edit2.fields.status.value, 
-                nome: App.ordemdeservicosbanhoetosa.edit2.fields.nome.value, 
-                pet: App.ordemdeservicosbanhoetosa.edit2.fields.pet.value, 
-                idade: App.ordemdeservicosbanhoetosa.edit2.fields.idade.value, 
-                genero: App.ordemdeservicosbanhoetosa.edit2.fields.genero.value, 
-                raca: App.ordemdeservicosbanhoetosa.edit2.fields.raca.value, 
-                temperamento: App.ordemdeservicosbanhoetosa.edit2.fields.temperamento.value, 
-                observacao: App.ordemdeservicosbanhoetosa.edit2.fields.observacao.value, 
-                servico: App.ordemdeservicosbanhoetosa.edit2.fields.servico.value, 
-                dataservico: App.ordemdeservicosbanhoetosa.edit2.fields.dataservico.value, 
-                taxidog: App.ordemdeservicosbanhoetosa.edit2.fields.taxidog.value, 
-                obsservico : App.ordemdeservicosbanhoetosa.edit2.fields.obsservico.value, 
-                statuspedido: document.getElementById("editstatuspedido").value, 
-                valorservico: valorconvertido, 
-                
-            }).then(function(){
+                keyclient: App.ordemdeservicosbanhoetosa.edit2.fields.keyclient.value,
+                cliente: App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value,
+                telefone: App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value,
+                cep: App.ordemdeservicosbanhoetosa.edit2.fields.cep.value,
+                rua: App.ordemdeservicosbanhoetosa.edit2.fields.rua.value,
+                uf: App.ordemdeservicosbanhoetosa.edit2.fields.uf.value,
+                cidade: App.ordemdeservicosbanhoetosa.edit2.fields.cidade.value,
+                numero: App.ordemdeservicosbanhoetosa.edit2.fields.numero.value,
+                complemento: App.ordemdeservicosbanhoetosa.edit2.fields.complemento.value,
+                status: App.ordemdeservicosbanhoetosa.edit2.fields.status.value,
+                nome: App.ordemdeservicosbanhoetosa.edit2.fields.nome.value,
+                pet: App.ordemdeservicosbanhoetosa.edit2.fields.pet.value,
+                idade: App.ordemdeservicosbanhoetosa.edit2.fields.idade.value,
+                genero: App.ordemdeservicosbanhoetosa.edit2.fields.genero.value,
+                raca: App.ordemdeservicosbanhoetosa.edit2.fields.raca.value,
+                temperamento: App.ordemdeservicosbanhoetosa.edit2.fields.temperamento.value,
+                observacao: App.ordemdeservicosbanhoetosa.edit2.fields.observacao.value,
+                servico: App.ordemdeservicosbanhoetosa.edit2.fields.servico.value,
+                dataservico: App.ordemdeservicosbanhoetosa.edit2.fields.dataservico.value,
+                taxidog: App.ordemdeservicosbanhoetosa.edit2.fields.taxidog.value,
+                obsservico: App.ordemdeservicosbanhoetosa.edit2.fields.obsservico.value,
+                statuspedido: document.getElementById("editstatuspedido").value,
+                valorservico: valorconvertido,
+                quantidade: 1
+
+            }).then(function () {
+                document.location.reload(true);
+                // App.ordemdeservicosbanhoetosa.getlist.list = [];
+                // App.ordemdeservicosbanhoetosa.getlist.list.push(testepush);
                 $('#modalEditOrdemdeServico').modal("toggle");
             });
+
         },
 
         // Route Tela Edit User
@@ -3250,11 +3480,13 @@ var App = new Vue({
                     App.ordemdeservicosbanhoetosa.remove.cliente = '';
                     App.ordemdeservicosbanhoetosa.remove.messages.push('Ordem de serviço removida com sucesso!');
                     route.go('#/ordemdeservicosbanhoetosa');
+                    window.location.reload(true);
                 })
                 .catch(function (err) {
                     App.ordemdeservicosbanhoetosa.remove.error = true;
                     App.ordemdeservicosbanhoetosa.remove.messages.push('Aconteceu um erro interno. Tente novamente.');
                 });
+                
         },
 
 
@@ -3277,6 +3509,10 @@ var App = new Vue({
                 });
         },
         abrircaixa: function () {
+            var valorabertura;
+            console.log(valorabertura);
+            if(isNaN(valorabertura)) valorabertura = parseFloat(document.getElementById("valorabertura").value.replace(",","."));
+            console.log(valorabertura);
             var dataconvert = App.aberturacaixa.abrircaixa.fields.data.value.split("-");
             var davaconvertida = dataconvert[2] + "/" + dataconvert[1] + "/" + dataconvert[0];
 
@@ -3304,7 +3540,7 @@ var App = new Vue({
                     }
                 })
             })
-            if (App.aberturacaixa.abrircaixa.fields.valor.value == "" || App.aberturacaixa.abrircaixa.fields.data.value == "" || App.aberturacaixa.abrircaixa.fields.admin.value == "") {
+            if (document.getElementById("valorabertura").value == "" || App.aberturacaixa.abrircaixa.fields.data.value == "" || App.aberturacaixa.abrircaixa.fields.admin.value == "") {
                 alert("Preencha todos os campos.");
             }
             else if (App.aberturacaixa.abrircaixa.list.length != 0) {
@@ -3314,9 +3550,10 @@ var App = new Vue({
                 firebase.database().ref(App.firebase.path + '/aberturadecaixa').push({
                     data: davaconvertida,
                     usuario: App.aberturacaixa.abrircaixa.fields.admin.value,
-                    valor: App.aberturacaixa.abrircaixa.fields.valor.value
+                    valor: valorabertura
                 })
                 alert("Caixa aberto no dia " + davaconvertida + " com sucesso.");
+                window.location.href = "/";
             }
 
 
@@ -3438,7 +3675,7 @@ var App = new Vue({
         //     })
         // },
 
-       
+
     },
 
 
@@ -3452,6 +3689,7 @@ App.getOrdensdeservico();
 App.getProviders();
 App.getSales();
 App.getAberturadeCaixa();
+App.getAberturadeCaixaAtivo();
 // App.editestoque();
 
 
@@ -3467,13 +3705,62 @@ var route = new FMRoute();
 
 route.get('/', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'home';
+     logado = true;
+   
+
+    var data = new Date();
+    var dia = data.getDate();
+    var mes = parseInt(data.getMonth()) + 1;
+    var ano = data.getFullYear();
+
+
+    if (dia < 10) {
+        dia = "0" + dia;
     }
-    else {
-        window.location.href = "/login.html"
+    if (mes < 10) {
+        mes = "0" + mes;
     }
+
+    var dataconcat = dia + "/" + mes + "/" + ano;
+
+    firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+
+        var concatenando = new RegExp(dataconcat, "i");
+        var arrayteste = [];
+        //console.log(concatenando);
+        data.forEach(function (item) {
+            var abertura = item.val();
+            abertura.key = item.key;
+             arrayteste = {
+                "key": abertura.key,
+                aberturadecaixa: [
+                    abertura
+                ]
+            };
+
+
+            if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                App.aberturacaixa.select.selectlist.push(abertura);
+               
+            }
+            else if(!arrayteste.aberturadecaixa[0].data.match(concatenando)){
+               
+              
+            }
+        })
+        if (document.cookie && arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+            App.page.current = 'home';
+        }
+        else if (document.cookie && !arrayteste.aberturadecaixa[0].data.match(concatenando)){
+            window.location.href = "/#/aberturadecaixa"
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+      
+
+
+    })
     next();
 });
 route.get('/logado', function (vars, next) {
@@ -3486,12 +3773,59 @@ route.get('/logado', function (vars, next) {
 route.get('/ordemdeservicosbanhoetosa', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logado = true;
-    if (document.cookie) {
-        App.page.current = 'ordemdeservicosbanhoetosa';
+    var data = new Date();
+    var dia = data.getDate();
+    var mes = parseInt(data.getMonth()) + 1;
+    var ano = data.getFullYear();
+
+
+    if (dia < 10) {
+        dia = "0" + dia;
     }
-    else {
-        window.location.href = "/login.html"
+    if (mes < 10) {
+        mes = "0" + mes;
     }
+
+    var dataconcat = dia + "/" + mes + "/" + ano;
+
+    firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+
+        var concatenando = new RegExp(dataconcat, "i");
+        var arrayteste = [];
+        //console.log(concatenando);
+        data.forEach(function (item) {
+            var abertura = item.val();
+            abertura.key = item.key;
+             arrayteste = {
+                "key": abertura.key,
+                aberturadecaixa: [
+                    abertura
+                ]
+            };
+
+
+            if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                App.aberturacaixa.select.selectlist.push(abertura);
+               
+            }
+            else if(!arrayteste.aberturadecaixa[0].data.match(concatenando)){
+               
+              
+            }
+        })
+        if (document.cookie && arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+            App.page.current = 'ordemdeservicosbanhoetosa';
+        }
+        else if (document.cookie && !arrayteste.aberturadecaixa[0].data.match(concatenando)){
+            window.location.href = "/#/aberturadecaixa"
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+      
+
+
+    })
     next();
 });
 route.get('/deslogado', function (vars, next) {
@@ -3503,12 +3837,60 @@ route.get('/deslogado', function (vars, next) {
 });
 route.get('/home', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    if (document.cookie) {
-        App.page.current = 'home';
+    logado = true;
+    var data = new Date();
+    var dia = data.getDate();
+    var mes = parseInt(data.getMonth()) + 1;
+    var ano = data.getFullYear();
+
+
+    if (dia < 10) {
+        dia = "0" + dia;
     }
-    else {
-        window.location.href = "/login.html"
+    if (mes < 10) {
+        mes = "0" + mes;
     }
+
+    var dataconcat = dia + "/" + mes + "/" + ano;
+
+    firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+
+        var concatenando = new RegExp(dataconcat, "i");
+        var arrayteste = [];
+        //console.log(concatenando);
+        data.forEach(function (item) {
+            var abertura = item.val();
+            abertura.key = item.key;
+             arrayteste = {
+                "key": abertura.key,
+                aberturadecaixa: [
+                    abertura
+                ]
+            };
+
+
+            if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                App.aberturacaixa.select.selectlist.push(abertura);
+               
+            }
+            else if(!arrayteste.aberturadecaixa[0].data.match(concatenando)){
+               
+              
+            }
+        })
+        if (document.cookie && arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+            App.page.current = '/home';
+        }
+        else if (document.cookie && !arrayteste.aberturadecaixa[0].data.match(concatenando)){
+            window.location.href = "/#/aberturadecaixa"
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+      
+
+
+    })
     next();
 
     next();
@@ -3516,10 +3898,13 @@ route.get('/home', function (vars, next) {
 route.get('/aberturadecaixa', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logado = true;
-    if (document.cookie) {
+    if (logado == true) {
+
         App.page.current = "aberturadecaixa"
-        var usercookies = document.cookie.split("=")
+        var usercookies = document.cookie.split("=");
+             
         App.aberturacaixa.abrircaixa.fields.admin.value = usercookies[1];
+        
         next();
         document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
@@ -3527,18 +3912,65 @@ route.get('/aberturadecaixa', function (vars, next) {
         window.location.href = "/login.html"
         next();
     }
-  
-   
+
+
 });
 route.get('/sangria', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logado = true;
-    if (document.cookie) {
-        App.page.current = 'sangria';
+    var data = new Date();
+    var dia = data.getDate();
+    var mes = parseInt(data.getMonth()) + 1;
+    var ano = data.getFullYear();
+
+
+    if (dia < 10) {
+        dia = "0" + dia;
     }
-    else {
-        window.location.href = "/login.html"
+    if (mes < 10) {
+        mes = "0" + mes;
     }
+
+    var dataconcat = dia + "/" + mes + "/" + ano;
+
+    firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+
+        var concatenando = new RegExp(dataconcat, "i");
+        var arrayteste = [];
+        //console.log(concatenando);
+        data.forEach(function (item) {
+            var abertura = item.val();
+            abertura.key = item.key;
+             arrayteste = {
+                "key": abertura.key,
+                aberturadecaixa: [
+                    abertura
+                ]
+            };
+
+
+            if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                App.aberturacaixa.select.selectlist.push(abertura);
+               
+            }
+            else if(!arrayteste.aberturadecaixa[0].data.match(concatenando)){
+               
+              
+            }
+        })
+        if (document.cookie && arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+            App.page.current = 'sangria';
+        }
+        else if (document.cookie && !arrayteste.aberturadecaixa[0].data.match(concatenando)){
+            window.location.href = "/#/aberturadecaixa"
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+      
+
+
+    })
     next();
 });
 
@@ -3598,12 +4030,59 @@ route.get('/fechamentodecaixa', function (vars, next) {
 route.get('/caixa', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logado = true;
-    if (document.cookie) {
-        App.page.current = 'caixa';
+    var data = new Date();
+    var dia = data.getDate();
+    var mes = parseInt(data.getMonth()) + 1;
+    var ano = data.getFullYear();
+
+
+    if (dia < 10) {
+        dia = "0" + dia;
     }
-    else {
-        window.location.href = "/login.html"
+    if (mes < 10) {
+        mes = "0" + mes;
     }
+
+    var dataconcat = dia + "/" + mes + "/" + ano;
+
+    firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
+
+        var concatenando = new RegExp(dataconcat, "i");
+        var arrayteste = [];
+        //console.log(concatenando);
+        data.forEach(function (item) {
+            var abertura = item.val();
+            abertura.key = item.key;
+             arrayteste = {
+                "key": abertura.key,
+                aberturadecaixa: [
+                    abertura
+                ]
+            };
+
+
+            if (arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+                App.aberturacaixa.select.selectlist.push(abertura);
+               
+            }
+            else if(!arrayteste.aberturadecaixa[0].data.match(concatenando)){
+               
+              
+            }
+        })
+        if (document.cookie && arrayteste.aberturadecaixa[0].data.match(concatenando)) {
+            App.page.current = 'caixa';
+        }
+        else if (document.cookie && !arrayteste.aberturadecaixa[0].data.match(concatenando)){
+            window.location.href = "/#/aberturadecaixa"
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+      
+
+
+    })
     next();
 });
 
@@ -3614,26 +4093,26 @@ route.get('/providers-edit/:key', function (vars, next) {
     logado = true;
     if (document.cookie) {
         App.page.current = 'providers-edit';
-    // MINIMIZADO POPULACAO 
-    App.getProvider(vars.key, function (provider) {
-        // limpando erros do form
-        App.providers.edit.error = false;
-        App.providers.edit.messages = [];
+        // MINIMIZADO POPULACAO 
+        App.getProvider(vars.key, function (provider) {
+            // limpando erros do form
+            App.providers.edit.error = false;
+            App.providers.edit.messages = [];
 
-        // limpando erros dos campos
-        App.providers.edit.fields.key = provider.key;
+            // limpando erros dos campos
+            App.providers.edit.fields.key = provider.key;
 
-        App.providers.edit.fields.nome.value = provider.nome;
-        App.providers.edit.fields.nome.error = false;
-        App.providers.edit.fields.nome.messages = [];
+            App.providers.edit.fields.nome.value = provider.nome;
+            App.providers.edit.fields.nome.error = false;
+            App.providers.edit.fields.nome.messages = [];
 
-        App.providers.edit.fields.marca.value = provider.marca;
-        App.providers.edit.fields.marca.error = false;
-        App.providers.edit.fields.marca.messages = [];
+            App.providers.edit.fields.marca.value = provider.marca;
+            App.providers.edit.fields.marca.error = false;
+            App.providers.edit.fields.marca.messages = [];
 
 
 
-    });
+        });
     }
     else {
         window.location.href = "/login.html"
@@ -3652,19 +4131,19 @@ route.get('/providers-remove/:key', function (vars, next) {
             // limpando erros do form
             App.providers.remove.error = false;
             App.providers.remove.messages = [];
-    
+
             // limpando erros dos campos
             App.providers.remove.key = provider.key;
             App.providers.remove.nome = provider.nome;
             App.providers.remove.marca = provider.marca;
-    
+
         });
     }
     else {
         window.location.href = "/login.html"
     }
     next();
-  
+
 
     next();
 });
@@ -3686,7 +4165,7 @@ route.get('/products', function (vars, next) {
 });
 
 route.get('/products-remove/:key', function (vars, next) {
-    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";   
+    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logado = true;
     if (document.cookie) {
         App.page.current = 'products-remove';
@@ -3695,14 +4174,14 @@ route.get('/products-remove/:key', function (vars, next) {
             // limpando erros do form
             App.products.remove.error = false;
             App.products.remove.messages = [];
-    
+
             // limpando erros dos campos
             App.products.remove.key = product.key;
             App.products.remove.produto = product.produto;
             App.products.remove.marca = product.marca;
-    
+
         });
-    
+
     }
     else {
         window.location.href = "/login.html"
@@ -3714,7 +4193,7 @@ route.get('/products-remove/:key', function (vars, next) {
 
 // Usuarios - Users
 route.get('/users', function (vars, next) {
-    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; 
+    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logado = true;
     if (document.cookie) {
         App.page.current = 'users';
@@ -3726,7 +4205,7 @@ route.get('/users', function (vars, next) {
 });
 
 route.get('/users-edit/:key', function (vars, next) {
-    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";       
+    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     logado = true;
     if (document.cookie) {
         App.page.current = 'users-edit';
@@ -3735,101 +4214,101 @@ route.get('/users-edit/:key', function (vars, next) {
             // limpando erros do form
             App.users.edit.error = false;
             App.users.edit.messages = [];
-    
+
             // limpando erros dos campos
             App.users.edit.fields.key = user.key;
-    
+
             App.users.edit.fields.codigo.value = user.codigo;
             App.users.edit.fields.codigo.error = false;
             App.users.edit.fields.codigo.messages = [];
-    
+
             App.users.edit.fields.cliente.value = user.cliente;
             App.users.edit.fields.cliente.error = false;
             App.users.edit.fields.cliente.messages = [];
-    
+
             App.users.edit.fields.telefone.value = user.telefone;
             App.users.edit.fields.telefone.error = false;
             App.users.edit.fields.telefone.messages = [];
-    
+
             App.users.edit.fields.cep.value = user.cep;
             App.users.edit.fields.cep.error = false;
             App.users.edit.fields.cep.messages = [];
-    
-    
+
+
             App.users.edit.fields.rua.value = user.rua;
             App.users.edit.fields.rua.error = false;
             App.users.edit.fields.rua.messages = [];
-    
-    
+
+
             App.users.edit.fields.numero.value = user.numero;
             App.users.edit.fields.numero.error = false;
             App.users.edit.fields.numero.messages = [];
-    
+
             App.users.edit.fields.complemento.value = user.complemento;
             App.users.edit.fields.complemento.error = false;
             App.users.edit.fields.complemento.messages = [];
-    
-    
+
+
             App.users.edit.fields.bairro.value = user.bairro;
             App.users.edit.fields.bairro.error = false;
             App.users.edit.fields.bairro.messages = [];
-    
-    
+
+
             App.users.edit.fields.cidade.value = user.cidade;
             App.users.edit.fields.cidade.error = false;
             App.users.edit.fields.cidade.messages = [];
-    
-    
+
+
             App.users.edit.fields.uf.value = user.uf;
             App.users.edit.fields.uf.error = false;
             App.users.edit.fields.uf.messages = [];
-    
-    
+
+
             App.users.edit.fields.datacadastro.value = user.datacadastro;
             App.users.edit.fields.datacadastro.error = false;
             App.users.edit.fields.datacadastro.messages = [];
-    
-    
+
+
             App.users.edit.fields.status.value = user.status;
             App.users.edit.fields.status.error = false;
             App.users.edit.fields.status.messages = [];
-    
-    
+
+
             App.users.edit.fields.nome.value = user.nome;
             App.users.edit.fields.nome.error = false;
             App.users.edit.fields.nome.messages = [];
-    
-    
+
+
             App.users.edit.fields.idade.value = user.idade;
             App.users.edit.fields.idade.error = false;
             App.users.edit.fields.idade.messages = [];
-    
-    
+
+
             App.users.edit.fields.pet.value = user.pet;
             App.users.edit.fields.pet.error = false;
             App.users.edit.fields.pet.messages = [];
-    
-    
+
+
             App.users.edit.fields.genero.value = user.genero;
             App.users.edit.fields.genero.error = false;
             App.users.edit.fields.genero.messages = [];
-    
-    
+
+
             App.users.edit.fields.raca.value = user.raca;
             App.users.edit.fields.raca.error = false;
             App.users.edit.fields.raca.messages = [];
-    
-    
+
+
             App.users.edit.fields.temperamento.value = user.temperamento;
             App.users.edit.fields.temperamento.error = false;
             App.users.edit.fields.temperamento.messages = [];
-    
-    
+
+
             App.users.edit.fields.observacao.value = user.observacao;
             App.users.edit.fields.observacao.error = false;
             App.users.edit.fields.observacao.messages = [];
-    
-    
+
+
         });
     }
     else {
@@ -3849,19 +4328,19 @@ route.get('/users-remove/:key', function (vars, next) {
             // limpando erros do form
             App.users.remove.error = false;
             App.users.remove.messages = [];
-    
+
             // limpando erros dos campos
             App.users.remove.key = user.key;
             App.users.remove.codigo = user.codigo;
             App.users.remove.cliente = user.cliente;
-    
+
         });
     }
     else {
         window.location.href = "/login.html"
     }
     next();
-  
+
 });
 route.get('/ordemservico-remove/:key', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -3873,19 +4352,19 @@ route.get('/ordemservico-remove/:key', function (vars, next) {
             // limpando erros do form
             App.ordemdeservicosbanhoetosa.remove.error = false;
             App.ordemdeservicosbanhoetosa.remove.messages = [];
-    
+
             // limpando erros dos campos
             App.ordemdeservicosbanhoetosa.remove.key = user.key;
             App.ordemdeservicosbanhoetosa.remove.codigo = user.codigo;
             App.ordemdeservicosbanhoetosa.remove.cliente = user.cliente;
-    
+
         });
     }
     else {
         window.location.href = "/login.html"
     }
     next();
-  
+
 });
 
 
@@ -4301,7 +4780,7 @@ function procuraestoque() {
 
 
 $(function maskmoney() {
-   
+
 
     $(App.sales.add.fields.precoproduto.value).maskMoney({
         thousands: '.',
@@ -4360,8 +4839,8 @@ function calcTotalCaixa() {
     var subtotal = 0;
     var discount = parseFloat(App.sales.add.fields.desconto.value);
     var recebido = parseFloat(App.sales.add.fields.valortotalrecebido.value);
-    var cash = parseFloat(document.getElementById("cash").value.replace(",","."));
-    var card = parseFloat(document.getElementById("card").value.replace(",","."));
+    var cash = parseFloat(document.getElementById("cash").value.replace(",", "."));
+    var card = parseFloat(document.getElementById("card").value.replace(",", "."));
     var total = parseFloat(App.sales.add.fields.totalcompra.value);
 
     if (typeof cash != 'number' || isNaN(cash || cash == "")) document.getElementById("cash").value = "0,00";
@@ -4373,13 +4852,13 @@ function calcTotalCaixa() {
 
     //console.log(subtotal)
     //console.log(App.sales.list[0].total);
-   
+
     for (var i = 0; i < App.sales.list.length; i++) {
         subtotal += App.sales.list[i].total;
     }
     //console.log(subtotal);
 
-    
+
     var somaValorRecebido = cash + card;
 
     App.sales.add.fields.valortotalrecebido.value = somaValorRecebido.toFixed(2);
@@ -4403,7 +4882,7 @@ function calcTotalCaixa() {
     }
 
     App.sales.add.fields.troco.value = (parseFloat(cash + card) - parseFloat(App.sales.add.fields.totalcompra.value)).toFixed(2);
-    
+
     // App.sales.add.fields.subtotalFormat = App.numberFormat(App.sales.add.fields.addsubtotal);
     // App.sales.add.fields.totalFormat = App.numberFormat(App.sales.add.fields.total);
 
