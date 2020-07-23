@@ -966,6 +966,12 @@ var App = new Vue({
                         messages: [],
 
                     },
+                    valor: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
                     cash: {
 
                         value: '',
@@ -1823,17 +1829,17 @@ var App = new Vue({
 
         addNewSale: function (keyproduct, keyordem) {
            
-            var price; 
+            var price;
             // parseFloat((document.getElementById("iptPrice").value).replace(",","."));
             if(isNaN(price)) {
-               var splitvalor = document.getElementById("iptPrice").value.split(" ")
+               var splitvalor = App.sales.add.fields.valor.value.split(" ")
                if(splitvalor[1] != undefined){
                 //alert("!undefineddddd")
                    price = parseFloat(splitvalor[1].replace(",",".")).toFixed(2);
                }
                else if (splitvalor[1] == undefined){
                 //alert("undefineddddd")
-                   price = parseFloat(document.getElementById("iptPrice").value.replace(",",".")).toFixed(2)
+                   price = parseFloat(App.sales.add.fields.valor.value.replace(",",".")).toFixed(2)
                }
                 //console.log(price)
             }
@@ -1876,7 +1882,7 @@ var App = new Vue({
 
             App.sales.add.fields.nome.value = '';
             App.sales.add.messages = [];
-            document.getElementById("iptPrice").value = '';
+            App.sales.add.fields.valor.value = '';
             App.sales.add.messages = [];
             App.sales.add.fields.quantidade.value = 1;
             App.sales.add.messages = [];
@@ -1887,6 +1893,110 @@ var App = new Vue({
 
         },
 
+        addNewOrdem: function (data) {
+            console.log(data.key);
+             var price = data.valorservico;
+           
+            if(isNaN(price)) {
+               var splitvalor = App.sales.add.fields.valor.value.split(" ")
+               alert(9);
+               if(splitvalor[1] != undefined){
+                //alert("!undefineddddd")
+                   price = parseFloat(splitvalor[1].replace(",",".")).toFixed(2);
+                   alert(1);
+               }
+               else if (splitvalor[1] == undefined){
+                //alert("undefineddddd")
+                   price = parseFloat(App.sales.add.fields.valor.value.replace(",",".")).toFixed(2)
+                   alert(2);
+               }
+                //console.log(price)
+            }
+            else if(price == "number") parseFloat(price);
+            console.log(price);
+            // if(keyproduct && keyordem == 0)alert("registro de mercadoria normal");
+            // if(keyordem && keyproduct == 0)alert("registro de ordem de servico");
+            var product = App.sales.add.fields.nome.value;
+            
+            var amount = parseFloat(App.sales.add.fields.quantidade.value);
+            // console.log(product);
+            // console.log(price);
+            // console.log(amount);
+            if (!product || !price || !amount) {
+                alert('Informe o produto!');
+                return;
+            }
+            var keyproduct;
+            var keyordem = data.key;
+            if(keyproduct == undefined) keyproduct = 0;
+            if(keyordem == undefined) keyordem = 0;
+            var product = {
+                product: product,
+                price: price,
+                priceFormat: App.numberFormat(price),
+                amount: amount,
+                amountFormat: App.numberFormat(amount, 3),
+                keyproduct: keyproduct,
+                keyordem: keyordem,
+                key: keyproduct,
+                key1: keyordem
+            };
+
+            product.total = product.amount * product.price;
+            product.totalFormat = App.numberFormat(product.total);
+           
+            
+            firebase.database().ref(App.firebase.path + '/ordemdeservico/' + data.key).child("quantidade").set(
+               0
+            )
+
+            App.sales.list.push(product);
+            console.log(App.sales.list);
+            //console.log(App.sales.list);
+            App.calcTotalCaixa();
+
+            App.sales.add.fields.nome.value = '';
+            App.sales.add.messages = [];
+            App.sales.add.fields.valor.value = '';
+            App.sales.add.messages = [];
+            App.sales.add.fields.quantidade.value = 1;
+            App.sales.add.messages = [];
+            //console.log(App.sales.list);
+
+
+
+
+        },
+
+        alterastatuscominput : function(key, status){
+          
+            firebase.database().ref(App.firebase.path + '/ordemdeservico/' + key).child("statuspedido").set(
+                status
+            ).then(function(){
+                App.ordemdeservicosbanhoetosa.remove.messages = [];
+                App.ordemdeservicosbanhoetosa.remove.messages.push('Ordem de serviço atualizada com sucesso!');
+            })
+        },
+        abreOrdemTelaCaixa : function(data){
+            console.log(data);
+            window.location.href = "/#/caixa";
+          
+
+            
+            // firebase.database().ref(App.firebase.path + '/ordemdeservico/' + key).child("quantidade").set(
+            //     0
+            // )
+            App.sales.add.fields.nome.value = data.cliente+", "+data.nome+" - "+data.servico+" -- "+data.dataservico;
+            App.sales.add.fields.valor.value = parseFloat(data.valorservico).toFixed(2);
+            // document.getElementById("iptPrice").value = valorservico;
+            App.sales.add.fields.quantidade.value = 1;
+            // $('#openSearchProduct').modal('hide');
+            // document.getElementById("quantidadeselecionada").value = "";
+
+            // App.addNewSale(0, key);
+            App.addNewOrdem(data);
+        },
+   
 
         getEstoque: function (inputprocuraestoque) {
             //console.log(inputprocuraestoque);
@@ -2025,6 +2135,22 @@ var App = new Vue({
             
 
         },
+
+        enviaFormCaixa: function () {
+         
+            firebase.database().ref(App.firebase.path + '/ordemdeservico/' + key).child("quantidade").set(
+                0
+            )
+            App.sales.add.fields.nome.value = cliente+", "+nome+" -"+servico+" -- "+dataservico;
+            document.getElementById("iptPrice").value = valorservico;
+            App.sales.add.fields.quantidade.value = 1;
+            $('#openSearchProduct').modal('hide');
+            document.getElementById("quantidadeselecionada").value = "";
+
+            App.addNewSale(0, key);
+        
+
+    },
        
 
         getAberturadeCaixa: function () {

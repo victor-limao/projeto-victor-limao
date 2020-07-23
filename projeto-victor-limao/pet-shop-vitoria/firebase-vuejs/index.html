@@ -1036,7 +1036,7 @@
                                             <div class="form-group">
                                                 <label for="">Preço Unitário (R$)</label><br>
                                                 <input type="text" class="form-control text-right mascara"
-                                                    placeholder="Preço Unitário" maxlength="30" step="any"
+                                                    placeholder="Preço Unitário" maxlength="30" step="any" v-model="sales.add.fields.valor.value"
                                                     id="iptPrice">
 
 
@@ -2775,15 +2775,21 @@
 
                     <tbody>
                         <tr v-for="getordemdeservicosbanhoetosatable in ordemdeservicosbanhoetosa.getlist.list">
-                            <td>{{getordemdeservicosbanhoetosatable.cliente}}</td>
-                            <td>{{getordemdeservicosbanhoetosatable.rua}}, {{getordemdeservicosbanhoetosatable.numero}}
+                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.cliente}}</td>
+                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.rua}}, {{getordemdeservicosbanhoetosatable.numero}}
                             </td>
-                            <td>{{getordemdeservicosbanhoetosatable.nome}}</td>
-                            <td>{{getordemdeservicosbanhoetosatable.dataservico}}</td>
-                            <td>{{getordemdeservicosbanhoetosatable.valorservico}}</td>
-                            <td>{{getordemdeservicosbanhoetosatable.servico}}</td>
-                            <td id="tdstatuspedido" class="tdstatuspedido" name="tdstatuspedido">
-                                {{getordemdeservicosbanhoetosatable.statuspedido}}</td>
+                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.nome}}</td>
+                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.dataservico}}</td>
+                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.valorservico}}</td>
+                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.servico}}</td>
+                            <td class="tdstatuspedido">
+                               
+                                <select name="tdstatuspedido" id="tdstatuspedido" style="background-color: transparent;border: none;width: 100%;height: 36px;" @click.prevent="alterastatuscominput(getordemdeservicosbanhoetosatable.key, $event.target.value)">
+                                    <option selected disabled hidden>{{getordemdeservicosbanhoetosatable.statuspedido}}</option>
+                                    <option value="Não chegou">Não chegou</option>
+                                    <option value="Chegou">Chegou</option>
+                                    <option value="Saiu">Saiu</option>
+                                </select></td>
 
                             <td>
                                 <button type="button" class="btn btn-primary"
@@ -3831,14 +3837,15 @@
             if (document.getElementsByClassName("tdstatuspedido").length) {
                
                 for (i = 0; i < document.getElementsByClassName("tdstatuspedido").length; i++) {
-                  
-                    if (document.getElementsByClassName("tdstatuspedido")[i].innerHTML.trim(" ") == "Não chegou") {
+                    
+                    
+                    if ($('option:selected',document.getElementsByClassName("tdstatuspedido")[i]).val() == "Não chegou") {
                         document.getElementsByClassName("tdstatuspedido")[i].style.backgroundColor = "#FF3333";
                     }
-                    else if (document.getElementsByClassName("tdstatuspedido")[i].innerHTML.trim(" ") == "Chegou") {
+                    else if ($('option:selected',document.getElementsByClassName("tdstatuspedido")[i]).val()  == "Chegou") {
                         document.getElementsByClassName("tdstatuspedido")[i].style.backgroundColor = "#00FF80";
                     }
-                    else if (document.getElementsByClassName("tdstatuspedido")[i].innerHTML.trim(" ") == "Saiu") {
+                    else if ($('option:selected',document.getElementsByClassName("tdstatuspedido")[i]).val()  == "Saiu") {
                         document.getElementsByClassName("tdstatuspedido")[i].style.backgroundColor = "#0080FF";
                     }
                 }
