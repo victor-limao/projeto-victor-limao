@@ -73,6 +73,53 @@
             var login = document.getElementById("login").value;
             var senha = document.getElementById("senha").value;
 
+            var data = new Date();
+
+            var dia = data.getDate();
+            var mes = data.getMonth();
+            var ano = data.getFullYear();
+            var dds = data.getDay();
+            var hora = data.getHours();
+            var minuto = data.getMinutes();
+            var segundo = data.getSeconds();
+
+            if (dia < 10) dia = "0" + dia;
+            if (mes < 10) mes = "0" + mes;
+            if (hora < 10) hora = "0" + hora;
+            if (minuto < 10) minuto = "0" + minuto;
+            if (segundo < 10) segundo = "0" + segundo;
+            if (dds == 0) dds = "Sun";
+            if (dds == 1) dds = "Mon";
+            if (dds == 2) dds = "Tue";
+            if (dds == 3) dds = "Wed";
+            if (dds == 4) dds = "Thu";
+            if (dds == 5) dds = "Fri";
+            if (dds == 6) dds = "Sat";
+            if (mes == 0) mes = "Jan";
+            if (mes == 1) mes = "Feb";
+            if (mes == 2) mes = "Mar";
+            if (mes == 3) mes = "Apr";
+            if (mes == 4) mes = "May";
+            if (mes == 5) mes = "Jun";
+            if (mes == 6) mes = "Jul";
+            if (mes == 7) mes = "Aug";
+            if (mes == 8) mes = "Set";
+            if (mes == 9) mes = "Oct";
+            if (mes == 10) mes = "Nov";
+            if (mes == 11) mes = "Dec";
+            if (hora == 25) hora = 01;
+            if (hora == 26) hora = 02;
+            if (hora == 27) hora = 03;
+            minuto = parseFloat(minuto) + 1;
+            hora = parseFloat(hora) + 11;
+            if (minuto < 10) minuto = "0" + minuto;
+            if (hora < 10) hora = "0" + hora;
+
+            var dataconvert = dds+", "+dia+" "+mes+" "+ano+" "+hora+":"+minuto+":"+segundo+""
+            
+            //username=victorlimao; expires=Wed, 22 Jul 2020 12:42:00; path=/
+           //"username=" + acessologin[0].usuario + ";  path=/;"
+
 
             var acessologin = [];
 
@@ -98,11 +145,11 @@
 
 
                     }
-
+                    
                 })
                 if (acessologin[0].usuario == login && acessologin[0].senha == senha) {
 
-                    document.cookie = "username=" + acessologin[0].usuario + "; path=/;";
+                    document.cookie = "username=" + acessologin[0].usuario + "; expires=" + dataconvert + " UTC; path=/";
                     window.location.href = "/"
                     //alert(document.cookie);
                 }

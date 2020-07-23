@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,17 +14,24 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 
-</head>
-<script>
-    $(function () {
-        $(".mascara").maskMoney({
-            prefix: 'R$ ',
-            allowNegative: false,
-            thousands: '',
-            decimal: ','
+    <script>
+        $(document).ready(function () {
+            document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            if (document.cookie == "") {
+                window.location.href = "/login.html";
+            }
         });
-    });
-</script>
+        $(function () {
+            $(".mascara").maskMoney({
+                prefix: 'R$ ',
+                allowNegative: false,
+                thousands: '',
+                decimal: ','
+            });
+        });
+    </script>
+</head>
+
 <body>
     <div>
         <!--Fechamento de Caixa-->
