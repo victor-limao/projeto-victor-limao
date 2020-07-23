@@ -2774,17 +2774,17 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="getordemdeservicosbanhoetosatable in ordemdeservicosbanhoetosa.getlist.list">
-                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.cliente}}</td>
-                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.rua}}, {{getordemdeservicosbanhoetosatable.numero}}
+                        <tr v-for="getordemdeservicosbanhoetosatable in ordemdeservicosbanhoetosa.getlist.list" style="cursor: pointer">
+                            <td v-on:dblclick="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.cliente}}</td>
+                            <td v-on:dblclick="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.rua}}, {{getordemdeservicosbanhoetosatable.numero}}
                             </td>
-                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.nome}}</td>
-                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.dataservico}}</td>
-                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.valorservico}}</td>
-                            <td @click.prevent="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)">{{getordemdeservicosbanhoetosatable.servico}}</td>
+                            <td v-on:dblclick="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)" style="cursor: pointer">{{getordemdeservicosbanhoetosatable.nome}}</td>
+                            <td v-on:dblclick="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)" style="cursor: pointer">{{getordemdeservicosbanhoetosatable.dataservico}}</td>
+                            <td v-on:dblclick="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)" style="cursor: pointer">{{getordemdeservicosbanhoetosatable.valorservico}}</td>
+                            <td v-on:dblclick="abreOrdemTelaCaixa(getordemdeservicosbanhoetosatable)" style="cursor: pointer">{{getordemdeservicosbanhoetosatable.servico}}</td>
                             <td class="tdstatuspedido">
                                
-                                <select name="tdstatuspedido" id="tdstatuspedido" style="background-color: transparent;border: none;width: 100%;height: 36px;" @click.prevent="alterastatuscominput(getordemdeservicosbanhoetosatable.key, $event.target.value)">
+                                <select name="tdstatuspedido" id="tdstatuspedido" style="background-color: transparent;border: none;width: 100%;height: 36px; cursor: pointer" @onchange.prevent="alterastatuscominput(getordemdeservicosbanhoetosatable.key, $event.target.value)" @click.prevent="alterastatuscominput(getordemdeservicosbanhoetosatable.key, $event.target.value)">
                                     <option selected disabled hidden>{{getordemdeservicosbanhoetosatable.statuspedido}}</option>
                                     <option value="Não chegou">Não chegou</option>
                                     <option value="Chegou">Chegou</option>

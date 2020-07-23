@@ -1828,11 +1828,13 @@ var App = new Vue({
         },
 
         addNewSale: function (keyproduct, keyordem) {
-           
-            var price;
+           ;
+            var price = App.sales.add.fields.valor.value;
+            console.log(price);
             // parseFloat((document.getElementById("iptPrice").value).replace(",","."));
             if(isNaN(price)) {
                var splitvalor = App.sales.add.fields.valor.value.split(" ")
+               console.log(App.sales.add.fields.valor.value);
                if(splitvalor[1] != undefined){
                 //alert("!undefineddddd")
                    price = parseFloat(splitvalor[1].replace(",",".")).toFixed(2);
@@ -1841,16 +1843,12 @@ var App = new Vue({
                 //alert("undefineddddd")
                    price = parseFloat(App.sales.add.fields.valor.value.replace(",",".")).toFixed(2)
                }
-                //console.log(price)
             }
-            // if(keyproduct && keyordem == 0)alert("registro de mercadoria normal");
-            // if(keyordem && keyproduct == 0)alert("registro de ordem de servico");
+            console.log(price);
             var product = App.sales.add.fields.nome.value;
             
             var amount = parseFloat(App.sales.add.fields.quantidade.value);
-            // console.log(product);
-            // console.log(price);
-            // console.log(amount);
+
             if (!product || !price || !amount) {
                 alert('Informe o produto!');
                 return;
@@ -1871,11 +1869,14 @@ var App = new Vue({
 
             product.total = product.amount * product.price;
             product.totalFormat = App.numberFormat(product.total);
+
+            App.sales.add.fields.valor.value = product.total;
+            console.log(App.sales.add.fields.valor.value);
             // console.log("product");
             // console.log(product);
             // console.log("product");
           
-
+            console.log(product);
             App.sales.list.push(product);
             //console.log(App.sales.list);
             App.calcTotalCaixa();
@@ -1894,6 +1895,7 @@ var App = new Vue({
         },
 
         addNewOrdem: function (data) {
+          
             console.log(data.key);
              var price = data.valorservico;
            
@@ -1981,7 +1983,7 @@ var App = new Vue({
             console.log(data);
             window.location.href = "/#/caixa";
           
-
+           
             
             // firebase.database().ref(App.firebase.path + '/ordemdeservico/' + key).child("quantidade").set(
             //     0
@@ -1999,6 +2001,7 @@ var App = new Vue({
    
 
         getEstoque: function (inputprocuraestoque) {
+           
             //console.log(inputprocuraestoque);
             App.sales.add.addlist = [];
             firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
@@ -2019,22 +2022,15 @@ var App = new Vue({
                             listsales.key
                         ]
                     };
-                    //console.log(arrayteste);
-                    //console.log(concatenando);
-                    // console.log(arrayteste.product[0].produto);
-                    // console.log(concatenando);
-                    // console.log(arrayteste.product[0].produto)
-
-                    // if(arrayteste.product[0].produto.match(concatenando)) console.log("achou");
-
                     if (arrayteste.product[0].produto.match(concatenando)) {
                         listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
                         listsales.posicao = posicao++;
                         App.sales.add.addlist.push(listsales);
                     }
                  })
+             
+                 
                 //console.log(App.sales.add.addlist);
-
 
             })
            
@@ -2065,11 +2061,8 @@ var App = new Vue({
                     };
                    // console.log(arrayteste);
                     var qtdlist = arrayteste.product[0].quantidade.toString()
-                   // console.log(concatenando);
-                   // console.log(arrayteste.product[0]);
-
-                    //if(arrayteste.product[0].cliente.match(concatenando)) console.log("entrou");
-
+                    
+                  
                     if ((arrayteste.product[0].cliente.match(concatenando) || arrayteste.product[0].nome.match(concatenando)) && qtdlist.match(concatqtd) ) {
                         listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
                         listsales.posicao = posicao++;
@@ -2084,10 +2077,11 @@ var App = new Vue({
 
         },
         editSelectedItem: function (produto, keyproduto, valorfinal, quantidadeemestoque, quantidadeselecionada) {
-          
+            //alert("teste");
             valorfinal = valorfinal.replace(",", ".");
             valorfinal = parseFloat(valorfinal);
-           
+            console.log(valorfinal)
+            console.log(quantidadeselecionada);
 
             var quantidadefinal = parseFloat(quantidadeemestoque) - parseFloat(quantidadeselecionada);
             //console.log(quantidadefinal);
@@ -2101,7 +2095,7 @@ var App = new Vue({
                     quantidadefinal
                 )
                 App.sales.add.fields.nome.value = produto;
-                document.getElementById("iptPrice").value = valorfinal;
+                App.sales.add.fields.valor.value = valorfinal;
                 App.sales.add.fields.quantidade.value = quantidadeselecionada;
                 $('#openSearchProduct').modal('hide');
                 document.getElementById("quantidadeselecionada").value = "";
@@ -2111,8 +2105,7 @@ var App = new Vue({
 
         },
         editSelectedItemOrdem: function (cliente, nome, valorservico, servico, dataservico, key) {
-         
-               
+             
                 // console.log(cliente);
                 // console.log(nome);
                 // console.log(valorservico);
@@ -2126,7 +2119,7 @@ var App = new Vue({
                     0
                 )
                 App.sales.add.fields.nome.value = cliente+", "+nome+" -"+servico+" -- "+dataservico;
-                document.getElementById("iptPrice").value = valorservico;
+                App.sales.add.fields.valor.value = valorservico;
                 App.sales.add.fields.quantidade.value = 1;
                 $('#openSearchProduct').modal('hide');
                 document.getElementById("quantidadeselecionada").value = "";
@@ -2137,7 +2130,7 @@ var App = new Vue({
         },
 
         enviaFormCaixa: function () {
-         
+          
             firebase.database().ref(App.firebase.path + '/ordemdeservico/' + key).child("quantidade").set(
                 0
             )
@@ -2276,6 +2269,7 @@ var App = new Vue({
         
             
             var somaValorRecebido = (cash + card).toFixed(2);
+            console.log(somaValorRecebido);
         
             App.sales.add.fields.valortotalrecebido.value = parseFloat(somaValorRecebido).toFixed(2);
         
@@ -2296,9 +2290,11 @@ var App = new Vue({
                 // console.log("Ok, você está recebendo tanto quanto deve, confira o troco...");
                 App.sales.add.fields.troco.error = false;
             }
-        
-            App.sales.add.fields.troco.value = (cash + card).toFixed(2) - parseFloat(App.sales.add.fields.totalcompra.value).toFixed(2);
-            App.sales.add.fields.troco.value.toFixed(2);
+            
+            var cardcash = parseFloat(somaValorRecebido);
+            var totalcompra = parseFloat(App.sales.add.fields.totalcompra.value.replace(",","."));
+            App.sales.add.fields.troco.value = parseFloat(cardcash - totalcompra).toFixed(2);
+            
             // App.sales.add.fields.subtotalFormat = App.numberFormat(App.sales.add.fields.addsubtotal);
             // App.sales.add.fields.totalFormat = App.numberFormat(App.sales.add.fields.total);
         
@@ -2578,6 +2574,7 @@ var App = new Vue({
         },
         addOrdemServico: function()
         {
+        
             if(!App.ordemdeservicosbanhoetosa.edit.fields.servico.value) App.ordemdeservicosbanhoetosa.edit.fields.servico.value = "Banho";
             //alert(App.ordemdeservicosbanhoetosa.edit.fields.servico.value);
             if(document.getElementById("valorservico").value == "") {
@@ -2971,6 +2968,7 @@ var App = new Vue({
         },
 
         getOrdensdeservico: function () {
+
             document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             firebase.database().ref(App.firebase.path + '/ordemdeservico').on('value', function (data) {
 
@@ -2986,23 +2984,35 @@ var App = new Vue({
                     //console.log(user.quantidade)
                     var strqtd = (user.quantidade).toString()
                     // if(user.quantidade)
+                    
                     if(strqtd.match(concatenando)){
                         //console.log("entrou");
+                        console.log(user);
                         App.ordemdeservicosbanhoetosa.getlist.list.push(user);
+                        //console.log(App.ordemdeservicosbanhoetosa.getlist.list);
                     }
                 });
-               
-               
-                for(var i = 0; i < App.ordemdeservicosbanhoetosa.getlist.list.length; i++){
-                    var convertvalor = App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico.split(" ");
-                    
-                    if(isNaN(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico)) valorsplit = parseFloat(convertvalor[1].replace(",",".")).toFixed(2);
-                    else {valorsplit = parseFloat(convertvalor[1].replace(",",".")).toFixed(2);}
-                    App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = valorsplit;
-                    //console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico)
-                    
+
+                for (var i = 0; i < App.ordemdeservicosbanhoetosa.getlist.list.length; i++) {
+
+                    // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico);
+                    if (isNaN(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico)) {
+                        // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico)
+                        var splitvalor = App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico.split(" ");
+                        if(splitvalor[1] == undefined) {
+                        App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = parseFloat(splitvalor[0].replace(",",".")).toFixed(2);
+                        // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico);
+                        }
+                        else if (splitvalor[1] != undefined) {
+
+                        App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = parseFloat(splitvalor[1].replace(",",".")).toFixed(2);
+                        // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico);
+                        }
+                    }
+
                 }
-                
+
+              
             });
            
         },
@@ -3298,6 +3308,7 @@ var App = new Vue({
 
         },
         openEditOrdem: function (data){
+           
             console.log(data.dataservico);
             var datasplit = data.dataservico.split(" ");
             console.log(datasplit);
@@ -4273,7 +4284,7 @@ function calcRecebido() {
     var somaDesconto = parseFloat(somaTroco + desconto).toFixed(2);
     App.sales.add.fields.valortotalrecebido.value = somaValorRecebido.toFixed(2);
 
-    App.sales.add.fields.troco.value = somaDesconto.toFixed(2);
+    App.sales.add.fields.troco.value = somaDesconto;
 
     if (App.sales.add.fields.cash.value == '') {
         App.sales.add.fields.cash.value = 0;
@@ -4289,7 +4300,7 @@ function calcRecebido() {
         console.log("Ok, você está recebendo tanto quanto deve, confira o troco...");
 
     }
-    App.sales.add.fields.troco.value.toFixed(2);
+
 }
 
 
