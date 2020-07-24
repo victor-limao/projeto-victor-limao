@@ -98,7 +98,7 @@
                             <input type="text" class="forminput itemsform si mascara" onchange="enviavalores()"
                                 id="totalrecebidocard" name="totalrecebidocard" placeholder="R$ 0,00" />
                         </label>
-                      
+
                     </div>
                     <button type="button" onclick="fechamentocaixa()" class="itemsform btnlogin">Fechar
                         Caixa</button>
@@ -171,16 +171,16 @@
                         ]
                     };
                     //console.log(dados);
-                     if(arrayteste.dadosdecaixa[0].data.match(concatenando)){
-                        
+                    if (arrayteste.dadosdecaixa[0].data.match(concatenando)) {
+
                         getaberturacaixa.push(dados);
                         //console.log(arrayteste.dadosdecaixa[0].valor);
                         //console.log(getaberturacaixa[0].valor);
                         valorabertura = parseFloat(getaberturacaixa[0].valor).toFixed(2);
                     }
                 })
-                if(getaberturacaixa.length == 0) caixaaberto = "Caixa não ainda não foi aberto hoje.";
-                   
+                if (getaberturacaixa.length == 0) caixaaberto = "Caixa não ainda não foi aberto hoje.";
+
             })
 
             var totalsomacard = [];
@@ -197,25 +197,25 @@
                             abertura
                         ]
                     };
-                    
-                    if(arrayteste.aberturadecaixa[0].datavenda.match(concatenando) && arrayteste.aberturadecaixa[0].card > 0){
-                       
+
+                    if (arrayteste.aberturadecaixa[0].datavenda.match(concatenando) && arrayteste.aberturadecaixa[0].card > 0) {
+
                         totalsomacard.push(abertura);
                         // console.log(totalsomacard)
                         // console.log(totalsomacard.length)
                         // console.log(abertura);
                     }
 
-                   
+
                 })
 
-                for(i = 0; i< totalsomacard.length; i++){
+                for (i = 0; i < totalsomacard.length; i++) {
                     somacard += parseFloat(totalsomacard[i].card);
-                    
+
                     //console.log(somacard);
-                    }
-                document.getElementById("totalcard").value = parseFloat(somacard).toFixed(2); 
-            
+                }
+                document.getElementById("totalcard").value = parseFloat(somacard).toFixed(2);
+
             })
 
 
@@ -233,25 +233,25 @@
                             abertura
                         ]
                     };
-                    
-                    if(arrayteste.aberturadecaixa[0].datavenda.match(concatenando) && arrayteste.aberturadecaixa[0].cash > 0){
-                       
+
+                    if (arrayteste.aberturadecaixa[0].datavenda.match(concatenando) && arrayteste.aberturadecaixa[0].cash > 0) {
+
                         totalsomacash.push(abertura);
                         // console.log(totalsomacash)
                         // console.log(totalsomacash.length)
                         // console.log(abertura);
                     }
 
-                   
+
                 })
 
-                for(i = 0; i< totalsomacash.length; i++){
+                for (i = 0; i < totalsomacash.length; i++) {
                     somacash += (parseFloat(totalsomacash[i].cash) - parseFloat(totalsomacash[i].troco));
-                    
+
                     //console.log(somacash);
-                    }
-                document.getElementById("totalcash").value = parseFloat(somacash).toFixed(2); 
-            
+                }
+                document.getElementById("totalcash").value = parseFloat(somacash).toFixed(2);
+
             })
 
 
@@ -329,10 +329,10 @@
                     somareforco += parseFloat(reforco[i].valor);
                     //console.log(somareforco);
                 }
-                if(caixaaberto != undefined){
+                if (caixaaberto != undefined) {
                     alert(caixaaberto)
                 }
-               if(valorabertura == undefined) valorabertura = 0;
+                if (valorabertura == undefined) valorabertura = 0;
                 document.getElementById("totalreforco").value = (parseFloat(somareforco) + parseFloat(valorabertura)).toFixed(2);
             })
 
@@ -341,78 +341,78 @@
 
 
         function enviavalores() {
-           //console.log("entrou");
-           var cash = document.getElementById("totalrecebidocash").value;
-           var card = document.getElementById("totalrecebidocard").value;
-            cash = parseFloat(cash.replace("R$ ","").replace(",","."));
-            card = parseFloat(card.replace("R$ ","").replace(",","."));
+            //console.log("entrou");
+            var cash = document.getElementById("totalrecebidocash").value;
+            var card = document.getElementById("totalrecebidocard").value;
+            cash = parseFloat(cash.replace("R$ ", "").replace(",", "."));
+            card = parseFloat(card.replace("R$ ", "").replace(",", "."));
 
             //console.log(card);
-            if(isNaN(card)){
-               card = 0;
-               //alert(card);
-           }
-           if(isNaN(cash)){
-               cash = 0;
-               //alert(cash)
-           }
-           if (!isNaN(cash) && !isNaN(card)) {
-               document.getElementById("itemstotal").style.visibility = "visible";
-               document.getElementById("serapreenchido").style.display = "none";
-           }
-         
-          
-           //alert(card + cash);
+            if (isNaN(card)) {
+                card = 0;
+                //alert(card);
+            }
+            if (isNaN(cash)) {
+                cash = 0;
+                //alert(cash)
+            }
+            if (!isNaN(cash) && !isNaN(card)) {
+                document.getElementById("itemstotal").style.visibility = "visible";
+                document.getElementById("serapreenchido").style.display = "none";
+            }
+
+
+            //alert(card + cash);
 
             var totalcard = parseFloat(document.getElementById("totalcard").value);
-            var totalcash = parseFloat(document.getElementById("totalcash").value);                            
+            var totalcash = parseFloat(document.getElementById("totalcash").value);
             var totalreforco = parseFloat(document.getElementById("totalreforco").value);
             var totalsangria = parseFloat(document.getElementById("totalsangria").value);
             var totalrecebidocard = document.getElementById("totalrecebidocard").value;
             var totalrecebidocash = document.getElementById("totalrecebidocash").value;
 
-            totalrecebidocard = parseFloat(totalrecebidocard.replace("R$ ","").replace(",","."));
-            totalrecebidocash = parseFloat(totalrecebidocash.replace("R$ ","").replace(",","."));
+            totalrecebidocard = parseFloat(totalrecebidocard.replace("R$ ", "").replace(",", "."));
+            totalrecebidocash = parseFloat(totalrecebidocash.replace("R$ ", "").replace(",", "."));
 
-          
-           if(isNaN(totalrecebidocash)){
+
+            if (isNaN(totalrecebidocash)) {
                 totalrecebidocash = 0;
                 document.getElementById("totalrecebidocash").value = "R$ 0,00";
-           }
-           if(isNaN(totalrecebidocard)){
+            }
+            if (isNaN(totalrecebidocard)) {
                 totalrecebidocard = 0;
                 document.getElementById("totalrecebidocard").value = "R$ 0,00";
-                
-               //alert(totalrecebidocard);
-           }
-           
+
+                //alert(totalrecebidocard);
+            }
+
 
             //alert(totalrecebidocard + totalrecebidocash);
 
             var totalcardcash = totalcard + totalcash;
-           
-            
+
+
             //console.log(totalrecebidocard + totalrecebidocash);
             //console.log(totalreforco - totalsangria);
             var totalrefsan = totalsangria - totalreforco;
             //console.log((totalrefsan -  totalcardcash));
 
-           somatudo = 0;
-           if(totalrefsan < 0){
-               var somatudo = ((totalrecebidocard + totalrecebidocash)- ((totalrefsan * -1) + totalcardcash));
-               //console.log(somatudo);
-           }
-           else if (totalrefsan => 0){
-               
-            var somatudo = (( totalrecebidocard + totalrecebidocash )-((totalrefsan -  totalcardcash)*-1));
-               //console.log(somatudo);
-           }
+            somatudo = 0;
+            if (totalrefsan < 0) {
+                var somatudo = ((totalrecebidocard + totalrecebidocash) - ((totalrefsan * -1) + totalcardcash));
+                //console.log(somatudo);
+            }
+            else if (totalrefsan => 0) {
+
+                var somatudo = ((totalrecebidocard + totalrecebidocash) - ((totalrefsan - totalcardcash) * -1));
+                //console.log(somatudo);
+            }
 
             document.getElementById("totalbalance").value = parseFloat(somatudo).toFixed(2);
-            if(somatudo < 0){
+            if (somatudo < 0) {
                 document.getElementById("totalbalance").style.color = "red";
             };
-            if(somatudo >= 0){
+            if (somatudo >= 0) {
                 document.getElementById("totalbalance").style.color = "green";
             };
         }
@@ -420,11 +420,11 @@
 
 
 
-
+var Appp = "/PETSHOP"
 
 
         function fechamentocaixa() {
-            alert("entrou");
+            //alert("entrou");
             var data = new Date();
             var dia = data.getDate();
             var mes = parseFloat(data.getMonth()) + 1;
@@ -452,6 +452,40 @@
             console.log(totalbalance);
             console.log(totalrecebidocash);
             console.log(totalrecebidocard);
+            var recebidocash = totalrecebidocash;
+            var recebidocard = totalrecebidocard
+            if(isNaN(recebidocard)){
+                var splitvalue = recebidocard.split(" ");
+                recebidocard = splitvalue[1].replace(",",".");
+            }
+            if(isNaN(recebidocash)){
+                var splitvalue = recebidocash.split(" ");
+                recebidocash = splitvalue[1].replace(",",".");
+            }
+            if (recebidocash) {
+                if (!recebidocard) recebidocard = 0;
+
+                firebase.database().ref(Appp + '/fechamentodecaixa').push({
+
+                    totalcarddia: totalcard,
+                    totalcashdia: totalcash,
+                    totalreforco: totalreforco,
+                    totalsangria: totalsangria,
+                    totalbalance: totalbalance,
+                    totalrecebidocard: recebidocard,
+                    totalrecebidocash: recebidocash,
+                    data: dataconvertida,
+
+                }).then(function () {
+                    alert("Caixa do dia " + dataconvertida + " fechado com sucesso.")
+                    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    window.location.href = "/login.html";
+                })
+
+            }
+
+
 
 
         }

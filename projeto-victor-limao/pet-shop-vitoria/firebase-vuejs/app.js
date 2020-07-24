@@ -1491,6 +1491,10 @@ var App = new Vue({
 
                 },
             },
+            search:{
+                list: [],
+            },
+
             remove: {
                 list: [],
             }
@@ -2267,7 +2271,117 @@ var App = new Vue({
             });
 
         },
+        codbar: function(){
+            var data = App.sales.add.fields.nome.value;
+            var dataint = parseFloat(data);
+            if(data.length == 13 && Number.isInteger(dataint)){  
+                firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
+                    App.getselecteditem.search.list = [];
+                    //var concat = "/"+nomeproduto+"*/";
+                    //console.log(concat)
+                    var concatenando = new RegExp(dataint, "i");
+                    var testando = [];
+                    var posicao = 0;
+                    data.forEach(function (item) {
+                        var listsales = item.val();
+                        listsales.key = item.key;
+                        var arrayteste = {
+                            product: [
+                                listsales
+                            ]
+                        };
+                        //console.log(listsales)
+                        if (arrayteste.product[0].codigodebarras.match(concatenando)) {
+                            listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
+                            listsales.posicao = posicao++;
+                            App.getselecteditem.search.list.push(listsales);
+                          
+                            App.sales.add.fields.nome.value = App.getselecteditem.search.list[0].produto;
+                            App.sales.add.fields.valor.value = App.getselecteditem.search.list[0].valorfinal;
+                            //console.log(App.getselecteditem.search.list);
+                        }
+                    })
+    
+                })
+                if(App.getselecteditem.search.list.length == 0){
+                    alert("Produto não encontrado.");
+                }
+                if(App.getselecteditem.search.list.length > 0){
+                    App.addNewSaleCodBar(App.getselecteditem.search.list);
+                }
+            }
+           
+        },
+        addNewSaleCodBar: function (listproduct) {
+            var keyordem = 0
+            //console.log(listproduct[0].quantidade);
+            var keyproduct = listproduct[0].key;
+            var price = App.sales.add.fields.valor.value;
+            //console.log(price);
+            // parseFloat((document.getElementById("iptPrice").value).replace(",","."));
+            if(isNaN(price)) {
+               var splitvalor = App.sales.add.fields.valor.value.split(" ")
+               //console.log(App.sales.add.fields.valor.value);
+               if(splitvalor[1] != undefined){
+                //alert("!undefineddddd")
+                   price = parseFloat(splitvalor[1].replace(",",".")).toFixed(2);
+               }
+               else if (splitvalor[1] == undefined){
+                //alert("undefineddddd")
+                   price = parseFloat(App.sales.add.fields.valor.value.replace(",",".")).toFixed(2)
+               }
+            }
+            //console.log(price);
+            var product = App.sales.add.fields.nome.value;
+            
+            var amount = parseFloat(App.sales.add.fields.quantidade.value);
 
+            if (!product || !price || !amount) {
+                alert('Informe o produto!');
+                return;
+            }
+            if(keyproduct == undefined) keyproduct = 0;
+            if(keyordem == undefined) keyordem = 0;
+            var product = {
+                product: product,
+                price: price,
+                priceFormat: App.numberFormat(price),
+                amount: amount,
+                amountFormat: App.numberFormat(amount, 3),
+                keyproduct: keyproduct,
+                keyordem: keyordem,
+                key: keyproduct,
+                key1: keyordem
+            };
+            var atualizaqtdestoque = listproduct[0].quantidade - amount;
+            product.total = product.amount * product.price;
+            product.totalFormat = App.numberFormat(product.total);
+
+            App.sales.add.fields.valor.value = product.total;
+            
+
+            firebase.database().ref(App.firebase.path + '/products/' + keyproduct).child("quantidade").set(
+                atualizaqtdestoque,
+            )
+            //console.log(product);
+            App.sales.list.push(product);
+            //console.log(App.sales.list);
+            App.calcTotalCaixa();
+
+            App.sales.add.fields.nome.value = '';
+            App.sales.add.messages = [];
+            App.sales.add.fields.valor.value = '';
+            App.sales.add.messages = [];
+            App.sales.add.fields.quantidade.value = 1;
+            document.getElementById("quantidadeproduto").focus();
+            App.sales.add.messages = [];
+            //console.log(App.sales.list);
+
+
+
+
+        },
+        
 
         calcTotalCaixa: function () {
             
@@ -2294,7 +2408,7 @@ var App = new Vue({
         
             
             var somaValorRecebido = (cash + card).toFixed(2);
-            console.log(somaValorRecebido);
+            //console.log(somaValorRecebido);
         
             App.sales.add.fields.valortotalrecebido.value = parseFloat(somaValorRecebido).toFixed(2);
         
@@ -2526,7 +2640,10 @@ var App = new Vue({
 
             }
 
-
+            App.sales.add.fields.nome.value = '';
+            App.sales.add.fields.quantidade.value = 1;
+            App.sales.add.fields.valor.value = '';
+            
             
             App.calcTotalCaixa();
 

@@ -1021,17 +1021,18 @@
                                     <div class="body-content"
                                         style="height: 100%;display: flex;flex-direction: column;align-items: center;justify-content: space-between;">
                                         <div>
-                                            <div class="form-group">
-                                                <label for="">Produto</label><br>
-                                                <input type="text" class="form-control" placeholder="Produto"
-                                                    maxlength="30" v-model="sales.add.fields.nome.value">
-                                            </div>
+                                           
 
                                             <div class="form-group">
                                                 <label for="">Quantidade</label><br>
                                                 <input type="text" class="form-control text-right" placeholder="Qtd."
-                                                    maxlength="30" v-model="sales.add.fields.quantidade.value" value="1"
+                                                    maxlength="30" v-model="sales.add.fields.quantidade.value" value="1" id="quantidadeproduto"
                                                     step="any">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Produto</label><br>
+                                                <input type="text" class="form-control" placeholder="Produto"
+                                                    maxlength="30" v-model="sales.add.fields.nome.value" id="vendaproduto" v-on:keyup="codbar()">
                                             </div>
                                             <div class="form-group">
                                                 <label for="">Preço Unitário (R$)</label><br>
@@ -3906,6 +3907,7 @@
 
             setTimeout("moveRelogio()", 1000)
         }
+
 
     </script>
 </body>
