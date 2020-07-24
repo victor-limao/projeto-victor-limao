@@ -1828,7 +1828,7 @@ var App = new Vue({
         },
 
         addNewSale: function (keyproduct, keyordem) {
-           ;
+          
             var price = App.sales.add.fields.valor.value;
             console.log(price);
             // parseFloat((document.getElementById("iptPrice").value).replace(",","."));
@@ -3750,14 +3750,34 @@ var route = new FMRoute();
 
 route.get('/', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'home';
+
+    if(App.sales.list.length > 0) {
+        if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'home';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else{
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
+    else if (App.sales.list.length == 0) { 
+        logado = true;
+            if (document.cookie) {
+                App.page.current = 'home';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
     }
-    next();
+
+  
 });
 route.get('/logado', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -3768,14 +3788,34 @@ route.get('/logado', function (vars, next) {
 });
 route.get('/ordemdeservicosbanhoetosa', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'ordemdeservicosbanhoetosa';
+
+
+    
+    if(App.sales.list.length > 0) {
+        if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'ordemdeservicosbanhoetosa';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else{
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
+    else if (App.sales.list.length == 0) { 
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'ordemdeservicosbanhoetosa';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
     }
-    next();
+
 });
 route.get('/deslogado', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -3786,96 +3826,250 @@ route.get('/deslogado', function (vars, next) {
 });
 route.get('/home', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    if (document.cookie) {
-        App.page.current = 'home';
-    }
-    else {
-        window.location.href = "/login.html"
-    }
-    next();
 
-    next();
+    if(App.sales.list.length > 0) {
+        if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'home';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else{
+            document.location = '/#/caixa';
+        }
+    }
+    else if (App.sales.list.length == 0) { 
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'home';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+    }
 });
 route.get('/aberturadecaixa', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = "aberturadecaixa"
-        var usercookies = document.cookie.split("=")
-        App.aberturacaixa.abrircaixa.fields.admin.value = usercookies[1];
-        next();
-        document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    if(App.sales.list.length > 0) {
+        if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
+            logado = true;
+            if (document.cookie) {
+                App.page.current = "aberturadecaixa"
+                var usercookies = document.cookie.split("=")
+                App.aberturacaixa.abrircaixa.fields.admin.value = usercookies[1];
+                next();
+                document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+            else {
+                window.location.href = "/login.html"
+                next();
+            }
+          
+        }
+        else{
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
-        next();
+    else if (App.sales.list.length == 0) { 
+        logado = true;
+        if (document.cookie) {
+            App.page.current = "aberturadecaixa"
+            var usercookies = document.cookie.split("=")
+            App.aberturacaixa.abrircaixa.fields.admin.value = usercookies[1];
+            next();
+            document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+        else {
+            window.location.href = "/login.html"
+            next();
+        }
+      
     }
-  
+
    
 });
 route.get('/sangria', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'sangria';
+
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'sangria';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+
+        }
+        else {
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
+    else if (App.sales.list.length == 0) {
+
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'sangria';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
     }
-    next();
+
 });
 
 // Fornecedores - Providers
 route.get('/providers', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'providers';
+
+
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+
+
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'providers';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else {
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
+    else if (App.sales.list.length == 0) {
+
+
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'providers';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
     }
-    next();
+
+
 });
 
 route.get('/vendas', function (vars, next) {
-    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'vendas';
+    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";   
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+
+
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'vendas';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else {
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
-    }
-    next();
+    else if (App.sales.list.length == 0) {
+
+
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'vendas';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
+    }  
 });
 
 
 route.get('/graficos', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        window.location.href = "/graficoscanvas.html"
+
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+            logado = true;
+            if (document.cookie) {
+                window.location.href = "/graficoscanvas.html"
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else {
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
-    }
-    next();
+    else if (App.sales.list.length == 0) {
 
 
-    next();
+
+        logado = true;
+        if (document.cookie) {
+            window.location.href = "/graficoscanvas.html"
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
+    }  
+
 });
 route.get('/fechamentodecaixa', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        window.location.href = "/fechamentocaixa.html"
-    }
-    else {
-        window.location.href = "/login.html"
-    }
-    next();
 
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+
+            logado = true;
+            if (document.cookie) {
+                window.location.href = "/fechamentocaixa.html"
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else {
+            document.location = '/#/caixa';
+        }
+    }
+    else if (App.sales.list.length == 0) {
+
+
+
+        logado = true;
+        if (document.cookie) {
+            window.location.href = "/fechamentocaixa.html"
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
+    }
 });
 
 route.get('/caixa', function (vars, next) {
@@ -3894,62 +4088,136 @@ route.get('/caixa', function (vars, next) {
 
 route.get('/providers-edit/:key', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'providers-edit';
-    // MINIMIZADO POPULACAO 
-    App.getProvider(vars.key, function (provider) {
-        // limpando erros do form
-        App.providers.edit.error = false;
-        App.providers.edit.messages = [];
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
 
-        // limpando erros dos campos
-        App.providers.edit.fields.key = provider.key;
+          
 
-        App.providers.edit.fields.nome.value = provider.nome;
-        App.providers.edit.fields.nome.error = false;
-        App.providers.edit.fields.nome.messages = [];
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'providers-edit';
+                // MINIMIZADO POPULACAO 
+                App.getProvider(vars.key, function (provider) {
+                    // limpando erros do form
+                    App.providers.edit.error = false;
+                    App.providers.edit.messages = [];
 
-        App.providers.edit.fields.marca.value = provider.marca;
-        App.providers.edit.fields.marca.error = false;
-        App.providers.edit.fields.marca.messages = [];
+                    // limpando erros dos campos
+                    App.providers.edit.fields.key = provider.key;
+
+                    App.providers.edit.fields.nome.value = provider.nome;
+                    App.providers.edit.fields.nome.error = false;
+                    App.providers.edit.fields.nome.messages = [];
+
+                    App.providers.edit.fields.marca.value = provider.marca;
+                    App.providers.edit.fields.marca.error = false;
+                    App.providers.edit.fields.marca.messages = [];
 
 
 
-    });
+                });
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else {
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
+    else if (App.sales.list.length == 0) {
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'providers-edit';
+            // MINIMIZADO POPULACAO 
+            App.getProvider(vars.key, function (provider) {
+                // limpando erros do form
+                App.providers.edit.error = false;
+                App.providers.edit.messages = [];
+
+                // limpando erros dos campos
+                App.providers.edit.fields.key = provider.key;
+
+                App.providers.edit.fields.nome.value = provider.nome;
+                App.providers.edit.fields.nome.error = false;
+                App.providers.edit.fields.nome.messages = [];
+
+                App.providers.edit.fields.marca.value = provider.marca;
+                App.providers.edit.fields.marca.error = false;
+                App.providers.edit.fields.marca.messages = [];
+            });
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
     }
-    next();
 
 });
 
 route.get('/providers-remove/:key', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'providers-remove';
 
-        App.getProvider(vars.key, function (provider) {
-            // limpando erros do form
-            App.providers.remove.error = false;
-            App.providers.remove.messages = [];
-    
-            // limpando erros dos campos
-            App.providers.remove.key = provider.key;
-            App.providers.remove.nome = provider.nome;
-            App.providers.remove.marca = provider.marca;
-    
-        });
-    }
-    else {
-        window.location.href = "/login.html"
-    }
-    next();
-  
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
 
-    next();
+
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'providers-remove';
+
+                App.getProvider(vars.key, function (provider) {
+                    // limpando erros do form
+                    App.providers.remove.error = false;
+                    App.providers.remove.messages = [];
+
+                    // limpando erros dos campos
+                    App.providers.remove.key = provider.key;
+                    App.providers.remove.nome = provider.nome;
+                    App.providers.remove.marca = provider.marca;
+
+                });
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        }
+        else {
+            document.location = '/#/caixa';
+        }
+    }
+    else if (App.sales.list.length == 0) {
+
+
+
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'providers-remove';
+
+            App.getProvider(vars.key, function (provider) {
+                // limpando erros do form
+                App.providers.remove.error = false;
+                App.providers.remove.messages = [];
+
+                // limpando erros dos campos
+                App.providers.remove.key = provider.key;
+                App.providers.remove.nome = provider.nome;
+                App.providers.remove.marca = provider.marca;
+
+            });
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
+    }
+
+
+
 });
 
 
@@ -3957,14 +4225,37 @@ route.get('/providers-remove/:key', function (vars, next) {
 // Produtos - Products
 route.get('/products', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'products';
+
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'products';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+        
+        }
+        else {
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
+    else if (App.sales.list.length == 0) {
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'products';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+    
+
     }
-    next();
+
+
 
 });
 
@@ -3998,14 +4289,34 @@ route.get('/products-remove/:key', function (vars, next) {
 // Usuarios - Users
 route.get('/users', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; 
-    logado = true;
-    if (document.cookie) {
-        App.page.current = 'users';
+
+    
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'users';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();       
+        }
+        else {
+            document.location = '/#/caixa';
+        }
     }
-    else {
-        window.location.href = "/login.html"
+    else if (App.sales.list.length == 0) {
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'users';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
     }
-    next();
 });
 
 route.get('/users-edit/:key', function (vars, next) {
