@@ -986,7 +986,6 @@
                                             </thead>
                                             <tbody>
                                                 <tr v-for="item in sales.add.addlistordem">
-                                                    
                                                     <td>{{item.cliente}} - {{item.nome}}</td>
                                                     <td class="text-right">{{item.valorservico}}</td>
                                                     <td class="text-right">{{item.servico}}</td>
@@ -1032,13 +1031,14 @@
                                             <div class="form-group">
                                                 <label for="">Produto</label><br>
                                                 <input type="text" class="form-control" placeholder="Produto"
-                                                    maxlength="30" v-model="sales.add.fields.nome.value" id="vendaproduto" v-on:keyup="codbar()">
+                                                    maxlength="30" v-model="sales.add.fields.nome.value" id="vendaproduto" v-on:keyup="codbar(); alert(10)">
                                             </div>
                                             <div class="form-group">
                                                 <label for="">Preço Unitário (R$)</label><br>
                                                 <input type="text" class="form-control text-right mascara"
                                                     placeholder="Preço Unitário" maxlength="30" step="any" v-model="sales.add.fields.valor.value"
                                                     id="iptPrice">
+                                                    <input type="text" id="ultcodbar" style="display: none">
 
 
 
@@ -1060,11 +1060,13 @@
                                                     <i class="glyphicon glyphicon-search"></i>
                                                 </button>
                                             </div>
+                                            
                                         </div>
 
 
 
                                         <div style="margin-bottom: 20px;">
+                                           
                                             <label for="">Formas de Pagamento</label><br>
                                             <p>
                                                 <div class="input-group">
@@ -1121,6 +1123,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <div id="camera" style="display: none;"></div>
                                         <tr v-for="(sale, i) in sales.list">
                                             <td>{{sale.product}}</a></td>
                                             <td class="text-right">{{sale.priceFormat}}</td>
@@ -3910,6 +3913,49 @@
 
 
     </script>
+     <script src="quagga.min.js"></script>
+     <script>
+          Quagga.init({
+             inputStream: {
+                 name: "Live",
+                 type: "LiveStream",
+                 target: document.querySelector('#camera')    // Or '#yourElement' (optional)
+             },
+             decoder: {
+                 readers: ["ean_reader"]
+             }
+         }, function (err) {
+             if (err) {
+                 console.log(err);
+                 return
+             }
+             console.log("Initialization finished. Ready to start");
+             Quagga.start();
+         });
+         Quagga.onDetected(function (data) {
+                //console.log(data.codeResult.code);
+
+                if (document.getElementById("vendaproduto").value == "") {
+                    document.getElementById("vendaproduto").value = data.codeResult.code;
+
+                }
+                console.log(document.getElementById("vendaproduto").value);
+                console.log(document.getElementById("ultcodbar").value);
+
+                if (document.getElementById("ultcodbar").value == data.codeResult.code) {
+                    if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+                        App.codbar()
+                    }
+                    else{
+                        document.getElementById("vendaproduto").value = '';
+                        return;
+                    }
+                }
+                if (document.getElementById("ultcodbar").value != data.codeResult.code) App.codbar()
+                        
+
+         });
+     </script>
 </body>
 
 </html>

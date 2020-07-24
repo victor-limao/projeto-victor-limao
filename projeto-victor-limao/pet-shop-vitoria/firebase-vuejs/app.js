@@ -2271,10 +2271,14 @@ var App = new Vue({
             });
 
         },
-        codbar: function(){
-            var data = App.sales.add.fields.nome.value;
-            var dataint = parseFloat(data);
+        codbar: function(){         
+            var dataint = '';
+            var data = document.getElementById("vendaproduto").value;
+            dataint = parseFloat(data);
+            //console.log(data);
+
             if(data.length == 13 && Number.isInteger(dataint)){  
+                //alert(10);
                 firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
                     App.getselecteditem.search.list = [];
                     //var concat = "/"+nomeproduto+"*/";
@@ -2292,23 +2296,28 @@ var App = new Vue({
                         };
                         //console.log(listsales)
                         if (arrayteste.product[0].codigodebarras.match(concatenando)) {
-                            listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
-                            listsales.posicao = posicao++;
-                            App.getselecteditem.search.list.push(listsales);
-                          
-                            App.sales.add.fields.nome.value = App.getselecteditem.search.list[0].produto;
-                            App.sales.add.fields.valor.value = App.getselecteditem.search.list[0].valorfinal;
-                            //console.log(App.getselecteditem.search.list);
+                            //console.log(dataint);
+                                listsales.valorfinal = parseFloat(listsales.valorfinal).toFixed(2).replace(".", ",");
+                                // listsales.posicao = posicao++;
+                                App.getselecteditem.search.list.push(listsales);
+                                App.sales.add.fields.nome.value = App.getselecteditem.search.list[0].produto;
+                                App.sales.add.fields.valor.value = App.getselecteditem.search.list[0].valorfinal;
+                                document.getElementById("ultcodbar").value = dataint;
                         }
                     })
     
                 })
+             
                 if(App.getselecteditem.search.list.length == 0){
-                    alert("Produto não encontrado.");
+                    console.log("Produto não encontrado.");
+                    document.getElementById("vendaproduto").value = '';
                 }
                 if(App.getselecteditem.search.list.length > 0){
                     App.addNewSaleCodBar(App.getselecteditem.search.list);
+                    
+                    
                 }
+                document.getElementById("vendaproduto").value = "";
             }
            
         },
@@ -5156,5 +5165,4 @@ function calcTotalCaixa() {
 
     // App.sales.add.fields.subtotalcompra.value = App.sales.add.fields.subtotalFormat;
     // App.sales.add.fields.totalcompra.value = App.sales.add.fields.totalFormat;
-
 }
