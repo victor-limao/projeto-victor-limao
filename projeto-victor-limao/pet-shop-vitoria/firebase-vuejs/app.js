@@ -2549,6 +2549,8 @@ var App = new Vue({
             var numstatus = parseFloat(splitstatus[0]) + 1;
             var strstatus = "º visita"
             //console.log(numstatus + strstatus);
+            //console.log(ordemdeservicosbanhoetosatable.codigo)
+            App.ordemdeservicosbanhoetosa.edit.fields.codigo.value = ordemdeservicosbanhoetosatable.codigo;
             App.ordemdeservicosbanhoetosa.edit.fields.keyclient.value = ordemdeservicosbanhoetosatable.key;
             App.ordemdeservicosbanhoetosa.edit.fields.key.value = ordemdeservicosbanhoetosatable.key;
             App.ordemdeservicosbanhoetosa.edit.fields.cliente.value = ordemdeservicosbanhoetosatable.cliente;
@@ -2612,6 +2614,7 @@ var App = new Vue({
             
             firebase.database().ref(App.firebase.path + '/ordemdeservico').push({
                 keyclient: App.ordemdeservicosbanhoetosa.edit.fields.keyclient.value,
+                codigo:  App.ordemdeservicosbanhoetosa.edit.fields.codigo.value,
                 cliente: App.ordemdeservicosbanhoetosa.edit.fields.cliente.value,
                 telefone: App.ordemdeservicosbanhoetosa.edit.fields.telefone.value,
                 cep: App.ordemdeservicosbanhoetosa.edit.fields.cep.value,
@@ -2971,7 +2974,7 @@ var App = new Vue({
 
             document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             firebase.database().ref(App.firebase.path + '/ordemdeservico').on('value', function (data) {
-
+                
                 App.ordemdeservicosbanhoetosa.getlist.list = [];
                 var concatenando = new RegExp(1, "i");
                 //console.log(concatenando);
@@ -2987,7 +2990,7 @@ var App = new Vue({
                     
                     if(strqtd.match(concatenando)){
                         //console.log("entrou");
-                        console.log(user);
+                        //console.log(user);
                         App.ordemdeservicosbanhoetosa.getlist.list.push(user);
                         //console.log(App.ordemdeservicosbanhoetosa.getlist.list);
                     }
@@ -2999,15 +3002,18 @@ var App = new Vue({
                     if (isNaN(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico)) {
                         // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico)
                         var splitvalor = App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico.split(" ");
-                        if(splitvalor[1] == undefined) {
-                        App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = parseFloat(splitvalor[0].replace(",",".")).toFixed(2);
-                        // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico);
+                        if (splitvalor[1] == undefined) {
+                            App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = parseFloat(splitvalor[0].replace(",", ".")).toFixed(2);
+                            // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico);
                         }
                         else if (splitvalor[1] != undefined) {
 
-                        App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = parseFloat(splitvalor[1].replace(",",".")).toFixed(2);
-                        // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico);
+                            App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = parseFloat(splitvalor[1].replace(",", ".")).toFixed(2);
+                            // console.log(App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico);
                         }
+                    }
+                    else {
+                        App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico = App.ordemdeservicosbanhoetosa.getlist.list[i].valorservico;
                     }
 
                 }
@@ -3327,14 +3333,17 @@ var App = new Vue({
         openEditOrdem: function (data){
            
             console.log(data.dataservico);
+           
             var datasplit = data.dataservico.split(" ");
             console.log(datasplit);
             var splitdata = datasplit[0].split("/");
             console.log(splitdata);
 
             var dataconvertida = splitdata[2]+"-"+splitdata[1]+"-"+splitdata[0]+"T"+datasplit[1];
-                console.log(data.key);
+                console.log(data);
+                
                 App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value = data.key,
+                App.ordemdeservicosbanhoetosa.edit2.fields.codigo.value = data.codigo,
                 App.ordemdeservicosbanhoetosa.edit2.fields.keyclient.value = data.keyclient,
                 App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value = data.cliente,
                 App.ordemdeservicosbanhoetosa.edit2.fields.telefone.value = data.telefone,
@@ -3380,6 +3389,7 @@ var App = new Vue({
             }
             //alert(valorconvertido)
             firebase.database().ref(App.firebase.path + '/ordemdeservico/' + App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value).set({
+                codigo: App.ordemdeservicosbanhoetosa.edit2.fields.codigo.value, 
                 keyclient: App.ordemdeservicosbanhoetosa.edit2.fields.keyclient.value, 
                 cliente: App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value, 
                 telefone: App.ordemdeservicosbanhoetosa.edit2.fields.telefone.value, 
