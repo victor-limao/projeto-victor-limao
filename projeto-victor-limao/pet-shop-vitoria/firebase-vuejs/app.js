@@ -3063,7 +3063,24 @@ var App = new Vue({
 
         // Adicionando usuário
         openAddUser: function () {
+
+            firebase.database().ref(App.firebase.path + '/users').on('value', function (data) {
+                var users = 0;
+                data.forEach(function (item) {
+
+                    var user = item.val();
+                    user.key = item.key;
+                    users++
+                });
+                var resultcod = (users * 78)*0.60;
+                console.log(resultcod);
+                if(resultcod < 1000) App.users.add.fields.codigo.value = "0" + resultcod
+                // App.users.add.fields.codigo.value = (users * 85)*0.60;
+
+            });
+
             $('#modalUserAdd').modal();
+            
         },
         addUser: function () {
 

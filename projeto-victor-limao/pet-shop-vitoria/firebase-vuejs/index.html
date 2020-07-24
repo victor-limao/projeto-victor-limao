@@ -1656,7 +1656,7 @@
                                                     :class="{ 'has-error': users.add.fields.codigo.error }">
                                                     <label for="">Codigo</label>
                                                     <input type="text" class="form-control" placeholder="xxxx"
-                                                        maxlength="4" v-model="users.add.fields.codigo.value">
+                                                        maxlength="4" v-model="users.add.fields.codigo.value" disabled>
                                                 </div>
                                             </div>
 
@@ -1765,7 +1765,7 @@
                                                 :class="{ 'has-error': users.add.fields.datacadastro.error }">
                                                 <div class="form-group">
                                                     <label for="">Horario Atual</label>
-                                                    <input type="text" class="form-control" id="dataatuall" />
+                                                    <input type="text" class="form-control" id="dataatuall" disabled/>
 
                                                 </div>
                                             </div>
@@ -3862,6 +3862,7 @@
                 var teste = document.getElementById("dataatualll").value;
                 document.getElementById("dataatualll").value = horaImprimivel;
             }
+            document.getElementById("dataatuall").value = horaImprimivel2;
             document.getElementById("relogio").value = horaImprimivel;
 
             //document.getElementById("yearfooter").innerHTML = year;
