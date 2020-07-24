@@ -325,6 +325,18 @@ var App = new Vue({
                         messages: [],
 
                     },
+                    telefone: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    email: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
                 },
             },
 
@@ -337,9 +349,22 @@ var App = new Vue({
                         value: '',
                         error: false,
                         messages: [],
+
                     },
 
                     marca: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    telefone: {
+                        value: '',
+                        error: false,
+                        messages: [],
+
+                    },
+                    email: {
                         value: '',
                         error: false,
                         messages: [],
@@ -2755,6 +2780,8 @@ var App = new Vue({
             firebase.database().ref(App.firebase.path + '/providers').push({
                 nome: App.providers.add.fields.nome.value,
                 marca: App.providers.add.fields.marca.value,
+                telefone: App.providers.add.fields.telefone.value,
+                email: App.providers.add.fields.email.value,
 
             })
                 .then(function () {
@@ -2804,6 +2831,14 @@ var App = new Vue({
                 App.providers.edit.fields.marca.value = provider.marca;
                 App.providers.edit.fields.marca.error = false;
                 App.providers.edit.fields.marca.messages = [];
+
+                App.providers.edit.fields.telefone.value = provider.telefone;
+                App.providers.edit.fields.nome.error = false;
+                App.providers.edit.fields.nome.messages = [];
+
+                App.providers.edit.fields.email.value = provider.email;
+                App.providers.edit.fields.nome.error = false;
+                App.providers.edit.fields.nome.messages = [];
 
 
 
@@ -2896,7 +2931,6 @@ var App = new Vue({
                 App.providers.edit.fields.nome.messages.push('Campo obrigatório.');
                 error = true;
             }
-
             // e todos os demais campos aqui...
 
             // se deu algum erro...
@@ -2909,6 +2943,8 @@ var App = new Vue({
             firebase.database().ref(App.firebase.path + '/providers/' + App.providers.edit.fields.key).set({
                 nome: App.providers.edit.fields.nome.value,
                 marca: App.providers.edit.fields.marca.value,
+                telefone: App.providers.edit.fields.telefone.value,
+                email: App.providers.edit.fields.email.value,
 
             })
                 .then(function () {

@@ -1359,6 +1359,8 @@
                         <tr>
                             <th>Nome</th>
                             <th>Marca</th>
+                            <th>Telefone</th>
+                            <th>E-mail</th>
 
                             <th width="200">Ações</th>
                         </tr>
@@ -1367,9 +1369,9 @@
                     <tbody>
                         <tr v-for="provider in providers.list">
                             <td><a href="#" @click.prevent="openEditProvider(provider.key)">{{ provider.nome }}</a></td>
-                            <td><a href="#" @click.prevent="openEditProvider(provider.key)">{{ provider.marca }}</a>
-                            </td>
-
+                            <td><a href="#" @click.prevent="openEditProvider(provider.key)">{{ provider.marca }}</a></td>
+                            <td><a href="#" @click.prevent="openEditProvider(provider.key)">{{ provider.telefone }}</a></td>
+                            <td><a href="#" @click.prevent="openEditProvider(provider.key)">{{ provider.email }}</a></td>
                             <td>
                                 <button type="button" class="btn btn-primary"
                                     @click.prevent="openEditProvider(provider.key)">
@@ -1422,6 +1424,21 @@
 
                                             <input type="text" class="form-control" placeholder="Marca"
                                                 maxlength="30   " v-model="providers.add.fields.marca.value">
+                                        </div>
+
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.add.fields.telefone.error }">
+                                            <label for="">Telefone/Celular</label>
+
+                                            <input type="text" class="form-control" placeholder="(xx) 99999-9999"
+                                                maxlength="13" v-model="providers.add.fields.telefone.value">
+                                        </div>
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.add.fields.email.error }">
+                                            <label for="">E-mail</label>
+
+                                            <input type="text" class="form-control" placeholder="example@gmail.com"
+                                                maxlength="40" v-model="providers.add.fields.email.value">
                                         </div>
 
                                         <small
@@ -1479,6 +1496,23 @@
                                             <input type="text" class="form-control" placeholder="Marca"
                                                 maxlength="30   " v-model="providers.edit.fields.marca.value">
                                         </div>
+
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.edit.fields.telefone.error }">
+                                            <label for="">Telefone</label>
+
+                                            <input type="text" class="form-control" placeholder="(xx) 99999-9999"
+                                                maxlength="30   " v-model="providers.edit.fields.telefone.value">
+                                        </div>
+                                        <div class="form-group"
+                                            :class="{ 'has-error': providers.edit.fields.email.error }">
+                                            <label for="">Email</label>
+
+                                            <input type="text" class="form-control" placeholder="example@gmail.com"
+                                                maxlength="30   " v-model="providers.edit.fields.email.value">
+                                        </div>
+
+
                                         <!-- <br>
                                         <div class="input-group">
                                                 <span class="input-group-addon">$</span>
