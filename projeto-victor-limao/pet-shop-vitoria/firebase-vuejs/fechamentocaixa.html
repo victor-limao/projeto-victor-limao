@@ -156,7 +156,7 @@
                 mes = "0" + mes;
             }
             var dataconvertida = (dia + "/" + mes + "/" + ano);
-
+            var caixaaberto;
             var valorabertura;
             var getaberturacaixa = [];
             firebase.database().ref(Apppath + '/aberturadecaixa').on('value', function (data) {
@@ -177,8 +177,9 @@
                         //console.log(arrayteste.dadosdecaixa[0].valor);
                         //console.log(getaberturacaixa[0].valor);
                         valorabertura = parseFloat(getaberturacaixa[0].valor).toFixed(2);
-                     }
+                    }
                 })
+                if(getaberturacaixa.length == 0) caixaaberto = "Caixa não ainda não foi aberto hoje.";
                    
             })
 
@@ -328,7 +329,10 @@
                     somareforco += parseFloat(reforco[i].valor);
                     //console.log(somareforco);
                 }
-              
+                if(caixaaberto != undefined){
+                    alert(caixaaberto)
+                }
+               if(valorabertura == undefined) valorabertura = 0;
                 document.getElementById("totalreforco").value = (parseFloat(somareforco) + parseFloat(valorabertura)).toFixed(2);
             })
 
