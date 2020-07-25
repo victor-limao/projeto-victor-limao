@@ -133,12 +133,24 @@ body {
 .content {
     /* border-color: black;
     border: 2px solid; */
-    height: 365px;
+    height: 50vh;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
     border-radius: 15px;
     display: flex;
+}
+
+.second-content-body{
+    width: 100%;
+    margin-top: 7vh;
+    margin-bottom: 7vh;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    padding-top: 5%;
+    padding-bottom: 5%;
 }
 
 h2 {
@@ -199,7 +211,6 @@ h2 {
 .first-content {
     font-family: 'Open Sans', sans-serif;
     background-color: #000000CF;
-    padding-top: 10%;
     width: 40%;
     display: flex;
     flex-direction: column;
@@ -241,7 +252,7 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
 .container-fluid {
@@ -330,7 +341,14 @@ input {
 }
 
 .first-content-align {
+    margin-top: 7vh;
+    width: 100%;
+    margin-bottom: 7vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    height: 100%;
+}
 }
