@@ -210,6 +210,7 @@
                                 <li><a href="#/vendas">Relatórios</a></li>
                                 <li><a href="#/sangria">Sangria e Reforço</a></li>
                                 <li><a href="#/graficos">Gráficos</a></li>
+                                <li><a href="#/lembretes">Lembretes</a></li>
                             </ul>
                         </li>
 
@@ -237,7 +238,11 @@
 
                 <div class="container">
                     <h2 class="pet">Bem-vindo</h2>
-                    <p>Você está na página home.</p>
+                    <!-- <p>Você está na página home.</p> -->
+                    <p><b>Lembretes do dia:</b></p>
+                    <ul id="ulhome" v-for="data in home.load.list">
+                        <li>{{data.mensagem}};</li>
+                    </ul>
 
 
                 </div>
@@ -973,7 +978,7 @@
                                     
                                     </div>
                                     <div>
-                                        <div class="alert alert-warning" v-if="sales.add.addlistordem.length == 0">Nenhuma mercadoria encontrada.</div>
+                                        <div class="alert alert-warning" v-if="sales.add.addlistordem.length == 0">Nenhuma ordem de serviço encontrada.</div>
                                         <table class="table table-bordered" v-if="sales.add.addlistordem.length > 0">
                                             <thead>
                                                 <tr style="text-align: center;">
@@ -1112,6 +1117,7 @@
                         <div class="box-center">
                             <div class="container-fluid">
                                 <br>
+                                 <div id="camera" style="display: none;"></div>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -1123,7 +1129,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <div id="camera" style="display: none;"></div>
                                         <tr v-for="(sale, i) in sales.list">
                                             <td>{{sale.product}}</a></td>
                                             <td class="text-right">{{sale.priceFormat}}</td>
@@ -3302,7 +3307,7 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                         aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="modalUserEditLabel">Criar Ordem de Serviço</h4>
+                                <h4 class="modal-title" id="modalUserEditLabel">Editar Ordem de Serviço</h4>
                             </div>
 
                             <div class="modal-body">
@@ -3761,6 +3766,161 @@
                 </div>
 
             </div>
+            <!--Lembretes-->
+            <div v-if="page.current == 'lembretes'">
+            
+                <h2 class="page-header"> Lembretes</h2>
+                <ol class="breadcrumb">
+            
+                    <li><a href="#/"> Home</a></li>
+                    <li class="active">Lembretes</li>
+                </ol>
+                <p>
+                    <button type="button" class="btn btn-default" @click.prevent="openLembreteModal()">
+                        <span class="glyphicon glyphicon-plus-sign"></span> Adicionar <b>Lembrete</b>
+                    </button>
+                </p>
+                <div class="alert alert-warning" v-if="lembretes.add.list == 0">Nenhum lembrete ativo encontrado.</div>
+                <table class="table table-bordered" v-else>
+                    <thead>
+                        <tr>
+                            <th>Mensagem</th>
+                            <th>Data Inclusão</th>
+                            <th>Data Exibição</th>
+                            <th>Ativo</th>
+                            <th width="60px">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="lembretes in lembretes.add.list">
+                            <td>{{ lembretes.mensagem }}</td>
+                            <td>{{ lembretes.datainclusao }}</td>
+                            <td>{{ lembretes.dataexibicao }}</td>
+                            <td><select name="tdlembreteativo" id="tdlembreteativo" style="background-color: transparent;border: none;width: 100%;height: 36px; cursor: pointer" @click.prevent="alteraativocomselect(lembretes.key, $event.target.value)" @onchange.prevent="alteraativocomselect(lembretes.key, $event.target.value)">
+                                <option selected disabled hidden>{{ lembretes.ativo }}</option>
+                                <option value="1">1</option>
+                                <option value="0">0</option>
+                            </select></td></td>
+                            <td>
+                                <button type="button" class="btn btn-primary"
+                                    @click.prevent="openEditLembrete(lembretes.key)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="modal fade" id="modalLembreteAdd" tabindex="-1" role="dialog" aria-labelledby="modalLembretesAddLabel">
+                    <div class="modal-dialog modal-large" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalLembretesAddLabel">Adicionar Lembrete</h4>
+                            </div>
+            
+                            <div class="modal-body">
+            
+                                <form @submit.prevent="addLembrete()">
+            
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': lembretes.add.error, 'alert-success': !lembretes.add.error }"
+                                        v-if="lembretes.add.messages.length > 0">
+                                        <p v-for="message in lembretes.add.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b>Dados do Lembrete</b></h3>
+                                        <div class="form-group" :class="{ 'has-error': lembretes.add.fields.mensagem.error }">
+                                            <label for="">Mensagem do lembrete</label>
+            
+                                            <input type="text" class="form-control" placeholder="Mensagem..." maxlength="30"
+                                                v-model="lembretes.add.fields.mensagem.value">
+                                        </div>
+            
+                                        <div class="form-group" :class="{ 'has-error': lembretes.add.fields.dataexibicao.error }">
+                                            <label for="">Data para exibir este lembrete</label>
+            
+                                            <input type="date" class="form-control" placeholder="Data" maxlength="30   "
+                                                v-model="lembretes.add.fields.dataexibicao.value">
+                                        </div>
+            
+                                        <small class="help-block">{{lembretes.add.fields.dataexibicao.messages.join(", ")}}</small>
+                                    </div>
+            
+                                    <p>
+                                        <button type="submit" class="btn btn-primary">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    </p>
+            
+                                </form>
+            
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalLembreteEdit" tabindex="-1" role="dialog" aria-labelledby="modalLembretesEditLabel">
+                    <div class="modal-dialog modal-large" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalLembretesEditLabel">Editar Lembrete</h4>
+                            </div>
+            
+                            <div class="modal-body">
+            
+                                <form @submit.prevent="editLembrete()">
+            
+                                    <div class="alert"
+                                        :class="{ 'alert-danger': lembretes.edit.error, 'alert-success': !lembretes.edit.error }"
+                                        v-if="lembretes.edit.messages.length > 0">
+                                        <p v-for="message in lembretes.edit.messages">{{ message }}</p>
+                                    </div>
+                                    <!--------------FORM MINIMIZADO------------>
+                                    <div id="minimizarform">
+                                        <h3><b>Dados do Lembrete</b></h3>
+                                        <div class="form-group" :class="{ 'has-error': lembretes.edit.fields.mensagem.error }">
+                                            <label for="">Mensagem do lembrete</label>
+                                            <input type="text" class="form-control" maxlength="30"
+                                            v-model="lembretes.edit.fields.key.value" style="display: none;" >
+                                            <input type="text" class="form-control" placeholder="Mensagem..." maxlength="30"
+                                                v-model="lembretes.edit.fields.mensagem.value">
+                                        </div>
+            
+                                        <div class="form-group" :class="{ 'has-error': lembretes.edit.fields.dataexibicao.error }">
+                                            <label for="">Data para exibir este lembrete</label>
+            
+                                            <input type="text" class="form-control" placeholder="Data" maxlength="30"
+                                                v-model="lembretes.edit.fields.dataexibicao.value">
+                                        </div>
+            
+                                        <small class="help-block">{{lembretes.edit.fields.dataexibicao.messages.join(", ")}}</small>
+                                    </div>
+            
+                                    <p>
+                                        <button type="submit" class="btn btn-primary">Salvar <i
+                                                class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    </p>
+            
+                                </form>
+            
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            
+            </div>
+
 
         </div>
 
@@ -3833,6 +3993,7 @@
     </footer>
     <script>
         $(document).ready(moveRelogio());
+        
         function moveRelogio() {
             //console.log("entrou");
             var date = new Date();
@@ -3955,6 +4116,7 @@
                         
 
          });
+
      </script>
 </body>
 

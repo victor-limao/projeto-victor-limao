@@ -18,6 +18,21 @@ var App = new Vue({
         firebase: {
             path: '/PETSHOP',
         },
+
+        home:{
+            load:{
+                fields:{
+                    ulhome:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    }
+                },
+                list: [],
+            }
+        },
+        
+
         users: {
             add: {
                 error: false,
@@ -1456,6 +1471,8 @@ var App = new Vue({
         list: [],
 
         getselecteditem: {
+            error: false,
+            messages: [],
             add: {
                 fields: {
                     produto: {
@@ -1498,6 +1515,48 @@ var App = new Vue({
             remove: {
                 list: [],
             }
+        },
+        lembretes:{
+            error: false,
+            messages: [],
+            add:{
+                fields:{
+                    mensagem:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    dataexibicao:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    }
+                },
+                messages: [],
+                list: [],
+            },  
+            edit:{
+                fields:{
+                    key:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    mensagem:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    },
+                    dataexibicao:{
+                        value: '',
+                        error: false,
+                        messages: [],
+                    }
+                },
+                messages: [],
+                list: [],
+            },           
+            list: []
         },
 
         footer: {
@@ -1649,10 +1708,62 @@ var App = new Vue({
                 });
 
         },
+        openEditLembrete: function (key) {
+            App.products.edit.messages = [];
+            firebase.database().ref(App.firebase.path + '/lembretes/' + key).once('value').then(function (data) {
+
+                var product = data.val();
+                product.key = data.key;
+                console.log(product);
+
+
+                // limpando erros do form
+                App.lembretes.edit.error = false;
+                App.lembretes.edit.messages = [];
+
+                // limpando erros dos campos
+                App.lembretes.edit.fields.key.value = product.key;
+
+
+                App.lembretes.edit.fields.mensagem.value = product.mensagem;
+                App.lembretes.edit.fields.mensagem.error = false;
+                App.lembretes.edit.fields.mensagem.messages = [];
+
+                App.lembretes.edit.fields.dataexibicao.value = product.dataexibicao;
+                App.lembretes.edit.fields.dataexibicao.error = false;
+                App.lembretes.edit.fields.dataexibicao.messages = [];
+               
+            });
+
+            $('#modalLembreteEdit').modal();
+
+
+        },
+        editLembrete: function () { 
+            App.lembretes.add.list = [];
+            App.lembretes.edit.messages = [];
+            console.log(App.lembretes.edit.fields.mensagem.value);
+            console.log(App.lembretes.edit.fields.dataexibicao.value);
+            firebase.database().ref(App.firebase.path + '/lembretes/' + App.lembretes.edit.fields.key.value).child("mensagem").set(
+               App.lembretes.edit.fields.mensagem.value
+            )
+            firebase.database().ref(App.firebase.path + '/lembretes/' + App.lembretes.edit.fields.key.value).child("dataexibicao").set(
+                 App.lembretes.edit.fields.dataexibicao.value
+            )
+                .then(function () {
+                    App.lembretes.edit.messages.push('Lembrete atualizado com sucesso!');
+                   
+                })
+                .catch(function (err) {
+                    App.lembretes.edit.error = true;
+                    App.lembretes.edit.messages.push('Aconteceu um erro interno. Tente novamente.');
+                });
+        },
 
 
         // Abrindo Modal Edit Product
         openEditProduct: function (key) {
+            App.products.edit.messages = [];
             firebase.database().ref(App.firebase.path + '/products/' + key).once('value').then(function (data) {
 
                 var product = data.val();
@@ -1999,8 +2110,18 @@ var App = new Vue({
 
         },
 
+        alteraativocomselect : function(key, ativo){
+            App.lembretes.add.list = [];
+            firebase.database().ref(App.firebase.path + '/lembretes/' + key).child("ativo").set(
+                ativo
+            ).then(function(){
+                App.lembretes.add.messages = [];
+                // App.lembretes.add.messages.push('Ordem de serviço atualizada com sucesso!');
+            })
+        },
+
         alterastatuscominput : function(key, status){
-          
+            App.ordemdeservicosbanhoetosa.remove.messages = [];
             firebase.database().ref(App.firebase.path + '/ordemdeservico/' + key).child("statuspedido").set(
                 status
             ).then(function(){
@@ -2106,7 +2227,7 @@ var App = new Vue({
 
         },
         editSelectedItem: function (produto, keyproduto, valorfinal, quantidadeemestoque, quantidadeselecionada) {
-            //alert("teste");
+            ordemdeservicosbanhoetosa.edit2.messages = [];
             valorfinal = valorfinal.replace(",", ".");
             valorfinal = parseFloat(valorfinal);
             console.log(valorfinal)
@@ -2191,7 +2312,6 @@ var App = new Vue({
             }
 
             var dataconcat = dia + "/" + mes + "/" + ano;
-
             App.aberturacaixa.select.selectlist = [];
             //console.log( App.aberturacaixa.select.selectlist);
             firebase.database().ref(App.firebase.path + '/aberturadecaixa').on('value', function (data) {
@@ -2382,7 +2502,7 @@ var App = new Vue({
             App.sales.add.fields.valor.value = '';
             App.sales.add.messages = [];
             App.sales.add.fields.quantidade.value = 1;
-            document.getElementById("quantidadeproduto").focus();
+            document.getElementById("vendaproduto").focus();
             App.sales.add.messages = [];
             //console.log(App.sales.list);
 
@@ -2870,6 +2990,55 @@ var App = new Vue({
         openProviderUser: function () {
             $('#modalProviderAdd').modal();
         },
+        openLembreteModal: function () {
+            App.lembretes.add.messages = [];
+            $('#modalLembreteAdd').modal();
+        },
+        //Adidionando Lembrete
+        addLembrete: function () {
+            App.lembretes.add.list = [];
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseInt(data.getMonth()) + 1;
+            var ano = data.getFullYear();
+
+            if (dia < 10) {
+                dia = "0" + dia;
+            }
+            if (mes < 10) {
+                mes = "0" + mes;
+            }
+
+            var dataexibicao = App.lembretes.add.fields.dataexibicao.value;
+
+            var splitdataexibicao = dataexibicao.split("-");
+
+            var dataexibicaoconcat = splitdataexibicao[2]+"/"+splitdataexibicao[1]+"/"+splitdataexibicao[0]
+            var dataconcat = dia + "/" + mes + "/" + ano;
+
+          
+            firebase.database().ref(App.firebase.path + '/lembretes').push({
+                mensagem: App.lembretes.add.fields.mensagem.value,
+                dataexibicao: dataexibicaoconcat,
+                datainclusao: dataconcat,
+                ativo: 1
+            })
+                .then(function () {
+                    App.lembretes.add.messages = [];
+                    App.lembretes.add.fields.mensagem.value = '';
+                    App.lembretes.add.messages = [];
+                    App.lembretes.add.fields.dataexibicao.value = '';
+
+                    App.lembretes.add.messages.push('Lembrete inserido com sucesso!');
+
+                })
+                .catch(function (err) {
+                    App.lembretes.add.error = true;
+                    App.lembretes.add.messages = [];
+                    App.lembretes.add.messages.push('Aconteceu um erro interno. Tente novamente.');
+                });
+
+        },
 
         // Adicionando Fornecedor   
         addProvider: function () {
@@ -3231,7 +3400,7 @@ var App = new Vue({
 
         // Adicionando usuário
         openAddUser: function () {
-
+            App.users.add.messages = [];
             firebase.database().ref(App.firebase.path + '/users').on('value', function (data) {
                 var users = 0;
                 data.forEach(function (item) {
@@ -3240,7 +3409,7 @@ var App = new Vue({
                     user.key = item.key;
                     users++
                 });
-                var resultcod = (users * 78)*0.60;
+                var resultcod = parseInt((users * 78)*0.60);
                 console.log(resultcod);
                 if(resultcod < 1000) App.users.add.fields.codigo.value = "0" + resultcod
                 // App.users.add.fields.codigo.value = (users * 85)*0.60;
@@ -3372,6 +3541,7 @@ var App = new Vue({
 
         // Abrindo Modal Edit User
         openEditUser: function (key) {
+            App.users.edit.messages = [];
             firebase.database().ref(App.firebase.path + '/users/' + key).once('value').then(function (data) {
 
                 var user = data.val();
@@ -3549,9 +3719,10 @@ var App = new Vue({
             else if(valorsplit != undefined){
                 valorconvertido = parseFloat(valorsplit.replace(",","."));
             }
+            //alert(valorconvertido);
             //alert(valorconvertido)
             firebase.database().ref(App.firebase.path + '/ordemdeservico/' + App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value).set({
-                codigo: App.ordemdeservicosbanhoetosa.edit2.fields.codigo.value, 
+               
                 keyclient: App.ordemdeservicosbanhoetosa.edit2.fields.keyclient.value, 
                 cliente: App.ordemdeservicosbanhoetosa.edit2.fields.cliente.value, 
                 telefone: App.ordemdeservicosbanhoetosa.edit2.fields.telefone.value, 
@@ -3577,7 +3748,8 @@ var App = new Vue({
                 valorservico: valorconvertido, 
                 quantidade: 1,
                 
-            }).then(function(){
+            })
+            .then(function(){
                 $('#modalEditOrdemdeServico').modal("toggle");
             });
         },
@@ -3836,6 +4008,39 @@ var App = new Vue({
                 document.location.reload();
             }
         },
+        getLembretes: function () {
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = parseInt(data.getMonth()) + 1;
+            var ano = data.getFullYear();
+
+            if (dia < 10) {
+                dia = "0" + dia;
+            }
+            if (mes < 10) {
+                mes = "0" + mes;
+            }
+
+            var dataconcat = dia + "/" + mes + "/" + ano;
+            console.log(dataconcat);
+            var concatenando = new RegExp(dataconcat, "i");
+            firebase.database().ref(App.firebase.path + '/lembretes').on('value', function (data) {
+
+                App.home.load.list = [];
+
+                data.forEach(function (item) {
+                    var data = item.val();
+                    data.key = item.key;
+                    if (data.dataexibicao.match(concatenando) && data.ativo == 1) {
+                        App.home.load.list.push(data);
+                    }
+                    if(data.ativo == 1){
+                    App.lembretes.add.list.push(data);
+                    }
+                });
+                //console.log(App.lembretes.add.list);
+            });
+        }
         // editestoque: function () {
 
         //     var data = new Date();
@@ -3897,6 +4102,7 @@ App.getOrdensdeservico();
 App.getProviders();
 App.getSales();
 App.getAberturadeCaixa();
+App.getLembretes();
 // App.editestoque();
 
 
@@ -3930,13 +4136,14 @@ route.get('/', function (vars, next) {
     }
     else if (App.sales.list.length == 0) { 
         logado = true;
-            if (document.cookie) {
-                App.page.current = 'home';
-            }
-            else {
-                window.location.href = "/login.html"
-            }
-            next();
+
+        if (document.cookie) {
+            App.page.current = 'home';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
     }
 
   
@@ -3951,8 +4158,6 @@ route.get('/logado', function (vars, next) {
 route.get('/ordemdeservicosbanhoetosa', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-
-    
     if(App.sales.list.length > 0) {
         if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
             logado = true;
@@ -3988,7 +4193,6 @@ route.get('/deslogado', function (vars, next) {
 });
 route.get('/home', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
     if(App.sales.list.length > 0) {
         if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
             logado = true;
@@ -4007,7 +4211,7 @@ route.get('/home', function (vars, next) {
     else if (App.sales.list.length == 0) { 
         logado = true;
         if (document.cookie) {
-            App.page.current = 'home';
+            App.page.current = 'home';                  
         }
         else {
             window.location.href = "/login.html"
@@ -4081,6 +4285,41 @@ route.get('/sangria', function (vars, next) {
         logado = true;
         if (document.cookie) {
             App.page.current = 'sangria';
+        }
+        else {
+            window.location.href = "/login.html"
+        }
+        next();
+
+    }
+
+});
+
+route.get('/lembretes', function (vars, next) {
+    document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    if (App.sales.list.length > 0) {
+        if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
+
+            logado = true;
+            if (document.cookie) {
+                App.page.current = 'lembretes';
+            }
+            else {
+                window.location.href = "/login.html"
+            }
+            next();
+
+        }
+        else {
+            document.location = '/#/caixa';
+        }
+    }
+    else if (App.sales.list.length == 0) {
+
+        logado = true;
+        if (document.cookie) {
+            App.page.current = 'lembretes';
         }
         else {
             window.location.href = "/login.html"
@@ -5166,3 +5405,7 @@ function calcTotalCaixa() {
     // App.sales.add.fields.subtotalcompra.value = App.sales.add.fields.subtotalFormat;
     // App.sales.add.fields.totalcompra.value = App.sales.add.fields.totalFormat;
 }
+// var dataconcat = "username=cidolimao";
+// var permitelogado;
+// var concatenando = new RegExp(dataconcat, "i");
+// if (document.cookie.match(concatenando)) permitelogado = 321312;
