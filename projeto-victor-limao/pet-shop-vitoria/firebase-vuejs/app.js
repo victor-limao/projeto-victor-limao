@@ -1970,11 +1970,11 @@ var App = new Vue({
         addNewSale: function (keyproduct, keyordem) {
           
             var price = App.sales.add.fields.valor.value;
-            console.log(price);
+            //console.log(price);
             // parseFloat((document.getElementById("iptPrice").value).replace(",","."));
             if(isNaN(price)) {
                var splitvalor = App.sales.add.fields.valor.value.split(" ")
-               console.log(App.sales.add.fields.valor.value);
+               //console.log(App.sales.add.fields.valor.value);
                if(splitvalor[1] != undefined){
                 //alert("!undefineddddd")
                    price = parseFloat(splitvalor[1].replace(",",".")).toFixed(2);
@@ -2011,12 +2011,12 @@ var App = new Vue({
             product.totalFormat = App.numberFormat(product.total);
 
             App.sales.add.fields.valor.value = product.total;
-            console.log(App.sales.add.fields.valor.value);
+            //console.log(App.sales.add.fields.valor.value);
             // console.log("product");
             // console.log(product);
             // console.log("product");
           
-            console.log(product);
+            //console.log(product);
             App.sales.list.push(product);
             //console.log(App.sales.list);
             App.calcTotalCaixa();
@@ -2227,11 +2227,11 @@ var App = new Vue({
 
         },
         editSelectedItem: function (produto, keyproduto, valorfinal, quantidadeemestoque, quantidadeselecionada) {
-            ordemdeservicosbanhoetosa.edit2.messages = [];
+            //ordemdeservicosbanhoetosa.edit2.messages = [];
             valorfinal = valorfinal.replace(",", ".");
             valorfinal = parseFloat(valorfinal);
-            console.log(valorfinal)
-            console.log(quantidadeselecionada);
+            //console.log(valorfinal)
+            //console.log(quantidadeselecionada);
 
             var quantidadefinal = parseFloat(quantidadeemestoque) - parseFloat(quantidadeselecionada);
             //console.log(quantidadefinal);
@@ -2857,15 +2857,18 @@ var App = new Vue({
                 App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value = "R$ 0,00";
             }
             
-            var splitvalorservico = document.getElementById("valorservico").value;
+            var splitvalorservico = document.getElementById("valorservico").value.split(" ");
             
             var valorconvertido;
           
-            if(isNaN(splitvalorservico)){
-                valorconvertido = parseFloat(splitvalorservico.split(" ")[1].replace(",","."));
+            if(isNaN(splitvalorservico) && splitvalorservico[1] != undefined){
+                valorconvertido = parseFloat(splitvalorservico[1].replace(",", ".")).toFixed(2);
+            }
+            else if (isNaN(splitvalorservico) && splitvalorservico[1] == undefined) {
+                valorconvertido = parseFloat(document.getElementById("valorservico").value.replace(",", ".")).toFixed(2);
             }
             else{
-                valorconvertido = document.getElementById("valorservico").value;
+                valorconvertido = parseFloat(document.getElementById("valorservico").value).toFixed(2);
             }
             
             console.log(valorconvertido);
@@ -2936,10 +2939,12 @@ var App = new Vue({
                 App.ordemdeservicosbanhoetosa.edit.fields.taxidog.value = '';
                 App.ordemdeservicosbanhoetosa.edit.fields.obsservico.value = '';
                 App.ordemdeservicosbanhoetosa.edit.fields.valorservico.value = '',
+                document.getElementById("valorservico").value = '';
                 App.ordemdeservicosbanhoetosa.edit.messages.push('Ordem de serviço criada com sucesso!');
+                $('#modalAddOrdemdeServico').modal("toggle");
             })
             .catch(function(){
-                alert("deu ruim");
+                alert("Ocorreu algum erro interno, por favor tente novamente.");
             })
         }
         else{
@@ -3412,7 +3417,7 @@ var App = new Vue({
                 var resultcod = parseInt((users * 78)*0.60);
                 console.log(resultcod);
                 if(resultcod < 1000) App.users.add.fields.codigo.value = "0" + resultcod
-                // App.users.add.fields.codigo.value = (users * 85)*0.60;
+                 App.users.add.fields.codigo.value = resultcod;
 
             });
 
@@ -3664,15 +3669,15 @@ var App = new Vue({
         },
         openEditOrdem: function (data){
            
-            console.log(data.dataservico);
+            //console.log(data.dataservico);
            
             var datasplit = data.dataservico.split(" ");
-            console.log(datasplit);
+            //console.log(datasplit);
             var splitdata = datasplit[0].split("/");
-            console.log(splitdata);
+            //console.log(splitdata);
 
             var dataconvertida = splitdata[2]+"-"+splitdata[1]+"-"+splitdata[0]+"T"+datasplit[1];
-                console.log(data);
+                //console.log(data);
                 
                 App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value = data.key,
                 App.ordemdeservicosbanhoetosa.edit2.fields.codigo.value = data.codigo,
@@ -3700,7 +3705,7 @@ var App = new Vue({
                 App.ordemdeservicosbanhoetosa.edit2.fields.taxidog.value = data.taxidog,
                 App.ordemdeservicosbanhoetosa.edit2.fields.obsservico.value = data.obsservico,
                 App.ordemdeservicosbanhoetosa.edit2.fields.dataservico.value = data.dataservico,
-                App.ordemdeservicosbanhoetosa.edit2.fields.valorservico.value = data.valorservico,
+                App.ordemdeservicosbanhoetosa.edit2.fields.valorservico.value = parseFloat(data.valorservico).toFixed(2),
                 
                         
             $('#modalEditOrdemdeServico').modal();
@@ -3712,13 +3717,20 @@ var App = new Vue({
             var valorsplit = convertvalor[1];
             var valorconvertido;
           
-            if(valorsplit == undefined){
-                valorconvertido = parseFloat(document.getElementById("editordemvalorservico").value);
+            if (valorsplit == undefined) {
+                valorconvertido = parseFloat(document.getElementById("editordemvalorservico").value.replace(",", ".")).toFixed(2);
                 //alert(valorconvertido);
+                //alert(1)
             }
-            else if(valorsplit != undefined){
-                valorconvertido = parseFloat(valorsplit.replace(",","."));
+            else if (valorsplit != undefined) {
+                valorconvertido = parseFloat(valorsplit.replace(",", ".")).toFixed(2);
+                //alert(2)
             }
+            else if (valorsplit == undefined && isNaN(document.getElementById("editordemvalorservico").value)) {
+                valorconvertido == parseFloat(document.getElementById("editordemvalorservico").value.replace(",", ".")).toFixed(2);
+                //alert(3)
+            }
+            //console.log(valorconvertido);
             //alert(valorconvertido);
             //alert(valorconvertido)
             firebase.database().ref(App.firebase.path + '/ordemdeservico/' + App.ordemdeservicosbanhoetosa.edit2.fields.keypedido.value).set({
@@ -4040,6 +4052,43 @@ var App = new Vue({
                 });
                 //console.log(App.lembretes.add.list);
             });
+        },
+        esvaziaCaixa: function () {
+         
+               for (i = 0; i < App.sales.list.length; i++) {
+                   console.log(i);
+                   if (App.sales.list[i].key != 0 && App.sales.list[i].key1 == 0) {
+                       var quantidadeselecionada = App.sales.list[i].amount;
+                       firebase.database().ref(App.firebase.path + '/products/' + App.sales.list[i].key).once('value').then(function (data) {
+                           var quantidadefinal;
+                           var product = data.val();
+                           product.key = data.key;
+
+                           quantidadefinal = product.quantidade;
+                           var repoequantidade = quantidadefinal + quantidadeselecionada;
+                           console.log(data.key);
+                           firebase.database().ref(App.firebase.path + '/products/' + data.key).child("quantidade").set(
+                               repoequantidade
+                           )
+                       });
+                   }
+                    if(App.sales.list[i].key == 0 && App.sales.list[i].key1 != 0){
+                        firebase.database().ref(App.firebase.path + '/ordemdeservico/' + App.sales.list[i].key1).child("quantidade").set(
+                           1
+                        )
+
+                   }
+
+               
+           }
+            App.sales.list = [];
+            App.sales.add.fields.troco.error = false;
+            App.sales.add.fields.troco.value = 0.00.toFixed(2);
+            App.sales.add.fields.totalcompra.value = 0.00.toFixed(2);
+            App.sales.add.fields.valortotalrecebido.value = 0.00.toFixed(2);
+            App.sales.add.fields.subtotalcompra.value = 0.00.toFixed(2);
+            App.sales.add.fields.desconto.value = 0.00.toFixed(2);
+            // console.log(quantidadeproduct)
         }
         // editestoque: function () {
 
@@ -4122,6 +4171,7 @@ route.get('/', function (vars, next) {
     if(App.sales.list.length > 0) {
         if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'home';
             }
@@ -4161,7 +4211,9 @@ route.get('/ordemdeservicosbanhoetosa', function (vars, next) {
     if(App.sales.list.length > 0) {
         if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
+                
                 App.page.current = 'ordemdeservicosbanhoetosa';
             }
             else {
@@ -4196,6 +4248,7 @@ route.get('/home', function (vars, next) {
     if(App.sales.list.length > 0) {
         if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'home';
             }
@@ -4225,6 +4278,7 @@ route.get('/aberturadecaixa', function (vars, next) {
     if(App.sales.list.length > 0) {
         if(window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")){
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = "aberturadecaixa"
                 var usercookies = document.cookie.split("=")
@@ -4265,8 +4319,8 @@ route.get('/sangria', function (vars, next) {
 
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
-
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'sangria';
             }
@@ -4300,8 +4354,8 @@ route.get('/lembretes', function (vars, next) {
 
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
-
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'lembretes';
             }
@@ -4337,9 +4391,8 @@ route.get('/providers', function (vars, next) {
 
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
-
-
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'providers';
             }
@@ -4373,9 +4426,8 @@ route.get('/vendas', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";   
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
-
-
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'vendas';
             }
@@ -4410,6 +4462,7 @@ route.get('/graficos', function (vars, next) {
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 window.location.href = "/graficoscanvas.html"
             }
@@ -4443,8 +4496,8 @@ route.get('/fechamentodecaixa', function (vars, next) {
 
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
-
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 window.location.href = "/fechamentocaixa.html"
             }
@@ -4491,7 +4544,7 @@ route.get('/providers-edit/:key', function (vars, next) {
     document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
-
+            App.esvaziaCaixa();
           
 
             logado = true;
@@ -4563,7 +4616,7 @@ route.get('/providers-remove/:key', function (vars, next) {
 
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
-
+            App.esvaziaCaixa();
 
             logado = true;
             if (document.cookie) {
@@ -4630,6 +4683,7 @@ route.get('/products', function (vars, next) {
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'products';
             }
@@ -4695,6 +4749,7 @@ route.get('/users', function (vars, next) {
     if (App.sales.list.length > 0) {
         if (window.confirm("A tela de caixa está com um pedido em aberto, tem certeza que quer mudar de tela?")) {
             logado = true;
+            App.esvaziaCaixa();
             if (document.cookie) {
                 App.page.current = 'users';
             }

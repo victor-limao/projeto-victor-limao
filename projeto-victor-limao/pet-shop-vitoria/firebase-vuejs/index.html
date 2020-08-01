@@ -239,7 +239,8 @@
                 <div class="container">
                     <h2 class="pet">Bem-vindo</h2>
                     <!-- <p>Você está na página home.</p> -->
-                    <p><b>Lembretes do dia:</b></p>
+                    <p v-if="home.load.list.length == 0"><b>Nenhum lembrete a ser exibido.</b></p>
+                    <p v-if="home.load.list.length > 0"><b>Lembretes do dia:</b></p>
                     <ul id="ulhome" v-for="data in home.load.list">
                         <li>{{data.mensagem}};</li>
                     </ul>
