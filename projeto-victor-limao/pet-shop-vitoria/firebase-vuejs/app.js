@@ -1146,7 +1146,7 @@ var App = new Vue({
             },
 
 
-
+            listsomames: [],
             list: [],
         },
 
@@ -2347,6 +2347,7 @@ var App = new Vue({
 
 
         getSales: function () {
+            App.sales.add.list = [];
             document.cookie = "i18next=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
 
@@ -2366,6 +2367,7 @@ var App = new Vue({
 
                     totaldinheiro += parseFloat(listsales.cash);
                     totalcartao += parseFloat(listsales.card);
+                    totalgeral += parseFloat(listsales.totalcompra);
                    
                     //console.log(totalcartao);
                     //totalgeral += totalizando;
@@ -2375,10 +2377,10 @@ var App = new Vue({
                     listsales.card = parseFloat(listsales.card).toFixed(2).replace(".", ",");
                     listsales.subtotalcompra = parseFloat(listsales.subtotalcompra).toFixed(2).replace(".", ",");
                     listsales.totalcompra = parseFloat(listsales.totalcompra).toFixed(2).replace(".", ",");
-                    App.sales.add.fields.dinheiro.value = totaldinheiro.toFixed(2).replace(".", ",");
                     App.sales.add.fields.totalcartao.value = parseFloat(totalcartao).toFixed(2).replace(".", ",");
-                    App.sales.add.fields.relatoriototal.value = (parseFloat(totalcartao) + parseFloat(totaldinheiro)).toFixed(2).replace(".",",");
-
+                    App.sales.add.fields.relatoriototal.value = (parseFloat(totalgeral)).toFixed(2).replace(".",",");
+                    App.sales.add.fields.dinheiro.value = (parseFloat(totalgeral) - parseFloat(totalcartao)).toFixed(2).replace(".",",");
+                    document.getElementById("referentea").value = '';
                     // console.log(subtotal)
                     // if (typeof subtotal != 'number' || isNaN(subtotal)) subtotal = 0;
                     // App.sales.add.fields.relatoriototal.value = subtotal;
@@ -4034,7 +4036,7 @@ var App = new Vue({
             }
 
             var dataconcat = dia + "/" + mes + "/" + ano;
-            console.log(dataconcat);
+            //console.log(dataconcat);
             var concatenando = new RegExp(dataconcat, "i");
             firebase.database().ref(App.firebase.path + '/lembretes').on('value', function (data) {
 
@@ -4089,54 +4091,69 @@ var App = new Vue({
             App.sales.add.fields.subtotalcompra.value = 0.00.toFixed(2);
             App.sales.add.fields.desconto.value = 0.00.toFixed(2);
             // console.log(quantidadeproduct)
-        }
-        // editestoque: function () {
+        },
+        FiltraData: function(){
+            App.sales.add.list = [];
+            console.log(document.getElementById('selectFiltroMes').value);
+            console.log(document.getElementById('selectFiltroAno').value);
+            App.sales.listsomames = [];
+            var totalrecebido = 0;
+            var totalcartao = 0;
+            var totaldinheiro = 0;
+            var data = new Date("Sat Aug 01 2019 22:24:20 GMT-0300 (Horário Padrão de Brasília)");
+            //console.log(data.getFullYear());
+            var day = 1;
+            var month = document.getElementById('selectFiltroMes').value;
+            if(month < 10) month = "0"+month;
+            var year = document.getElementById('selectFiltroAno').value;
 
-        //     var data = new Date();
-        //     var dia = data.getDate();
-        //     var mes = parseFloat(data.getMonth()) +1;
-        //     var ano = data.getFullYear();
-        //     var hora = data.getHours();
-        //     var minuto = data.getMinutes();
+            var a = 0;
+            for(i = 0; i < 31; i++){
+                firebase.database().ref(App.firebase.path + '/sales').on('value', function (data) {
+                    a++;
+                    if(a < 10)a = "0"+a;
+                    var date = a+"/"+month+"/"+year;
+                    var concatenando = new RegExp(date, "i");
+                   
+                    var testando = [];
+                    var posicao = 0;
+                    data.forEach(function (item) {
+                        var listsales = item.val();
+                        listsales.key = item.key;
+                        var arrayteste = {
+                           
+                            product: [
+                                listsales,
+                            ]
+                        };
+                    
+                      if (arrayteste.product[0].datavenda.match(concatenando)) {
 
-        //     if(dia < 10){
-        //         dia = "0"+dia;
-        //     }
-        //     if(mes < 10){
-        //         mes = "0"+mes;
-        //     }
-        //     var dataconvertida = dia+"/"+mes+"/"+ano;
-
-
-        //     var estoque = [];
-        //     var somaestoque = 0;
-        //     firebase.database().ref(App.firebase.path + '/products').on('value', function (data) {
-        //         var concatenando = new RegExp(dataconvertida, "i");
-
-        //         data.forEach(function (item) {
-        //             var abertura = item.val();
-        //             abertura.key = item.key;
-        //             console.log(abertura);
-        //             var arrayteste = {
-        //                 "key": abertura.key,
-        //                 aberturadecaixa: [
-        //                     abertura
-        //                 ]
-        //             };
-
-        //             if(arrayteste.aberturadecaixa.length > 0){
-
-        //                 estoque.push(abertura);
-        //                 console.log(estoque);
-        //                 console.log("entrou aqui rapaziada.");
-        //             }
-
-        //         })
-
-
-        //     })
-        // },
-
+                          App.sales.listsomames.push(listsales)
+                          App.sales.add.list.push(listsales);
+                          var length = App.sales.listsomames.length - 1;
+                          // console.log( App.sales.listsomames)
+                          totalrecebido += parseFloat(App.sales.listsomames[length].totalcompra);
+                          totalcartao += parseFloat(App.sales.listsomames[length].card);
+                          totaldinheiro += parseFloat(App.sales.listsomames[length].totalcompra) - parseFloat(App.sales.listsomames[length].card);
+                          //console.log(listsales);
+                          listsales.cash = parseFloat(listsales.cash).toFixed(2).replace(".", ",");
+                          listsales.card = parseFloat(listsales.card).toFixed(2).replace(".", ",");
+                          listsales.subtotalcompra = parseFloat(listsales.subtotalcompra).toFixed(2).replace(".", ",");
+                          listsales.totalcompra = parseFloat(listsales.totalcompra).toFixed(2).replace(".", ",");
+                          console.log(parseFloat(totalrecebido.toFixed(2)));
+                      }
+                    })             
+                })
+                document.getElementById("referentea").value = month+"/"+year;
+                App.sales.add.fields.relatoriototal.value = parseFloat(totalrecebido).toFixed(2).replace(".",",");
+                App.sales.add.fields.totalcartao.value = totalcartao.toFixed(2).replace(".",",");
+                App.sales.add.fields.dinheiro.value = totaldinheiro.toFixed(2).replace(".",",");
+            }
+        },
+        FiltroSales: function(){
+          
+        },
        
     },
 

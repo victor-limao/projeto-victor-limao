@@ -766,10 +766,53 @@
                     <li><a href="#/">Home</a></li>
                     <li class="active">Vendas</li>
                 </ol>
+                <div style="display: flex;">
+                    <select name="" id="selectFiltroMes" class="form-control" style="width: 10vh;">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                    </select>
+                    <select name="" id="selectFiltroAno" class="form-control" style="width: 10vh; margin-left:10px">
+                        <option>2019</option>
+                        <option>2020</option>
+                    </select>
+                    <button class="btn btn-info glyphicon glyphicon-search" style="margin-left:10px; margin-bottom: 10px;" @click.prevent="FiltraData()"> Filtrar</button>
+                    <button class="btn btn-danger glyphicon glyphicon-trash" style="margin-left:10px; margin-bottom: 10px;" @click.prevent="getSales()"> Limpar</button>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="200">Rerente à</th>
+                            <th width="150"><span class="glyphicon glyphicon-usd"></span> Total</th>
+                            <th width="150"><span class="glyphicon glyphicon-credit-card"></span> Total</th>
+                            <th width="150"> Total Geral</th>
 
+                        </tr>
+                    </thead>
 
-                <div></div>
-
+                    <tbody>
+                        <tr>
+                            <div class="form-group">
+                                <td width="333"><input class="form-control" id="referentea" placeholder="Todo o Período" readonly></td>
+                                <td width="333"><input type="text" class="form-control" placeholder="0,00"
+                                        v-model="sales.add.fields.dinheiro.value" readonly>
+                                </td>
+                                <td width="333"><input class="form-control" placeholder="0,00"
+                                        v-model="sales.add.fields.totalcartao.value" readonly></td>
+                                <td width="333"><input class="form-control" placeholder="0,00"
+                                        v-model="sales.add.fields.relatoriototal.value" readonly></td>
+                            </div>
+                        </tr>
+                    </tbody>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -797,31 +840,7 @@
 
                 </table>
 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th width="200">Rerente à</th>
-                            <th width="150"><span class="glyphicon glyphicon-usd"></span> Total</th>
-                            <th width="150"><span class="glyphicon glyphicon-credit-card"></span> Total</th>
-                            <th width="150"> Total Geral</th>
-
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <div class="form-group">
-                                <td width="333"><input class="form-control" placeholder="21/08/2019" readonly></td>
-                                <td width="333"><input type="text" class="form-control" placeholder="0,00"
-                                        v-model="sales.add.fields.dinheiro.value" readonly>
-                                </td>
-                                <td width="333"><input class="form-control" placeholder="0,00"
-                                        v-model="sales.add.fields.totalcartao.value" readonly></td>
-                                <td width="333"><input class="form-control" placeholder="0,00"
-                                        v-model="sales.add.fields.relatoriototal.value" readonly></td>
-                            </div>
-                        </tr>
-                    </tbody>
+               
 
                 </table>
 
