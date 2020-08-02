@@ -871,23 +871,22 @@ var App = new Vue({
             list: [],
         },
 
+        acesso: {
+            check: {
+                error: false,
+                messages: [],
+                fields: {
+                    nivel: {
+                        value: '',
+                        error: false,
+                        messages: [],
 
-
-        // newSale: {
-        //     add: {
-        //         error: false,
-        //         messages: [],
-
-        //         fields: {
-        //             nome: {
-        //                 value: '',
-        //                 error: false,
-        //                 messages: [],
-
-        //             },
-        //         },
-        //     },
-        // },
+                    },
+                },
+                list: []
+            },
+            list: []
+        },
 
         sales: {
             add: {
@@ -1040,10 +1039,13 @@ var App = new Vue({
                         messages: [],
 
                     },
+                    referentea: {
 
+                        value: '',
+                        error: false,
+                        messages: [],
 
-
-
+                    },
                 },
                 list: [],
                 
@@ -2380,7 +2382,7 @@ var App = new Vue({
                     App.sales.add.fields.totalcartao.value = parseFloat(totalcartao).toFixed(2).replace(".", ",");
                     App.sales.add.fields.relatoriototal.value = (parseFloat(totalgeral)).toFixed(2).replace(".",",");
                     App.sales.add.fields.dinheiro.value = (parseFloat(totalgeral) - parseFloat(totalcartao)).toFixed(2).replace(".",",");
-                    document.getElementById("referentea").value = '';
+                    App.sales.add.fields.referentea.value = '';
                     // console.log(subtotal)
                     // if (typeof subtotal != 'number' || isNaN(subtotal)) subtotal = 0;
                     // App.sales.add.fields.relatoriototal.value = subtotal;
@@ -4092,6 +4094,39 @@ var App = new Vue({
             App.sales.add.fields.desconto.value = 0.00.toFixed(2);
             // console.log(quantidadeproduct)
         },
+        CheckAcesso: function(){
+            App.acesso.check.list = [];
+            var user = document.cookie.split("username=")[1];
+            console.log(user)
+            firebase.database().ref(App.firebase.path + '/admin').on('value', function (data) {
+                var concatenando = new RegExp(user, "i");
+                data.forEach(function (item) {
+                    var admin = item.val();
+                    admin.key = item.key;
+                    var arrayteste = {
+                       
+                        product: [
+                            admin,
+                        ]
+                    };
+                   
+                    if (arrayteste.product[0].usuario.match(concatenando)) {
+                              App.acesso.check.list = {
+                              admin: admin,
+                              acesso: admin.acesso
+                              }
+
+                          console.log(App.acesso.check.list);
+                   
+                    }
+                 })
+             
+                 
+                //console.log(App.sales.add.addlist);
+
+            })
+        },
+
         FiltraData: function(){
             App.sales.add.list = [];
             console.log(document.getElementById('selectFiltroMes').value);
@@ -4169,6 +4204,7 @@ App.getProviders();
 App.getSales();
 App.getAberturadeCaixa();
 App.getLembretes();
+App.CheckAcesso();
 // App.editestoque();
 
 

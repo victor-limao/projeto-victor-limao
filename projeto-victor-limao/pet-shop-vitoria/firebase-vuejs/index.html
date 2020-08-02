@@ -207,14 +207,24 @@
                             <ul class="dropdown-menu">
                                 <li><a href="#/aberturadecaixa">Abertura de Caixa</a></li>
                                 <li><a href="#/fechamentodecaixa">Fechamento de Caixa</a></li>
-                                <li><a href="#/vendas">Relatórios</a></li>
+                            
                                 <li><a href="#/sangria">Sangria e Reforço</a></li>
-                                <li><a href="#/graficos">Gráficos</a></li>
+                              
                                 <li><a href="#/lembretes">Lembretes</a></li>
+                            </ul>
+                        </li>
+                        <li v-if="acesso.check.list.acesso == 0"><a href="" class="dropdown-toggle" data-toggle="dropdown">Administrador
+                                <span class="caret">
+                        
+                                </span></a>
+                            <ul class="dropdown-menu">
+                                <li v-if="acesso.check.list.acesso == 0"><a href="#/vendas">Relatórios</a></li>
+                                <li v-if="acesso.check.list.acesso == 0"><a href="#/graficos">Gráficos</a></li>
                             </ul>
                         </li>
 
                         <li><a href="#/asdasdasdasd">Não Existe</a></li>
+                        
                         <li><a href="/login.html" class="glyphicon glyphicon-log-out" onclick="deslogar()"></button></a>
                         </li>
 
@@ -802,7 +812,7 @@
                     <tbody>
                         <tr>
                             <div class="form-group">
-                                <td width="333"><input class="form-control" id="referentea" placeholder="Todo o Período" readonly></td>
+                                <td width="333"><input class="form-control" id="referentea" v-model="sales.add.fields.referentea.value" placeholder="Todo o Período" readonly></td>
                                 <td width="333"><input type="text" class="form-control" placeholder="0,00"
                                         v-model="sales.add.fields.dinheiro.value" readonly>
                                 </td>
